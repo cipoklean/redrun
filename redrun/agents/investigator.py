@@ -227,7 +227,7 @@ class MarkovianInvestigator:
                 AGENT,
                 "progress",
                 f"step {step_no} {usage.provider}/{usage.model} "
-                f"tokens_in={usage.prompt_tokens} tokens_out={usage.completion_tokens}",
+                f"tokens {usage.prompt_tokens}/{usage.completion_tokens}",
                 {
                     "step": step_no,
                     "provider": usage.provider,
@@ -361,6 +361,7 @@ class MarkovianInvestigator:
         failed_checks: list[dict],
         carryover: Carryover,
         prior: ProposedVerdict | None,
+        step_number: int = 1,
     ) -> InvestigatorResult:
         """Exactly one revision step, handed the critique and the failed checks."""
         payload = {
@@ -383,7 +384,7 @@ class MarkovianInvestigator:
         ]
         ctx = ChunkContext(chunk="revision", evidence_ids=[item.id for item in self.evidence])
         ok, updated, verdict, record = self._step(
-            1, "revision", ctx, carryover, "deep", messages=messages
+            step_number, "revision", ctx, carryover, "deep", messages=messages
         )
         return self._finish([record], updated, verdict if ok else None, "cap" if ok else "error")
 

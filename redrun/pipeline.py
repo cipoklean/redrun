@@ -9,18 +9,40 @@ from typing import Sequence
 from redrun.adapters.base import EngineError, QueryEngine
 from redrun.adapters.duckdb_engine import DuckDBEngine
 from redrun.adapters.github import GitHubClient
+from redrun.adapters.llm import LLMClient
 from redrun.adapters.replay_engine import ReplayEngine
 from redrun.adapters.zetaris import ZetarisEngine
+from redrun.agents.investigator import (
+    Carryover,
+    MarkovianInvestigator,
+    ProposedVerdict,
+)
+from redrun.agents.skeptic import Skeptic
 from redrun.collectors import deps as deps_collector
 from redrun.collectors import diff as diff_collector
 from redrun.collectors import github_runs, logs
 from redrun.collectors.base import CollectContext, CollectorError
 from redrun.config import ROOT, Settings, load_settings
-from redrun.core.models import Evidence, Link, Metrics, RunResult
-from redrun.core.rules import rule_verdict
+from redrun.core.citations import guard
+from redrun.core.confidence import DECISIVE_CHECKS, apply_confidence
+from redrun.core.models import (
+    Evidence,
+    Link,
+    MarkovianMetrics,
+    Metrics,
+    RunResult,
+    RunInfo,
+    SkepticReport,
+    Verdict,
+)
+from redrun.core.rules import rule_verdict  # noqa: F401 - kept for the rules-only path
 from redrun.core.tables import build_tables, write_tables
 from redrun.core.target import parse_target
+from redrun.core.taxonomy import Cause
 from redrun.trace import Tracer
+from redrun.world.context import ContextBuilder
+from redrun.world.ingest import ingest
+from redrun.world.store import WorldStoreService
 
 OVERLAP_SQL = ROOT / "redrun" / "queries" / "overlap.sql"
 
@@ -36,6 +58,7 @@ class Prepared:
     deps: deps_collector.DepsCollected
     evidence: list[Evidence]
     table_paths: dict[str, Path]
+    client: object | None = None
 
 
 def prepare(
@@ -44,6 +67,7 @@ def prepare(
     base: Settings,
     *,
     trace_id: str | None = None,
+    sink=None,
 ) -> Prepared:
     """Run every collector, redact, and write the four evidence tables."""
     parsed = parse_target(target) if target else None
@@ -53,7 +77,7 @@ def prepare(
         )
 
     trace_id = trace_id or uuid.uuid4().hex[:12]
-    tracer = Tracer(trace_id, base.logs_dir)
+    tracer = Tracer(trace_id, base.logs_dir, sink=sink)
     ctx = CollectContext(settings=base, target=parsed, sample=sample)
     client = None if ctx.is_sample else GitHubClient(base.github_token)
 
@@ -93,10 +117,9 @@ def prepare(
         )
     except CollectorError as exc:
         tracer.emit("collector", "error", str(exc))
-        raise
-    finally:
         if client is not None:
             client.close()
+        raise
 
     evidence = runs.evidence + changes.evidence + job_logs.evidence + deps.evidence
     tables = build_tables(runs, changes, job_logs, deps)
@@ -117,6 +140,7 @@ def prepare(
         deps=deps,
         evidence=evidence,
         table_paths=table_paths,
+        client=client,
     )
 
 
@@ -219,6 +243,7 @@ def investigate(
     sample: str | None = None,
     settings: Settings | None = None,
     engine: str | None = None,
+    sink=None,
 ) -> RunResult:
     """Investigate a failed run. `sample` selects a fixture and forces offline mode."""
     base = settings or load_settings()
@@ -230,54 +255,256 @@ def investigate(
     label = target.strip() if target else f"sample:{sample}"
     started = time.perf_counter()
     trace_id = uuid.uuid4().hex[:12]
-    Tracer(trace_id, base.logs_dir).emit(
+    tracer = Tracer(trace_id, base.logs_dir, sink=sink)
+    tracer.emit(
         "triage",
         "start",
         f"Investigating {label}",
         {"target": target, "sample": sample, "engine": engine or "auto"},
     )
-    prepared = prepare(target, sample, base, trace_id=trace_id)
+    prepared = prepare(target, sample, base, trace_id=trace_id, sink=sink)
+    return _investigate_prepared(prepared, base, engine, label, started, tracer)
 
-    links, engine_label, _skipped = run_overlap(prepared, base, engine)
-    verdict = rule_verdict(
-        prepared.evidence, prepared.runs.failed_run, prepared.runs.last_green_run, links
-    )
-    prepared.tracer.emit(
-        "investigator",
-        "check",
-        f"cause={verdict.cause.value} confidence={verdict.confidence}",
-        {
-            "breakdown": [signal.model_dump() for signal in verdict.confidence_breakdown],
-            "cited": verdict.cited_evidence_ids,
-            "links": len(links),
-        },
+
+def _triage_cause(links: list[Link], job_logs: logs.LogsCollected) -> Cause:
+    """Deterministic first guess from the links and the log patterns."""
+    kinds = {link.link_type for link in links}
+    if "dependency_match" in kinds:
+        return Cause.DEPENDENCY_BUMP
+    if "secret_or_config_match" in kinds:
+        return Cause.EXPIRED_OR_MISSING_SECRET
+    if "file_match" in kinds:
+        return Cause.BAD_COMMIT
+    patterns = {match.pattern for match in job_logs.matches}
+    for pattern, cause in (
+        ("auth_or_secret", Cause.EXPIRED_OR_MISSING_SECRET),
+        ("dependency_resolution", Cause.DEPENDENCY_BUMP),
+        ("infra_env", Cause.INFRA_OUTAGE),
+        ("timeout", Cause.FLAKY_TEST),
+        ("pytest_failure", Cause.BAD_COMMIT),
+    ):
+        if pattern in patterns:
+            return cause
+    return Cause.UNKNOWN
+
+
+def _merge_markovian(first: MarkovianMetrics, extra: MarkovianMetrics) -> MarkovianMetrics:
+    tokens_in = first.tokens_in + extra.tokens_in
+    return MarkovianMetrics(
+        steps=first.steps + extra.steps,
+        stop_reason=first.stop_reason,
+        tokens_in=tokens_in,
+        tokens_out=first.tokens_out + extra.tokens_out,
+        carryover_tokens_max=max(first.carryover_tokens_max, extra.carryover_tokens_max),
+        full_context_tokens_estimate=first.full_context_tokens_estimate,
+        tokens_saved=max(0, first.full_context_tokens_estimate - tokens_in),
+        per_step=first.per_step + extra.per_step,
     )
 
-    result = RunResult(
-        run_id=str(prepared.runs.failed_run.run_id),
-        input=label,
-        failed_run=prepared.runs.failed_run,
-        last_green_run=prepared.runs.last_green_run,
-        evidence=prepared.evidence,
-        verdict=verdict,
-        links=links,
-        trace_id=prepared.trace_id,
-        metrics=Metrics(
-            latency_ms=int((time.perf_counter() - started) * 1000),
-            query_engine=engine_label,
-        ),
+
+def _verdict_from(proposal: ProposedVerdict) -> Verdict:
+    return Verdict(
+        cause=proposal.cause,
+        root_cause=proposal.root_cause,
+        confidence=0.0,
+        confidence_breakdown=[],
+        next_step=proposal.next_step,
+        cited_evidence_ids=list(proposal.cited_evidence_ids),
     )
-    prepared.tracer.emit(
-        "investigator",
-        "result",
-        f"{verdict.cause.value}: {verdict.next_step}",
-        {
-            "cause": verdict.cause.value,
-            "confidence": verdict.confidence,
-            "evidence": len(prepared.evidence),
-            "links": len(links),
-            "query_engine": engine_label,
-            "trace_id": prepared.trace_id,
-        },
+
+
+def _unknown(reason: str) -> Verdict:
+    return Verdict(
+        cause=Cause.UNKNOWN,
+        root_cause=reason,
+        confidence=0.0,
+        confidence_breakdown=[],
+        next_step="Collect more evidence, or have a human review the run before acting.",
+        cited_evidence_ids=[],
     )
-    return result
+
+
+def _investigate_prepared(
+    prepared: Prepared,
+    base: Settings,
+    engine: str | None,
+    label: str,
+    started: float,
+    tracer: Tracer,
+) -> RunResult:
+    llm: LLMClient | None = None
+    judge: LLMClient | None = None
+    try:
+        links, engine_label, _skipped = run_overlap(prepared, base, engine)
+
+        world = ingest(
+            trace_id=prepared.trace_id,
+            runs=prepared.runs,
+            changes=prepared.changes,
+            job_logs=prepared.job_logs,
+            deps=prepared.deps,
+            links=links,
+            evidence=prepared.evidence,
+        )
+        world_path = WorldStoreService(base.data_dir).save(world)
+        tracer.emit(
+            "collector",
+            "progress",
+            f"world: {len(world.entities)} entities, {len(world.facts)} facts",
+            {
+                "entities": len(world.entities),
+                "facts": len(world.facts),
+                "path": str(world_path),
+            },
+        )
+
+        candidate = _triage_cause(links, prepared.job_logs)
+        tracer.emit(
+            "triage",
+            "check",
+            f"triage candidate: {candidate.value}",
+            {"cause": candidate.value, "links": len(links)},
+        )
+
+        llm = LLMClient(base, sample_case=prepared.sample)
+        investigator = MarkovianInvestigator(
+            llm=llm,
+            tracer=tracer,
+            builder=ContextBuilder(world, prepared.evidence),
+            evidence=prepared.evidence,
+            max_steps=base.investigator_max_steps,
+            chunk_tokens=base.investigator_chunk_tokens,
+            carryover_tokens=base.investigator_carryover_tokens,
+        )
+        investigated = investigator.run(triage_cause=candidate)
+        markovian = investigated.metrics
+        proposal = investigated.verdict
+        verdict = _from_proposal_or_unknown(proposal)
+
+        tracer.emit(
+            "investigator",
+            "handoff",
+            "investigator -> skeptic: verdict proposed",
+            {"cause": verdict.cause.value, "cited": verdict.cited_evidence_ids},
+        )
+
+        if not base.sample_mode:
+            judge = LLMClient(base, sample_case=None)
+        skeptic = Skeptic(
+            settings=base,
+            tracer=tracer,
+            runs=prepared.runs,
+            changes=prepared.changes,
+            job_logs=prepared.job_logs,
+            deps=prepared.deps,
+            links=links,
+            evidence=prepared.evidence,
+            sample_case=prepared.sample,
+            github=prepared.client,
+            judge=judge,
+        )
+        report = skeptic.check(verdict)
+        prepared.evidence.extend(skeptic.last_outage_evidence)
+
+        if report.final_status == "failed":
+            failed = [
+                check
+                for check in report.checks
+                if check.status == "fail" and check.check in DECISIVE_CHECKS
+            ]
+            critique = skeptic.critique_text(failed)
+            tracer.emit(
+                "skeptic",
+                "handoff",
+                "skeptic -> investigator: critique",
+                {"critique": critique, "failed": [check.check for check in failed]},
+            )
+            revision = investigator.revise(
+                critique=critique,
+                failed_checks=[check.model_dump() for check in failed],
+                carryover=investigated.carryover,
+                prior=proposal,
+                step_number=markovian.steps + 1,
+            )
+            markovian = _merge_markovian(markovian, revision.metrics)
+            if revision.verdict is not None:
+                verdict = _verdict_from(revision.verdict)
+            report = skeptic.check(verdict, revisions=1)
+            report.final_status = "revised" if report.final_status == "passed" else "failed"
+            prepared.evidence.extend(skeptic.last_outage_evidence)
+
+        if report.final_status == "failed":
+            still_failing = [check.check for check in report.checks if check.status == "fail"]
+            verdict = _unknown(
+                "the skeptic rejected every proposed cause after one revision "
+                f"({', '.join(still_failing)})"
+            )
+
+        citation = guard(verdict, {item.id for item in prepared.evidence})
+        if not citation.ok:
+            tracer.emit(
+                "investigator",
+                "check",
+                f"citation guard rejected the verdict: {citation.reason()}",
+                {"problems": [problem.code for problem in citation.problems]},
+            )
+            verdict = _unknown(f"the verdict failed the citation guard ({citation.reason()})")
+
+        against: list[str] = []
+        if investigated.carryover.hypotheses:
+            against = investigated.carryover.hypotheses[0].against_ids
+        verdict = apply_confidence(
+            verdict,
+            [check.model_dump() for check in report.checks],
+            report.revisions,
+            links,
+            against,
+        )
+
+        result = RunResult(
+            run_id=str(prepared.runs.failed_run.run_id),
+            input=label,
+            failed_run=prepared.runs.failed_run,
+            last_green_run=prepared.runs.last_green_run,
+            evidence=prepared.evidence,
+            verdict=verdict,
+            links=links,
+            skeptic=report,
+            trace_id=prepared.trace_id,
+            metrics=Metrics(
+                llm_calls=markovian.steps,
+                tokens_in=markovian.tokens_in,
+                tokens_out=markovian.tokens_out,
+                latency_ms=int((time.perf_counter() - started) * 1000),
+                query_engine=engine_label,
+                markovian=markovian,
+            ),
+        )
+        tracer.emit(
+            "investigator",
+            "result",
+            f"{verdict.cause.value}: {verdict.next_step}",
+            {
+                "cause": verdict.cause.value,
+                "confidence": verdict.confidence,
+                "skeptic": report.final_status,
+                "evidence": len(prepared.evidence),
+                "links": len(links),
+                "query_engine": engine_label,
+                "trace_id": prepared.trace_id,
+            },
+        )
+        return result
+    finally:
+        if prepared.client is not None:
+            prepared.client.close()
+        if llm is not None:
+            llm.close()
+        if judge is not None:
+            judge.close()
+
+
+def _from_proposal_or_unknown(proposal: ProposedVerdict | None) -> Verdict:
+    if proposal is None:
+        return _unknown("the investigator produced no verdict")
+    return _verdict_from(proposal)

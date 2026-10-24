@@ -95,7 +95,13 @@ def compute_confidence(
     return round(confidence, 4), signals
 
 
-def apply_confidence(verdict: Verdict, checks: list[dict], revisions: int, links: list[Link]) -> Verdict:
+def apply_confidence(
+    verdict: Verdict,
+    checks: list[dict],
+    revisions: int,
+    links: list[Link],
+    against_ids: list[str] | None = None,
+) -> Verdict:
     """Return the same verdict with confidence and breakdown replaced by computed ones."""
     checks_payload = [check.model_dump() if hasattr(check, "model_dump") else check for check in checks]
     confidence, signals = compute_confidence(
@@ -103,7 +109,7 @@ def apply_confidence(verdict: Verdict, checks: list[dict], revisions: int, links
         cited_ids=verdict.cited_evidence_ids,
         checks=checks_payload,
         revisions=revisions,
-        against_ids=[],
+        against_ids=list(against_ids or []),
         cause=verdict.cause,
     )
     return verdict.model_copy(update={"confidence": confidence, "confidence_breakdown": signals})

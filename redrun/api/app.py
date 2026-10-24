@@ -1,8 +1,12 @@
-"""FastAPI surface: POST /run, GET /health, GET /provider/status."""
+"""FastAPI surface: POST /run, streaming events, health and provider status."""
 
-from typing import Literal
+import json
+import threading
+from queue import Empty, Queue
+from typing import Any, Literal
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 from redrun.adapters.base import EngineError
@@ -61,6 +65,67 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             raise HTTPException(status_code=502, detail=str(exc)) from exc
         except EngineError as exc:
             raise HTTPException(status_code=502, detail=str(exc)) from exc
+
+    @app.post("/run/stream")
+    def run_stream(body: RunRequest) -> StreamingResponse:
+        """Run once and stream every Event as it happens, then close."""
+        queue: Queue = Queue()
+
+        def sink(event: Any) -> None:
+            queue.put(event)
+
+        def work() -> None:
+            try:
+                investigate(
+                    body.target,
+                    sample=body.sample,
+                    settings=cfg,
+                    engine=body.engine,
+                    sink=sink,
+                )
+            except (ValueError, CollectorError, EngineError) as exc:
+                queue.put({"detail": str(exc)})
+            finally:
+                queue.put(None)
+
+        threading.Thread(target=work, daemon=True).start()
+
+        def events():
+            while True:
+                try:
+                    item = queue.get(timeout=600)
+                except Empty:
+                    return
+                if item is None:
+                    return
+                if isinstance(item, dict):
+                    yield f"event: error\ndata: {json.dumps(item)}\n\n"
+                else:
+                    yield f"data: {item.model_dump_json()}\n\n"
+
+        return StreamingResponse(
+            events(),
+            media_type="text/event-stream",
+            headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+        )
+
+    @app.get("/run/{trace_id}/events")
+    def replay_events(trace_id: str) -> StreamingResponse:
+        """Replay a finished run's trace as SSE. Read-only, no re-execution."""
+        path = cfg.logs_dir / f"{trace_id}.jsonl"
+        if not path.exists():
+            raise HTTPException(status_code=404, detail=f"no trace for {trace_id}")
+
+        def events():
+            for line in path.read_text(encoding="utf-8").splitlines():
+                if line.strip():
+                    yield f"data: {line}\n\n"
+
+        return StreamingResponse(
+            events(),
+            media_type="text/event-stream",
+            headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+        )
 
     return app
 

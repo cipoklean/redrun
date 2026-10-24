@@ -389,9 +389,10 @@ class Skeptic:
         if failed_decisive:
             self.tracer.emit(
                 AGENT,
-                "handoff",
-                f"skeptic -> investigator: {len(failed_decisive)} decisive check(s) failed",
-                {"failed": [item.check for item in failed_decisive], "revision": revisions},
+                "check",
+                f"skeptic: {len(failed_decisive)} decisive check(s) failed: "
+                f"{', '.join(item.check for item in failed_decisive)}",
+                {"revision": revisions, "decisive_failed": [item.check for item in failed_decisive]},
             )
         return report
 
