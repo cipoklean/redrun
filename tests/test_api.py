@@ -55,6 +55,7 @@ def test_run_by_sample_returns_the_contract(client: TestClient) -> None:
         "evidence",
         "verdict",
         "links",
+        "skeptic",
         "trace_id",
         "metrics",
     }

@@ -1,50 +1,56 @@
 [
   {
-    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"the test change looks like the cause\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"step 1: reading the cross-source links\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
     "usage": {
-      "prompt_tokens": 700,
-      "completion_tokens": 55,
-      "latency_ms": 40
+      "prompt_tokens": 407,
+      "completion_tokens": 56,
+      "latency_ms": 40,
+      "note": "estimate: len(prompt)/4, measured during recording"
     }
   },
   {
-    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"the test change looks like the cause\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"step 2: reading the log error window\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
     "usage": {
-      "prompt_tokens": 745,
-      "completion_tokens": 55,
-      "latency_ms": 40
+      "prompt_tokens": 1091,
+      "completion_tokens": 56,
+      "latency_ms": 40,
+      "note": "estimate: len(prompt)/4, measured during recording"
     }
   },
   {
-    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"the test change looks like the cause\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"step 3: reading the diff and dependency facts\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
     "usage": {
-      "prompt_tokens": 790,
-      "completion_tokens": 55,
-      "latency_ms": 40
+      "prompt_tokens": 576,
+      "completion_tokens": 58,
+      "latency_ms": 40,
+      "note": "estimate: len(prompt)/4, measured during recording"
     }
   },
   {
-    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"the test change looks like the cause\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"step 4: reading the run and config facts\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
     "usage": {
-      "prompt_tokens": 835,
-      "completion_tokens": 55,
-      "latency_ms": 40
+      "prompt_tokens": 725,
+      "completion_tokens": 57,
+      "latency_ms": 40,
+      "note": "estimate: len(prompt)/4, measured during recording"
     }
   },
   {
     "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"the frozen-clock change to tests/test_api.py breaks the health check\", \"supporting_ids\": [\"ev_log_001\", \"ev_file_001\"], \"against_ids\": []}], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": {\"cause\": \"bad_commit\", \"root_cause\": \"the frozen-clock change to tests/test_api.py breaks the health check\", \"next_step\": \"Revert the frozen clock in tests/test_api.py and re-run.\", \"cited_evidence_ids\": [\"ev_log_001\", \"ev_file_001\"]}}",
     "usage": {
-      "prompt_tokens": 1010,
-      "completion_tokens": 130,
-      "latency_ms": 40
+      "prompt_tokens": 467,
+      "completion_tokens": 123,
+      "latency_ms": 40,
+      "note": "estimate: len(prompt)/4, measured during recording"
     }
   },
   {
     "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"flaky_test\", \"claim\": \"the same commit passed in the deploy workflow and this test failed before on unrelated commits, so it is flaky rather than newly broken\", \"supporting_ids\": [\"ev_log_001\", \"ev_file_001\"], \"against_ids\": []}], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": {\"cause\": \"flaky_test\", \"root_cause\": \"the same commit passed in the deploy workflow and this test failed before on unrelated commits, so it is flaky rather than newly broken\", \"next_step\": \"Re-run the failed job once; if it passes, quarantine tests/test_api.py::test_health_depends_on_time.\", \"cited_evidence_ids\": [\"ev_log_001\", \"ev_file_001\"]}}",
     "usage": {
-      "prompt_tokens": 1120,
-      "completion_tokens": 150,
-      "latency_ms": 40
+      "prompt_tokens": 732,
+      "completion_tokens": 167,
+      "latency_ms": 40,
+      "note": "estimate: len(prompt)/4, measured during recording"
     }
   }
 ]

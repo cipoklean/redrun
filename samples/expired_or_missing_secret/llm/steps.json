@@ -1,42 +1,47 @@
 [
   {
-    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"expired_or_missing_secret\", \"claim\": \"collecting evidence\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"expired_or_missing_secret\", \"claim\": \"step 1: reading the cross-source links\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
     "usage": {
-      "prompt_tokens": 720,
+      "prompt_tokens": 456,
       "completion_tokens": 60,
-      "latency_ms": 40
+      "latency_ms": 40,
+      "note": "estimate: len(prompt)/4, measured during recording"
     }
   },
   {
-    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"expired_or_missing_secret\", \"claim\": \"collecting evidence\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"expired_or_missing_secret\", \"claim\": \"step 2: reading the log error window\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
     "usage": {
-      "prompt_tokens": 760,
-      "completion_tokens": 60,
-      "latency_ms": 40
+      "prompt_tokens": 1085,
+      "completion_tokens": 59,
+      "latency_ms": 40,
+      "note": "estimate: len(prompt)/4, measured during recording"
     }
   },
   {
-    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"expired_or_missing_secret\", \"claim\": \"collecting evidence\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"expired_or_missing_secret\", \"claim\": \"step 3: reading the diff and dependency facts\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
     "usage": {
-      "prompt_tokens": 800,
-      "completion_tokens": 60,
-      "latency_ms": 40
+      "prompt_tokens": 624,
+      "completion_tokens": 62,
+      "latency_ms": 40,
+      "note": "estimate: len(prompt)/4, measured during recording"
     }
   },
   {
-    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"expired_or_missing_secret\", \"claim\": \"collecting evidence\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"expired_or_missing_secret\", \"claim\": \"step 4: reading the run and config facts\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
     "usage": {
-      "prompt_tokens": 840,
+      "prompt_tokens": 735,
       "completion_tokens": 60,
-      "latency_ms": 40
+      "latency_ms": 40,
+      "note": "estimate: len(prompt)/4, measured during recording"
     }
   },
   {
     "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"expired_or_missing_secret\", \"claim\": \"the deploy workflow reads secrets.REGISTRY_TOKEN, which is empty\", \"supporting_ids\": [\"ev_log_001\", \"ev_file_001\"], \"against_ids\": []}], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": {\"cause\": \"expired_or_missing_secret\", \"root_cause\": \"the deploy workflow reads secrets.REGISTRY_TOKEN, which is empty\", \"next_step\": \"Rotate the registry token and set the repository secret, then re-run.\", \"cited_evidence_ids\": [\"ev_log_001\", \"ev_file_001\"]}}",
     "usage": {
-      "prompt_tokens": 980,
-      "completion_tokens": 120,
-      "latency_ms": 40
+      "prompt_tokens": 469,
+      "completion_tokens": 131,
+      "latency_ms": 40,
+      "note": "estimate: len(prompt)/4, measured during recording"
     }
   }
 ]

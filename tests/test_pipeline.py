@@ -35,7 +35,9 @@ def test_sample_run_produces_a_complete_result(tmp_path: Path) -> None:
     assert result.verdict is not None
     assert result.verdict.cause is Cause.DEPENDENCY_BUMP
     assert result.verdict.confidence > 0.5
-    assert result.metrics.llm_calls == 0
+    assert result.metrics.llm_calls >= 1
+    assert result.metrics.markovian is not None
+    assert result.metrics.markovian.steps == result.metrics.llm_calls
     assert len(result.evidence) >= 5
 
 

@@ -67,6 +67,7 @@ def test_run_result_fields_match_contract() -> None:
         "evidence",
         "verdict",
         "links",
+        "skeptic",
         "trace_id",
         "metrics",
     }
@@ -76,6 +77,7 @@ def test_run_result_fields_match_contract() -> None:
         "tokens_out",
         "latency_ms",
         "query_engine",
+        "markovian",
     }
 
 

@@ -39,30 +39,51 @@ def handler_for(seen: list[httpx.Request], payload: dict, status_code: int = 200
 # ---------------------------------------------------------------- sample provider
 
 
-def test_sample_provider_reads_the_fixture_and_never_touches_the_network() -> None:
+def test_sample_provider_reads_the_fixture_and_never_touches_the_network(tmp_path: Path) -> None:
     def explode(request: httpx.Request) -> httpx.Response:
         raise AssertionError(f"sample mode made a network call: {request.url}")
 
-    client = LLMClient(sample_settings(), sample_case="dependency_bump", transport=httpx.MockTransport(explode))
+    case = tmp_path / "lane_only"
+    (case / "llm").mkdir(parents=True)
+    (case / "llm" / "deep.json").write_text(
+        json.dumps({"text": "from the deep lane", "usage": {"prompt_tokens": 42, "completion_tokens": 7}})
+    )
+
+    settings = Settings(sample_mode=True, samples_dir=tmp_path)
+    client = LLMClient(settings, sample_case="lane_only", transport=httpx.MockTransport(explode))
     got = client.complete([{"role": "user", "content": "why did it fail?"}], lane="deep")
 
-    expected = json.loads((SAMPLES / "dependency_bump" / "llm" / "deep.json").read_text())
-    assert got.text == expected["text"]
-    assert got.usage.prompt_tokens == expected["usage"]["prompt_tokens"]
-    assert got.usage.completion_tokens == expected["usage"]["completion_tokens"]
+    assert got.text == "from the deep lane"
+    assert got.usage.prompt_tokens == 42
+    assert got.usage.completion_tokens == 7
     assert got.usage.provider == "sample"
     assert got.usage.model == "sample/deep"
+
+
+def test_a_recorded_step_sequence_is_replayed_in_order() -> None:
+    client = LLMClient(sample_settings(), sample_case="dependency_bump")
+    first = client.complete([{"role": "user", "content": "step 1"}], lane="fast")
+    second = client.complete([{"role": "user", "content": "step 2"}], lane="fast")
+    third = client.complete([{"role": "user", "content": "step 3"}], lane="fast")
+
+    steps = json.loads((SAMPLES / "dependency_bump" / "llm" / "steps.json").read_text())
+    assert first.text == steps[0]["text"]
+    assert second.text == steps[1]["text"]
+    assert third.text == steps[2]["text"]
+    assert first.text != second.text, "each step must get its own recorded reply"
 
 
 def test_sample_status_is_sample() -> None:
     assert LLMClient(sample_settings(), sample_case="bad_commit").status() == "sample"
 
 
-def test_sample_lane_is_deterministic() -> None:
-    client = LLMClient(sample_settings(), sample_case="bad_commit")
-    first = client.complete([{"role": "user", "content": "x"}], lane="fast")
-    second = client.complete([{"role": "user", "content": "y"}], lane="fast")
-    assert first.text == second.text
+def test_replay_is_deterministic_across_instances() -> None:
+    """Within a run the steps advance; a fresh client always replays from step 1."""
+    def first_reply() -> str:
+        client = LLMClient(sample_settings(), sample_case="bad_commit")
+        return client.complete([{"role": "user", "content": "x"}], lane="fast").text
+
+    assert first_reply() == first_reply()
 
 
 # ---------------------------------------------------------------- meterless
