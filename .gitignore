@@ -3,7 +3,15 @@ __pycache__/
 *.pyc
 *.egg-info/
 .env
+.env.*
+!.env.example
 .pytest_cache/
 logs/*.jsonl
 data/
 .cache/
+frontend/node_modules/
+frontend/dist/
+frontend/*.tsbuildinfo
+frontend/test-results/
+frontend/playwright-report/
+frontend/.vite/
