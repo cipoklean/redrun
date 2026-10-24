@@ -171,15 +171,32 @@ Machine-readable versions of Evidence, Verdict, Link, RunResult and Event are in
 - `POST /run {target?, sample?, engine?}` -> RunResult. `engine` is `zetaris` or
   `duckdb`; omit it to auto-select.
 - `POST /run/stream` -> `text/event-stream` of Event objects, live as the run
-  happens, then close. Errors arrive as `event: error`.
+  happens, then close. Errors arrive as `event: error`. The response carries
+  `X-RedRun-Trace: <trace_id>` so the client can own its URL before the run ends.
 - `GET /run/{trace_id}/events` -> the same Event stream, replayed from a
   finished trace. 404 for an unknown trace id.
+- `GET /run/{trace_id}` -> the stored RunResult for a finished run. A browser
+  navigation (Accept: text/html) gets the single page app instead, so client
+  routes under /run keep working; `fetch` gets JSON.
+- `GET /samples` -> `{samples: [{name, title, category, description, order}]}`
+- `GET /provider/test` -> wraps the meterless and zetaris checks:
+  `{llm: {provider, status, base_url, model_count, models, latency_ms, token_set},
+  zetaris: {status, configured, enabled, url, latency_ms}, summary}`. Never
+  returns a token value, only whether one is set.
+- `GET /` and any non API path -> `frontend/dist/index.html` when the UI is built.
 - `GET /health` -> `{status, sample_mode, version}`
 - `GET /provider/status` -> `{llm: {provider, status}, zetaris: {status, configured, enabled, url}}`
 
 Events never carry raw logs or secrets: only redacted excerpts, ids, step
 numbers, token counts and check statuses. Every LLM call emits a progress event
 with `provider`, `model`, `lane`, `latency_ms`, `tokens_in` and `tokens_out`.
+Each investigator step result also carries a small `carryover preview` (the top
+two hypotheses and the open question count), which is what the UI shows.
+
+## Stored results
+
+Every finished run writes `data/<trace_id>/result.json` next to its trace, so a
+refreshed page can read the verdict without re-running anything.
 
 ## CLI
 

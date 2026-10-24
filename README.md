@@ -135,6 +135,44 @@ curl -s -X POST localhost:8000/run -H 'content-type: application/json' -d '{"sam
 Traces land in `./logs`. Inside the container the Meterless runtime is reached at
 `http://host.docker.internal:8088/v1`; compose sets that for you.
 
+## The interface
+
+The UI is React, Vite, TypeScript and Tailwind, with shadcn style components
+vendored under `frontend/src/components/ui`. FastAPI serves the built app at `/`,
+so one container is still the whole product.
+
+```bash
+cd frontend
+npm install
+npm run types     # regenerate src/types/contract from docs/schemas
+npm run build     # writes frontend/dist
+npm run dev       # hot reload on 5173, API proxied to 127.0.0.1:8001
+```
+
+Two screens. `/` takes a run URL or an `owner/repo` pair, shows the provider
+strip and the sample cards. `/run/<trace_id>` streams the investigation live:
+the vertical pipeline lights up stage by stage, every investigator step shows
+its lane, model, tokens and carryover, the skeptic checks appear as pass, fail
+or n/a chips, and a critique handoff is drawn as an arrow back to the
+investigator. When the run finishes the same page becomes the verdict: cause
+badge, root cause with clickable `ev_` chips, next step, the confidence gauge
+with its full breakdown, evidence cards grouped by kind, a change timeline from
+the last green run to the failed one, and a raw event log.
+
+`src/types/contract/` is generated from `docs/schemas`, and `npm run
+check:types` fails when the two drift.
+
+## Tests
+
+```bash
+cd frontend
+npx vitest run          # verdict rendering per sample, ev chip linking, confidence sums
+npx playwright test     # smoke: run a sample, land on a verdict, click a citation
+```
+
+Tests are in `frontend/src/test` and `frontend/e2e`. Screenshots of the four
+states live in `docs/screenshots`.
+
 ## Contract
 
 `docs/contract.md` is the frozen wire format, `docs/schemas/` holds the exported
