@@ -1,0 +1,420 @@
+{
+  "$defs": {
+    "Cause": {
+      "description": "Why a run failed. `unknown` is a real answer, not a placeholder.",
+      "enum": [
+        "bad_commit",
+        "dependency_bump",
+        "flaky_test",
+        "infra_outage",
+        "expired_or_missing_secret",
+        "config_change",
+        "unknown"
+      ],
+      "title": "Cause",
+      "type": "string"
+    },
+    "ConfidenceSignal": {
+      "description": "One measured signal behind the confidence number.",
+      "properties": {
+        "signal": {
+          "title": "Signal",
+          "type": "string"
+        },
+        "weight": {
+          "title": "Weight",
+          "type": "number"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "signal",
+        "weight",
+        "value"
+      ],
+      "title": "ConfidenceSignal",
+      "type": "object"
+    },
+    "Evidence": {
+      "description": "One citable fact. `excerpt` is always redacted before it is stored.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "run",
+            "commit",
+            "file",
+            "log",
+            "dependency",
+            "outage",
+            "rerun"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "source_url": {
+          "title": "Source Url",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "excerpt": {
+          "title": "Excerpt",
+          "type": "string"
+        },
+        "timestamp": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Timestamp"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "title": "Metadata",
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "source_url",
+        "title",
+        "excerpt"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "JobInfo": {
+      "properties": {
+        "job_id": {
+          "title": "Job Id",
+          "type": "integer"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "conclusion": {
+          "title": "Conclusion",
+          "type": "string"
+        },
+        "steps": {
+          "items": {
+            "$ref": "#/$defs/StepInfo"
+          },
+          "title": "Steps",
+          "type": "array"
+        }
+      },
+      "required": [
+        "job_id",
+        "name",
+        "conclusion"
+      ],
+      "title": "JobInfo",
+      "type": "object"
+    },
+    "Link": {
+      "description": "One cross-source join from overlap.sql: a log error tied to a change.",
+      "properties": {
+        "link_type": {
+          "enum": [
+            "dependency_match",
+            "file_match",
+            "secret_or_config_match",
+            "config_match"
+          ],
+          "title": "Link Type",
+          "type": "string"
+        },
+        "log_evidence_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Log Evidence Id"
+        },
+        "change_evidence_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Change Evidence Id"
+        },
+        "score_hint": {
+          "title": "Score Hint",
+          "type": "number"
+        },
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        }
+      },
+      "required": [
+        "link_type",
+        "score_hint",
+        "detail"
+      ],
+      "title": "Link",
+      "type": "object"
+    },
+    "Metrics": {
+      "properties": {
+        "llm_calls": {
+          "default": 0,
+          "title": "Llm Calls",
+          "type": "integer"
+        },
+        "tokens_in": {
+          "default": 0,
+          "title": "Tokens In",
+          "type": "integer"
+        },
+        "tokens_out": {
+          "default": 0,
+          "title": "Tokens Out",
+          "type": "integer"
+        },
+        "latency_ms": {
+          "default": 0,
+          "title": "Latency Ms",
+          "type": "integer"
+        },
+        "query_engine": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Query Engine"
+        }
+      },
+      "title": "Metrics",
+      "type": "object"
+    },
+    "RunInfo": {
+      "properties": {
+        "run_id": {
+          "title": "Run Id",
+          "type": "integer"
+        },
+        "workflow_name": {
+          "title": "Workflow Name",
+          "type": "string"
+        },
+        "workflow_path": {
+          "title": "Workflow Path",
+          "type": "string"
+        },
+        "branch": {
+          "title": "Branch",
+          "type": "string"
+        },
+        "head_sha": {
+          "title": "Head Sha",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "conclusion": {
+          "title": "Conclusion",
+          "type": "string"
+        },
+        "runner_image": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Runner Image"
+        },
+        "jobs": {
+          "items": {
+            "$ref": "#/$defs/JobInfo"
+          },
+          "title": "Jobs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "run_id",
+        "workflow_name",
+        "workflow_path",
+        "branch",
+        "head_sha",
+        "created_at",
+        "conclusion"
+      ],
+      "title": "RunInfo",
+      "type": "object"
+    },
+    "StepInfo": {
+      "properties": {
+        "number": {
+          "title": "Number",
+          "type": "integer"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "conclusion": {
+          "title": "Conclusion",
+          "type": "string"
+        }
+      },
+      "required": [
+        "number",
+        "name",
+        "conclusion"
+      ],
+      "title": "StepInfo",
+      "type": "object"
+    },
+    "Verdict": {
+      "properties": {
+        "cause": {
+          "$ref": "#/$defs/Cause"
+        },
+        "root_cause": {
+          "title": "Root Cause",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "confidence_breakdown": {
+          "items": {
+            "$ref": "#/$defs/ConfidenceSignal"
+          },
+          "title": "Confidence Breakdown",
+          "type": "array"
+        },
+        "next_step": {
+          "title": "Next Step",
+          "type": "string"
+        },
+        "cited_evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Cited Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "cause",
+        "root_cause",
+        "confidence",
+        "confidence_breakdown",
+        "next_step",
+        "cited_evidence_ids"
+      ],
+      "title": "Verdict",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "input": {
+      "title": "Input",
+      "type": "string"
+    },
+    "failed_run": {
+      "$ref": "#/$defs/RunInfo"
+    },
+    "last_green_run": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RunInfo"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/Evidence"
+      },
+      "title": "Evidence",
+      "type": "array"
+    },
+    "verdict": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Verdict"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "links": {
+      "items": {
+        "$ref": "#/$defs/Link"
+      },
+      "title": "Links",
+      "type": "array"
+    },
+    "trace_id": {
+      "title": "Trace Id",
+      "type": "string"
+    },
+    "metrics": {
+      "$ref": "#/$defs/Metrics"
+    }
+  },
+  "required": [
+    "run_id",
+    "input",
+    "failed_run",
+    "trace_id"
+  ],
+  "title": "RunResult",
+  "type": "object"
+}

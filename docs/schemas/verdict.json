@@ -1,0 +1,85 @@
+{
+  "$defs": {
+    "Cause": {
+      "description": "Why a run failed. `unknown` is a real answer, not a placeholder.",
+      "enum": [
+        "bad_commit",
+        "dependency_bump",
+        "flaky_test",
+        "infra_outage",
+        "expired_or_missing_secret",
+        "config_change",
+        "unknown"
+      ],
+      "title": "Cause",
+      "type": "string"
+    },
+    "ConfidenceSignal": {
+      "description": "One measured signal behind the confidence number.",
+      "properties": {
+        "signal": {
+          "title": "Signal",
+          "type": "string"
+        },
+        "weight": {
+          "title": "Weight",
+          "type": "number"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "signal",
+        "weight",
+        "value"
+      ],
+      "title": "ConfidenceSignal",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "cause": {
+      "$ref": "#/$defs/Cause"
+    },
+    "root_cause": {
+      "title": "Root Cause",
+      "type": "string"
+    },
+    "confidence": {
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "confidence_breakdown": {
+      "items": {
+        "$ref": "#/$defs/ConfidenceSignal"
+      },
+      "title": "Confidence Breakdown",
+      "type": "array"
+    },
+    "next_step": {
+      "title": "Next Step",
+      "type": "string"
+    },
+    "cited_evidence_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Cited Evidence Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "cause",
+    "root_cause",
+    "confidence",
+    "confidence_breakdown",
+    "next_step",
+    "cited_evidence_ids"
+  ],
+  "title": "Verdict",
+  "type": "object"
+}

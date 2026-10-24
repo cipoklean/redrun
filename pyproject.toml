@@ -1,0 +1,36 @@
+[project]
+name = "redrun"
+version = "0.1.0"
+description = "Explains why a GitHub Actions run failed: cause, evidence, confidence, next step."
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "pydantic>=2.6",
+    "httpx>=0.27",
+    "python-dotenv>=1.0",
+    "duckdb>=1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+]
+
+[project.scripts]
+redrun = "redrun.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["redrun"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = [
+    # Starlette's TestClient warns about httpx while FastAPI still ships that pair.
+    "ignore:Using `httpx` with `starlette.testclient` is deprecated",
+]

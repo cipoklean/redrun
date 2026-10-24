@@ -1,0 +1,61 @@
+{
+  "description": "One citable fact. `excerpt` is always redacted before it is stored.",
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "run",
+        "commit",
+        "file",
+        "log",
+        "dependency",
+        "outage",
+        "rerun"
+      ],
+      "title": "Kind",
+      "type": "string"
+    },
+    "source_url": {
+      "title": "Source Url",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "excerpt": {
+      "title": "Excerpt",
+      "type": "string"
+    },
+    "timestamp": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Timestamp"
+    },
+    "metadata": {
+      "additionalProperties": true,
+      "title": "Metadata",
+      "type": "object"
+    }
+  },
+  "required": [
+    "id",
+    "kind",
+    "source_url",
+    "title",
+    "excerpt"
+  ],
+  "title": "Evidence",
+  "type": "object"
+}

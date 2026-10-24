@@ -1,0 +1,54 @@
+{
+  "description": "One cross-source join from overlap.sql: a log error tied to a change.",
+  "properties": {
+    "link_type": {
+      "enum": [
+        "dependency_match",
+        "file_match",
+        "secret_or_config_match",
+        "config_match"
+      ],
+      "title": "Link Type",
+      "type": "string"
+    },
+    "log_evidence_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Log Evidence Id"
+    },
+    "change_evidence_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Change Evidence Id"
+    },
+    "score_hint": {
+      "title": "Score Hint",
+      "type": "number"
+    },
+    "detail": {
+      "title": "Detail",
+      "type": "string"
+    }
+  },
+  "required": [
+    "link_type",
+    "score_hint",
+    "detail"
+  ],
+  "title": "Link",
+  "type": "object"
+}

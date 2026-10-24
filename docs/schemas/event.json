@@ -1,0 +1,49 @@
+{
+  "description": "One line of the JSONL trace. Also the SSE payload shape, later.",
+  "properties": {
+    "ts": {
+      "format": "date-time",
+      "title": "Ts",
+      "type": "string"
+    },
+    "agent": {
+      "enum": [
+        "triage",
+        "collector",
+        "zetaris",
+        "investigator",
+        "skeptic"
+      ],
+      "title": "Agent",
+      "type": "string"
+    },
+    "type": {
+      "enum": [
+        "start",
+        "progress",
+        "handoff",
+        "check",
+        "result",
+        "error"
+      ],
+      "title": "Type",
+      "type": "string"
+    },
+    "message": {
+      "title": "Message",
+      "type": "string"
+    },
+    "data": {
+      "additionalProperties": true,
+      "title": "Data",
+      "type": "object"
+    }
+  },
+  "required": [
+    "agent",
+    "type",
+    "message"
+  ],
+  "title": "Event",
+  "type": "object"
+}
