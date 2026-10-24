@@ -19,11 +19,21 @@ Built for the Open Agent Hackathon 2026, Track 2 (The Agent That Can Explain Why
   changed file, to a workflow change, or a run-level config difference.
 - That query runs on **Zetaris** when configured, on **DuckDB** otherwise, and on
   recorded results in sample mode. `metrics.query_engine` always says which.
-- A rules-based verdict that scores those links alongside the log and diff
-  signals. Every signal and weight is listed in `confidence_breakdown`.
-- CLI and API, a JSONL trace per run, three offline sample cases.
-- The LLM adapter is wired but **not called** by the verdict yet: the agents come
-  in a later change.
+- A **Markovian investigator** that reads the evidence in ordered chunks: each
+  LLM call sees one chunk plus a capped carryover state, never the whole run.
+  `metrics.markovian` reports steps, stop reason, tokens in, the token cost of a
+  single all-evidence prompt, and `tokens_saved`.
+- A **skeptic** that runs six tool checks on the proposed verdict
+  (same-SHA-elsewhere, test history, error/change overlap, GitHub incidents,
+  dependency timing, citation validity). A decisive failure sends one critique
+  back to the investigator for exactly one revision; a second failure ends in
+  `unknown` with the reason.
+- A **citation guard**: a verdict may only cite evidence ids that exist in that
+  run, and a non-`unknown` cause must cite at least one.
+- **Computed confidence** from named signals in `confidence_breakdown`; the model
+  never emits a score, and any it returns is stripped and logged.
+- **Live events**: every stage writes to the JSONL trace and to an SSE stream.
+- CLI and API, four offline sample cases, and a recorder for new ones.
 
 ## The evidence engines
 
@@ -79,6 +89,13 @@ curl -s localhost:8000/provider/status
 curl -s -X POST localhost:8000/run \
   -H 'content-type: application/json' \
   -d '{"sample":"expired_or_missing_secret"}'
+
+# the same run, as it happens
+curl -sN -X POST localhost:8000/run/stream \
+  -H 'content-type: application/json' -d '{"sample":"flaky_test"}'
+
+# replay a finished run's trace
+curl -sN localhost:8000/run/<trace_id>/events
 ```
 
 ## Live mode
@@ -92,6 +109,20 @@ SAMPLE_MODE=false python -m redrun investigate owner/repo    # latest failed run
 The LLM provider is chosen by `LLM_PROVIDER`: `meterless` (default) or `nvidia`.
 `GET /provider/status` reports `online`, `unauthorized` or `offline` without
 throwing.
+
+Qualify the runtime itself, then record a new sample from a real run:
+
+```bash
+python -m redrun meterless-check            # GET /v1/models + one pinned completion
+python -m redrun record-sample <run-url> --name my_case
+```
+
+`meterless-check` masks the token, prints the model the runtime actually
+returned, and exits 1 naming `offline` or `unauthorized` separately. It never
+falls back silently: if a different provider serves the completion, it says so.
+`record-sample` writes a redacted sample directory (collector outputs, the
+Zetaris result with `recorded_from`, the skeptic inputs and every LLM step) so
+`SAMPLE_MODE=true` can replay it with no network.
 
 ## Docker
 
