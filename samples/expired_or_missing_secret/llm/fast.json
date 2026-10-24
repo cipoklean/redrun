@@ -1,0 +1,7 @@
+{
+  "text": "The failing step is Log in to registry: the registry rejected the token with 401.",
+  "usage": {
+    "prompt_tokens": 812,
+    "completion_tokens": 41
+  }
+}

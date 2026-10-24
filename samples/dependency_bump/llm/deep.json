@@ -1,0 +1,7 @@
+{
+  "text": "fastapi 0.116.0 pins httpx<0.28 while the project asks for httpx>=0.28, so uv cannot solve the graph. Either pin fastapi back or raise its httpx bound.",
+  "usage": {
+    "prompt_tokens": 1094,
+    "completion_tokens": 71
+  }
+}

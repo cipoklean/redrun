@@ -1,0 +1,7 @@
+{
+  "text": "pytest failed with AttributeError: NoneType has no attribute created_at in the green run lookup.",
+  "usage": {
+    "prompt_tokens": 902,
+    "completion_tokens": 33
+  }
+}

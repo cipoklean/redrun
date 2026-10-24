@@ -1,0 +1,32 @@
+{
+  "commits": [
+    {
+      "sha": "3f9c2a1d4b5e6f708192a3b4c5d6e7f8091a2b3c",
+      "message": "chore(deps): bump fastapi to 0.116.0 and httpx to 0.28.1",
+      "author": "dependabot[bot]",
+      "date": "2026-10-23T08:55:00Z"
+    },
+    {
+      "sha": "c0ffee12ab34cd56ef78901234567890abcdef12",
+      "message": "docs: fix typo in README",
+      "author": "david",
+      "date": "2026-10-23T09:02:31Z"
+    }
+  ],
+  "files": [
+    {
+      "filename": "pyproject.toml",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "patch": "@@ -9,8 +9,8 @@ dependencies = [\n-    \"fastapi>=0.110\",\n-    \"httpx>=0.27\",\n+    \"fastapi>=0.116\",\n+    \"httpx>=0.28\",\n     \"pydantic>=2.6\","
+    },
+    {
+      "filename": "README.md",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "patch": "@@ -1 +1 @@\n-# redrun\n+# RedRun"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "text": "The deploy workflow was updated to read secrets.REGISTRY_TOKEN, and the runner reports that secret is empty, so the login step receives no password and the registry returns 401. Rotating or re-adding the repository secret is the fix.",
+  "usage": {
+    "prompt_tokens": 1180,
+    "completion_tokens": 96
+  }
+}

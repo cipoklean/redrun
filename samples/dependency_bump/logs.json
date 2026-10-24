@@ -1,0 +1,9 @@
+{
+  "jobs": [
+    {
+      "job_id": 90011,
+      "name": "test (3.11)",
+      "log": "2026-10-23T09:13:55.001Z ##[group]Run actions/setup-python@v5\n2026-10-23T09:13:55.002Z with:\n2026-10-23T09:13:55.003Z   python-version: 3.11\n2026-10-23T09:13:55.004Z ##[endgroup]\n2026-10-23T09:13:55.120Z Successfully set up Python 3.11.16\n2026-10-23T09:13:55.400Z ##[group]Run uv pip install -e \".[dev]\"\n2026-10-23T09:13:58.010Z Resolved 34 packages in 2.61s\n2026-10-23T09:13:58.120Z    Building redrun @ file:///home/runner/work/widgets/widgets\n2026-10-23T09:13:58.900Z       Built redrun @ file:///home/runner/work/widgets/widgets\n2026-10-23T09:13:58.910Z Downloading fastapi-0.116.0-py3-none-any.whl\n2026-10-23T09:13:58.920Z Downloading httpx-0.28.1-py3-none-any.whl\n2026-10-23T09:13:59.020Z error: Failed to prepare distributions\n2026-10-23T09:13:59.021Z   Caused by: Failed to download and build `fastapi==0.116.0`\n2026-10-23T09:13:59.022Z   Caused by: Package `fastapi==0.116.0` requires `httpx<0.28`, but `0.28.1` is installed\n2026-10-23T09:13:59.030Z Resolving dependencies failed: no solution\n2026-10-23T09:13:59.031Z   Because fastapi 0.116.0 depends on httpx<0.28 and redrun depends on httpx>=0.28,\n2026-10-23T09:13:59.032Z   version solving failed.\n2026-10-23T09:13:59.040Z ##[error]Process completed with exit code 1.\n"
+    }
+  ]
+}

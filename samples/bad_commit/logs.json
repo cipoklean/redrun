@@ -1,0 +1,9 @@
+{
+  "jobs": [
+    {
+      "job_id": 90021,
+      "name": "test (3.11)",
+      "log": "2026-10-23T11:02:31.100Z ##[group]Run pytest -q\n2026-10-23T11:02:31.101Z pytest -q\n2026-10-23T11:02:31.500Z ============================= test session starts ==============================\n2026-10-23T11:02:31.501Z platform linux -- Python 3.11.16, pytest-8.3.3, pluggy-1.5.0\n2026-10-23T11:02:31.502Z rootdir: /home/runner/work/widgets/widgets\n2026-10-23T11:02:33.900Z collected 41 items\n2026-10-23T11:02:34.400Z .....................................F....\n2026-10-23T11:02:34.410Z =================================== FAILURES ===================================\n2026-10-23T11:02:34.411Z ________________________ test_returns_both_runs _________________________\n2026-10-23T11:02:34.412Z\n2026-10-23T11:02:34.413Z     def test_returns_both_runs(sample_ctx):\n2026-10-23T11:02:34.414Z         got = collect(sample_ctx, client=None)\n2026-10-23T11:02:34.415Z >       assert got.last_green_run is not None\n2026-10-23T11:02:34.416Z E       AttributeError: 'NoneType' object has no attribute 'created_at'\n2026-10-23T11:02:34.417Z\n2026-10-23T11:02:34.418Z redrun/collectors/github_runs.py:91: AttributeError\n2026-10-23T11:02:34.500Z =========================== short test summary info ============================\n2026-10-23T11:02:34.501Z FAILED tests/test_collectors.py::test_returns_both_runs - AttributeError: 'NoneType' object has no attribute 'created_at'\n2026-10-23T11:02:34.600Z ##[error]Process completed with exit code 1.\n"
+    }
+  ]
+}

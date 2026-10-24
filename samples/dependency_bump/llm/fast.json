@@ -1,0 +1,7 @@
+{
+  "text": "Dependency resolution failed: fastapi 0.116.0 wants httpx<0.28, the project wants httpx>=0.28.",
+  "usage": {
+    "prompt_tokens": 760,
+    "completion_tokens": 37
+  }
+}

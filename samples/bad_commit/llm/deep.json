@@ -1,0 +1,7 @@
+{
+  "text": "The refactor added an early return when the green run lookup returns None, but RunInfo still requires created_at, so constructing the result raises AttributeError. The guard returns before the type contract is satisfied.",
+  "usage": {
+    "prompt_tokens": 1042,
+    "completion_tokens": 88
+  }
+}

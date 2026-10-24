@@ -1,0 +1,26 @@
+{
+  "commits": [
+    {
+      "sha": "8d4e2f6a0b1c3d5e7f9012345678abcdef012345",
+      "message": "refactor: return early when a run has no jobs",
+      "author": "david",
+      "date": "2026-10-23T10:58:12Z"
+    }
+  ],
+  "files": [
+    {
+      "filename": "redrun/collectors/github_runs.py",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 3,
+      "patch": "@@ -84,9 +84,10 @@ def collect(ctx: CollectContext, client: GitHubAPI | None = None) -> RunsCollected\n-    green = _last_green(client, target, failed)\n-    return RunsCollected(failed_run=failed, last_green_run=green, evidence=evidence)\n+    green = _last_green(client, target, failed)\n+    if green is None:\n+        return RunsCollected(failed_run=failed, last_green_run=None, evidence=evidence)\n+    return RunsCollected(failed_run=failed, last_green_run=green, evidence=evidence)"
+    },
+    {
+      "filename": "redrun/core/models.py",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "patch": "@@ -58,7 +58,7 @@ class RunInfo(BaseModel):\n-    created_at: datetime\n+    created_at: datetime | None = None"
+    }
+  ]
+}

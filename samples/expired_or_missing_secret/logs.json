@@ -1,0 +1,9 @@
+{
+  "jobs": [
+    {
+      "job_id": 90031,
+      "name": "deploy",
+      "log": "2026-10-23T13:45:02.100Z ##[group]Run docker/login-action@v3\n2026-10-23T13:45:02.101Z with:\n2026-10-23T13:45:02.102Z   registry: registry.example.com\n2026-10-23T13:45:02.103Z   username: deploy-bot\n2026-10-23T13:45:02.300Z ##[endgroup]\n2026-10-23T13:45:02.900Z WARNING: secret REGISTRY_TOKEN is empty\n2026-10-23T13:45:03.100Z Logging into registry.example.com...\n2026-10-23T13:45:04.400Z Error response from daemon: Get \"https://registry.example.com/v2/\": unauthorized: authentication required\n2026-10-23T13:45:04.410Z ##[error]401 Unauthorized\n2026-10-23T13:45:04.500Z ##[error]Process completed with exit code 1.\n"
+    }
+  ]
+}

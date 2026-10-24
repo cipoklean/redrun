@@ -1,0 +1,83 @@
+{
+  "workflow": {
+    "id": 71001,
+    "name": "CI",
+    "path": ".github/workflows/ci.yml"
+  },
+  "branch": "main",
+  "runner_image": "ubuntu-24.04",
+  "failed_run": {
+    "run_id": 5001,
+    "head_sha": "3f9c2a1d4b5e6f708192a3b4c5d6e7f8091a2b3c",
+    "created_at": "2026-10-23T09:14:02Z",
+    "conclusion": "failure",
+    "jobs": [
+      {
+        "job_id": 90011,
+        "name": "test (3.11)",
+        "conclusion": "failure",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Install dependencies",
+            "conclusion": "failure"
+          },
+          {
+            "number": 4,
+            "name": "Run pytest",
+            "conclusion": "skipped"
+          }
+        ]
+      }
+    ]
+  },
+  "last_green_run": {
+    "run_id": 4980,
+    "head_sha": "b71e0d9c8a7f6e5d4c3b2a1908f7e6d5c4b3a291",
+    "created_at": "2026-10-22T17:40:11Z",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "job_id": 90004,
+        "name": "test (3.11)",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Install dependencies",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Run pytest",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  },
+  "repository": {
+    "owner": "acme",
+    "repo": "widgets"
+  }
+}

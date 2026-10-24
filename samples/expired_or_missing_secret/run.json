@@ -1,0 +1,83 @@
+{
+  "workflow": {
+    "id": 71003,
+    "name": "deploy",
+    "path": ".github/workflows/deploy.yml"
+  },
+  "branch": "main",
+  "runner_image": "ubuntu-24.04",
+  "failed_run": {
+    "run_id": 5020,
+    "head_sha": "5c7d9e1f3a5b7c9d1e3f5a7b9c1d3e5f7a9b1c3d",
+    "created_at": "2026-10-23T13:45:10Z",
+    "conclusion": "failure",
+    "jobs": [
+      {
+        "job_id": 90031,
+        "name": "deploy",
+        "conclusion": "failure",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Log in to registry",
+            "conclusion": "failure"
+          },
+          {
+            "number": 4,
+            "name": "Push image",
+            "conclusion": "skipped"
+          }
+        ]
+      }
+    ]
+  },
+  "last_green_run": {
+    "run_id": 5015,
+    "head_sha": "5c7d9e1f3a5b7c9d1e3f5a7b9c1d3e5f7a9b1c3d",
+    "created_at": "2026-10-22T22:10:03Z",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "job_id": 90028,
+        "name": "deploy",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Log in to registry",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Push image",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  },
+  "repository": {
+    "owner": "acme",
+    "repo": "widgets"
+  }
+}

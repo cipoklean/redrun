@@ -1,0 +1,15 @@
+{
+  "recorded_from": "duckdb",
+  "note": "Recorded by running redrun/queries/overlap.sql on this sample's tables with DuckDB. No live Zetaris cluster was reachable when this was recorded, so replay is labelled engine=zetaris_replay rather than zetaris.",
+  "sql_sha256": "029627e167e7c2335341b0ac780a31693fb83827a82506c81c9350315c90adb7",
+  "row_count": 1,
+  "rows": [
+    {
+      "link_type": "secret_or_config_match",
+      "log_evidence_id": "ev_log_001",
+      "change_evidence_id": "ev_file_001",
+      "score_hint": 0.75,
+      "detail": "auth or secret failure alongside changed .github/workflows/deploy.yml"
+    }
+  ]
+}
