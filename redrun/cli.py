@@ -6,13 +6,21 @@
 
 import argparse
 import sys
+from dataclasses import replace
 
 from redrun.adapters.base import EngineError
+from redrun.adapters.llm import LLMClient, LLMError
 from redrun.adapters.zetaris import ZetarisEngine
+from redrun.agents.investigator import MarkovianInvestigator
+from redrun.agents.skeptic import Skeptic
 from redrun.collectors.base import CollectorError
 from redrun.config import Settings, load_settings
-from redrun.core.models import RunResult
-from redrun.pipeline import investigate, prepare, run_overlap
+from redrun.core.models import RunResult, Verdict
+from redrun.core.taxonomy import Cause
+from redrun.pipeline import _triage_cause, investigate, prepare, run_overlap
+from redrun.recording import RecordingLLM, write_sample
+from redrun.world.context import ContextBuilder
+from redrun.world.ingest import ingest
 
 ENGINES = ("zetaris", "duckdb")
 
@@ -35,6 +43,15 @@ def _parser() -> argparse.ArgumentParser:
 
     check = sub.add_parser("zetaris-check", help="report Zetaris status and run a query")
     check.add_argument("--sample", default="dependency_bump", help="sample whose tables to query")
+
+    meterless = sub.add_parser(
+        "meterless-check", help="prove the Meterless/Nightshift runtime answers a real completion"
+    )
+    meterless.add_argument("--json", action="store_true", dest="as_json")
+
+    record = sub.add_parser("record-sample", help="record a live run as a replayable sample")
+    record.add_argument("url", help="https://github.com/owner/repo/actions/runs/<id>")
+    record.add_argument("--name", required=True, help="sample directory name")
     return parser
 
 
@@ -103,11 +120,151 @@ def _zetaris_check(sample: str, base: Settings) -> int:
     return 0
 
 
+def _mask(token: str) -> str:
+    if not token:
+        return "(not set)"
+    if len(token) <= 6:
+        return "*" * len(token)
+    return f"{token[:4]}{'*' * (len(token) - 6)}{token[-2:]}"
+
+
+def meterless_check(base: Settings, *, transport=None) -> int:
+    """GET /v1/models, then ONE pinned completion. Exit 1 with a reason if it cannot."""
+    # This check exists to qualify a live runtime, so SAMPLE_MODE must not short-circuit it.
+    base = replace(base, sample_mode=False)
+    client = LLMClient(base, sample_case=None, transport=transport)
+    status = client.status()
+
+    print(f"provider     : {client.provider}")
+    print(f"base url     : {base.meterless_base_url}")
+    print(f"token        : {_mask(base.meterless_runtime_token)}")
+    print(f"status       : {status}")
+
+    if client.provider != "meterless":
+        print(
+            f"WARNING: LLM_PROVIDER={client.provider!r}. This is not the Meterless/Nightshift "
+            "path; nothing below proves Nightshift works."
+        )
+    if status == "unauthorized":
+        print("exit 1: unauthorized (missing or rejected METERLESS_RUNTIME_TOKEN)")
+        return 1
+    if status != "online":
+        print(
+            f"exit 1: offline (nothing answering at {base.meterless_base_url}; "
+            "is Nightshift running?)"
+        )
+        return 1
+
+    models = client.list_models()
+    print(f"models       : {len(models)} from GET /v1/models")
+    for model_id in models[:20]:
+        print(f"  - {model_id}")
+
+    try:
+        completion = client.complete(
+            [{"role": "user", "content": "Reply with the single word: ready"}], lane="fast"
+        )
+    except LLMError as exc:
+        print(f"chat         : FAILED {exc}")
+        return 1
+
+    usage = completion.usage
+    print(f"chat HTTP    : {client.last_status}")
+    print(f"chat model   : {usage.model}")
+    print(f"chat latency : {usage.latency_ms} ms")
+    print(f"chat tokens  : in={usage.prompt_tokens} out={usage.completion_tokens}")
+    print(f"chat text    : {completion.text.strip()[:80]}")
+    print(f"pinned model : {base.meterless_fast_model}")
+    if usage.provider != "meterless":
+        print(f"WARNING: the completion was served by {usage.provider!r}, not meterless")
+    if usage.model != base.meterless_fast_model:
+        print(f"NOTE: provider reported model {usage.model!r}, not the pinned id")
+    return 0
+
+
+def record_sample(url: str, name: str, base: Settings) -> int:
+    """One live run, saved as a replayable sample. Needs credentials and network."""
+    if base.sample_mode:
+        print("record-sample needs SAMPLE_MODE=false and live credentials")
+        return 1
+    live = replace(base, sample_mode=False)
+    prepared = prepare(url, None, live)
+    engine = "zetaris" if live.zetaris_enabled else "duckdb"
+    try:
+        links, label, _skipped = run_overlap(prepared, live, engine)
+        llm = RecordingLLM(LLMClient(live, sample_case=None))
+        world = ingest(
+            trace_id=prepared.trace_id,
+            runs=prepared.runs,
+            changes=prepared.changes,
+            job_logs=prepared.job_logs,
+            deps=prepared.deps,
+            links=links,
+            evidence=prepared.evidence,
+        )
+        investigator = MarkovianInvestigator(
+            llm=llm,
+            tracer=prepared.tracer,
+            builder=ContextBuilder(world, prepared.evidence),
+            evidence=prepared.evidence,
+            max_steps=live.investigator_max_steps,
+        )
+        investigated = investigator.run(triage_cause=_triage_cause(links, prepared.job_logs))
+        skeptic = Skeptic(
+            settings=live,
+            tracer=prepared.tracer,
+            runs=prepared.runs,
+            changes=prepared.changes,
+            job_logs=prepared.job_logs,
+            deps=prepared.deps,
+            links=links,
+            evidence=prepared.evidence,
+            sample_case=None,
+            github=prepared.client,
+        )
+        if investigated.verdict is not None:
+            proposal = investigated.verdict
+            skeptic.check(
+                Verdict(
+                    cause=proposal.cause,
+                    root_cause=proposal.root_cause,
+                    confidence=0.0,
+                    confidence_breakdown=[],
+                    next_step=proposal.next_step,
+                    cited_evidence_ids=list(proposal.cited_evidence_ids),
+                )
+            )
+    except (CollectorError, EngineError, LLMError) as exc:
+        print(f"record-sample failed: {exc}")
+        return 2
+    finally:
+        if prepared.client is not None:
+            prepared.client.close()
+
+    path = write_sample(
+        settings=base,
+        name=name,
+        prepared=prepared,
+        links=links,
+        engine_label=label,
+        llm_steps=llm.steps,
+        skeptic=skeptic,
+    )
+    print(f"recorded {path} ({len(llm.steps)} LLM steps, {len(links)} links, engine={label})")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
 
     if args.command == "zetaris-check":
         return _zetaris_check(args.sample, load_settings())
+
+    if args.command == "meterless-check":
+        return meterless_check(load_settings())
+
+    if args.command == "record-sample":
+        return record_sample(args.url, args.name, load_settings())
 
     if args.command != "investigate":
         _parser().print_help()

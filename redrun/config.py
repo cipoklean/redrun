@@ -25,6 +25,7 @@ class Settings:
     meterless_runtime_token: str = ""
     meterless_fast_model: str = "nvidia/nemotron-3.5-lightning-30b-a3b"
     meterless_deep_model: str = "nvidia/nemotron-3.5-super-vl-120b-a12b"
+    meterless_judge_model: str = ""
     nvidia_api_key: str = ""
     github_token: str = ""
     zetaris_enabled: bool = False
@@ -54,6 +55,7 @@ def load_settings() -> Settings:
         or "nvidia/nemotron-3.5-lightning-30b-a3b",
         meterless_deep_model=os.getenv("METERLESS_DEEP_MODEL")
         or "nvidia/nemotron-3.5-super-vl-120b-a12b",
+        meterless_judge_model=os.getenv("METERLESS_JUDGE_MODEL") or "",
         nvidia_api_key=os.getenv("NVIDIA_API_KEY") or "",
         github_token=os.getenv("GITHUB_TOKEN") or "",
         zetaris_enabled=_as_bool(os.getenv("ZETARIS_ENABLED"), default=False),

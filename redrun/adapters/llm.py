@@ -16,7 +16,7 @@ from redrun.config import Settings
 
 NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
 TIMEOUT_SECONDS = 180.0
-LANES = ("fast", "deep")
+LANES = ("fast", "deep", "judge")
 
 
 class LLMError(RuntimeError):
@@ -52,7 +52,9 @@ class LLMClient:
         self.sample_case = sample_case
         self.timeout = TIMEOUT_SECONDS
         self.provider = "sample" if settings.sample_mode else settings.llm_provider
+        self.base_url = ""
         self._sample_index = 0
+        self.last_status: int | None = None
 
         if self.provider == "sample":
             self._client: httpx.Client | None = None
@@ -86,11 +88,11 @@ class LLMClient:
             raise LLMError(f"unknown lane {lane!r}; expected one of {LANES}")
         if self.provider == "sample":
             return f"sample/{lane}"
-        return (
-            self.settings.meterless_fast_model
-            if lane == "fast"
-            else self.settings.meterless_deep_model
-        )
+        if lane == "fast":
+            return self.settings.meterless_fast_model
+        if lane == "judge":
+            return self.settings.meterless_judge_model or self.settings.meterless_deep_model
+        return self.settings.meterless_deep_model
 
     def _sample_completion(self, lane: str) -> Completion:
         if not self.sample_case:
@@ -156,6 +158,7 @@ class LLMClient:
             raise LLMError(
                 f"{self.provider} returned {response.status_code}: {response.text[:200]}"
             )
+        self.last_status = response.status_code
         try:
             payload = response.json()
             text = payload["choices"][0]["message"]["content"]
@@ -173,6 +176,25 @@ class LLMClient:
                 model=str(payload.get("model") or model),
             ),
         )
+
+    def list_models(self) -> list[str]:
+        """Model ids from GET {base}/models. Empty when unreachable or unauthorized."""
+        if self.provider == "sample" or self._client is None:
+            return []
+        try:
+            response = self._client.get(f"{self.base_url}/models")
+        except httpx.HTTPError:
+            return []
+        if response.status_code >= 400:
+            return []
+        try:
+            payload = response.json()
+        except ValueError:
+            return []
+        entries = payload.get("data") if isinstance(payload, dict) else None
+        if not isinstance(entries, list):
+            return []
+        return [str(entry.get("id")) for entry in entries if isinstance(entry, dict)]
 
     def status(self) -> str:
         """online | unauthorized | offline | sample. Never raises."""
