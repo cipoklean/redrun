@@ -65,12 +65,42 @@ ties a log error to a change.
 | `verdict` | Verdict or null | null only if the pipeline could not run |
 | `links` | array of Link | from the cross-source query, ranked by `score_hint` |
 | `trace_id` | string | filename stem of `logs/<trace_id>.jsonl` |
-| `metrics` | object | `llm_calls`, `tokens_in`, `tokens_out`, `latency_ms`, `query_engine` |
+| `metrics` | object | `llm_calls`, `tokens_in`, `tokens_out`, `latency_ms`, `query_engine`, `markovian` |
+| `skeptic` | SkepticReport or null | tool checks, revisions, final status |
 
 `query_engine` is one of `zetaris`, `zetaris_replay`, `duckdb`, `duckdb_fallback`.
 `zetaris_replay` means a recorded result was replayed, never that a live query
 ran. `duckdb_fallback` means the configured engine failed and is reported in the
 trace as an error event.
+
+## SkepticReport
+
+| field | type | notes |
+| --- | --- | --- |
+| `checks` | array of CheckResult | six tool checks |
+| `revisions` | number | 0 or 1; the loop is capped at one revision |
+| `final_status` | enum | `passed`, `revised`, `failed`, `skipped` |
+
+`CheckResult`: `check`, `status` (`pass` / `fail` / `n/a`), `detail`,
+`evidence_ids`. `status` means "does this check support the proposed cause":
+`pass` supports it, `fail` contradicts it, `n/a` does not apply. A `fail` on a
+decisive check (`same_sha_elsewhere`, `test_failure_history`,
+`error_change_overlap`, `outage_overlap`, `dependency_timing`,
+`citation_validity`) sends the investigator back for exactly one revision. If
+the re-check still fails, the cause becomes `unknown` and `root_cause` says why.
+
+## Metrics.markovian
+
+| field | type | notes |
+| --- | --- | --- |
+| `steps` | number | LLM calls made by the investigator, including a revision |
+| `stop_reason` | enum | `rule` (evidence sufficient), `cap` (step limit) or `error` |
+| `tokens_in` | number | prompt tokens actually sent |
+| `tokens_out` | number | completion tokens |
+| `carryover_tokens_max` | number | largest carryover state passed between steps |
+| `full_context_tokens_estimate` | number | one prompt containing all evidence |
+| `tokens_saved` | number | full estimate minus tokens actually sent, floored at 0 |
+| `per_step` | array | `step`, `chunk`, `lane`, `provider`, `model`, `tokens_in`, `tokens_out`, `latency_ms`, `ok` |
 
 `RunInfo`: `run_id` (number), `workflow_name`, `workflow_path`, `branch`,
 `head_sha`, `created_at`, `conclusion`, `runner_image` (string or null), `jobs`.
@@ -140,5 +170,22 @@ Machine-readable versions of Evidence, Verdict, Link, RunResult and Event are in
 
 - `POST /run {target?, sample?, engine?}` -> RunResult. `engine` is `zetaris` or
   `duckdb`; omit it to auto-select.
+- `POST /run/stream` -> `text/event-stream` of Event objects, live as the run
+  happens, then close. Errors arrive as `event: error`.
+- `GET /run/{trace_id}/events` -> the same Event stream, replayed from a
+  finished trace. 404 for an unknown trace id.
 - `GET /health` -> `{status, sample_mode, version}`
 - `GET /provider/status` -> `{llm: {provider, status}, zetaris: {status, configured, enabled, url}}`
+
+Events never carry raw logs or secrets: only redacted excerpts, ids, step
+numbers, token counts and check statuses. Every LLM call emits a progress event
+with `provider`, `model`, `lane`, `latency_ms`, `tokens_in` and `tokens_out`.
+
+## CLI
+
+```
+python -m redrun investigate <url-or-owner/repo> [--sample NAME] [--engine zetaris|duckdb] [--json]
+python -m redrun zetaris-check [--sample NAME]
+python -m redrun meterless-check
+python -m redrun record-sample <run-url> --name <case>
+```

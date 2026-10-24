@@ -14,6 +14,42 @@
       "title": "Cause",
       "type": "string"
     },
+    "CheckResult": {
+      "description": "One skeptic tool check. `status` says whether it supports the proposal.",
+      "properties": {
+        "check": {
+          "title": "Check",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "pass",
+            "fail",
+            "n/a"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "check",
+        "status",
+        "detail"
+      ],
+      "title": "CheckResult",
+      "type": "object"
+    },
     "ConfidenceSignal": {
       "description": "One measured signal behind the confidence number.",
       "properties": {
@@ -183,6 +219,59 @@
       "title": "Link",
       "type": "object"
     },
+    "MarkovianMetrics": {
+      "properties": {
+        "steps": {
+          "default": 0,
+          "title": "Steps",
+          "type": "integer"
+        },
+        "stop_reason": {
+          "default": "cap",
+          "enum": [
+            "rule",
+            "cap",
+            "error"
+          ],
+          "title": "Stop Reason",
+          "type": "string"
+        },
+        "tokens_in": {
+          "default": 0,
+          "title": "Tokens In",
+          "type": "integer"
+        },
+        "tokens_out": {
+          "default": 0,
+          "title": "Tokens Out",
+          "type": "integer"
+        },
+        "carryover_tokens_max": {
+          "default": 0,
+          "title": "Carryover Tokens Max",
+          "type": "integer"
+        },
+        "full_context_tokens_estimate": {
+          "default": 0,
+          "title": "Full Context Tokens Estimate",
+          "type": "integer"
+        },
+        "tokens_saved": {
+          "default": 0,
+          "title": "Tokens Saved",
+          "type": "integer"
+        },
+        "per_step": {
+          "items": {
+            "$ref": "#/$defs/StepMetrics"
+          },
+          "title": "Per Step",
+          "type": "array"
+        }
+      },
+      "title": "MarkovianMetrics",
+      "type": "object"
+    },
     "Metrics": {
       "properties": {
         "llm_calls": {
@@ -216,6 +305,17 @@
           ],
           "default": null,
           "title": "Query Engine"
+        },
+        "markovian": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MarkovianMetrics"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         }
       },
       "title": "Metrics",
@@ -284,6 +384,35 @@
       "title": "RunInfo",
       "type": "object"
     },
+    "SkepticReport": {
+      "properties": {
+        "checks": {
+          "items": {
+            "$ref": "#/$defs/CheckResult"
+          },
+          "title": "Checks",
+          "type": "array"
+        },
+        "revisions": {
+          "default": 0,
+          "title": "Revisions",
+          "type": "integer"
+        },
+        "final_status": {
+          "default": "skipped",
+          "enum": [
+            "passed",
+            "revised",
+            "failed",
+            "skipped"
+          ],
+          "title": "Final Status",
+          "type": "string"
+        }
+      },
+      "title": "SkepticReport",
+      "type": "object"
+    },
     "StepInfo": {
       "properties": {
         "number": {
@@ -305,6 +434,60 @@
         "conclusion"
       ],
       "title": "StepInfo",
+      "type": "object"
+    },
+    "StepMetrics": {
+      "description": "One LLM step of the Markovian investigator.",
+      "properties": {
+        "step": {
+          "title": "Step",
+          "type": "integer"
+        },
+        "chunk": {
+          "title": "Chunk",
+          "type": "string"
+        },
+        "lane": {
+          "title": "Lane",
+          "type": "string"
+        },
+        "provider": {
+          "title": "Provider",
+          "type": "string"
+        },
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "tokens_in": {
+          "title": "Tokens In",
+          "type": "integer"
+        },
+        "tokens_out": {
+          "title": "Tokens Out",
+          "type": "integer"
+        },
+        "latency_ms": {
+          "title": "Latency Ms",
+          "type": "integer"
+        },
+        "ok": {
+          "default": true,
+          "title": "Ok",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "step",
+        "chunk",
+        "lane",
+        "provider",
+        "model",
+        "tokens_in",
+        "tokens_out",
+        "latency_ms"
+      ],
+      "title": "StepMetrics",
       "type": "object"
     },
     "Verdict": {
@@ -400,6 +583,17 @@
       },
       "title": "Links",
       "type": "array"
+    },
+    "skeptic": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SkepticReport"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     },
     "trace_id": {
       "title": "Trace Id",
