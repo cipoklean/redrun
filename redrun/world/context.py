@@ -14,6 +14,9 @@ _PREFIXES = {
     "diff_deps": ("commit:", "file:", "pkg:"),
     "run_config": ("run:", "outage:"),
 }
+# `links` must be selected by predicate: its facts hang off log: and file: subjects
+# that other chunks own, and sharing them would leak a log excerpt into step one.
+_LINK_PREDICATES = ("linked_via_", "link_score")
 
 
 def estimate_tokens(text: str) -> int:
@@ -56,11 +59,21 @@ class ContextBuilder:
         self.evidence = {item.id: item for item in evidence}
 
     def _facts_for(self, chunk: str) -> list[Fact]:
+        if chunk == "links":
+            return [
+                fact
+                for fact in self.world.facts
+                if fact.predicate.startswith(_LINK_PREDICATES)
+            ]
         prefixes = _PREFIXES[chunk]
         return [fact for fact in self.world.facts if fact.subject.startswith(prefixes)]
 
     def build_chunk_context(
-        self, chunk: str, carryover: dict, budget_tokens: int
+        self,
+        chunk: str,
+        carryover: dict,
+        budget_tokens: int,
+        evidence_subset: list[str] | None = None,
     ) -> ChunkContext:
         """Facts first, then excerpts, both cut to fit `budget_tokens`."""
         if chunk not in CHUNKS:
@@ -68,8 +81,14 @@ class ContextBuilder:
 
         result = ChunkContext(chunk=chunk)
         used = estimate_tokens(json.dumps(carryover, default=str))
+        allowed = set(evidence_subset) if evidence_subset is not None else None
+
+        def keep(fact: Fact) -> bool:
+            return allowed is None or fact.evidence_id in allowed
 
         for fact in self._facts_for(chunk):
+            if not keep(fact):
+                continue
             cost = estimate_tokens(json.dumps(fact.model_dump(mode="json"), default=str))
             if used + cost > budget_tokens:
                 result.truncated = True

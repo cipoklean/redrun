@@ -34,6 +34,9 @@ class Settings:
     zetaris_token: str = ""
     zetaris_catalog: str = ""
     zetaris_org: str = "1"
+    investigator_chunk_tokens: int = 3000
+    investigator_max_steps: int = 6
+    investigator_carryover_tokens: int = 800
     samples_dir: Path = ROOT / "samples"
     logs_dir: Path = ROOT / "logs"
     data_dir: Path = ROOT / "data"
@@ -60,6 +63,9 @@ def load_settings() -> Settings:
         zetaris_token=os.getenv("ZETARIS_TOKEN") or "",
         zetaris_catalog=(os.getenv("ZETARIS_CATALOG") or "").strip(),
         zetaris_org=(os.getenv("ZETARIS_ORG_ID") or "1").strip(),
+        investigator_chunk_tokens=int(os.getenv("INVESTIGATOR_CHUNK_TOKENS") or 3000),
+        investigator_max_steps=int(os.getenv("INVESTIGATOR_MAX_STEPS") or 6),
+        investigator_carryover_tokens=int(os.getenv("INVESTIGATOR_CARRYOVER_TOKENS") or 800),
         logs_dir=Path(os.getenv("REDRUN_LOGS_DIR") or ROOT / "logs"),
         data_dir=Path(os.getenv("REDRUN_DATA_DIR") or ROOT / "data"),
     )

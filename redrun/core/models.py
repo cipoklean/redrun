@@ -66,12 +66,38 @@ class RunInfo(BaseModel):
     jobs: list[JobInfo] = Field(default_factory=list)
 
 
+class StepMetrics(BaseModel):
+    """One LLM step of the Markovian investigator."""
+
+    step: int
+    chunk: str
+    lane: str
+    provider: str
+    model: str
+    tokens_in: int
+    tokens_out: int
+    latency_ms: int
+    ok: bool = True
+
+
+class MarkovianMetrics(BaseModel):
+    steps: int = 0
+    stop_reason: Literal["rule", "cap", "error"] = "cap"
+    tokens_in: int = 0
+    tokens_out: int = 0
+    carryover_tokens_max: int = 0
+    full_context_tokens_estimate: int = 0
+    tokens_saved: int = 0
+    per_step: list[StepMetrics] = Field(default_factory=list)
+
+
 class Metrics(BaseModel):
     llm_calls: int = 0
     tokens_in: int = 0
     tokens_out: int = 0
     latency_ms: int = 0
     query_engine: str | None = None
+    markovian: MarkovianMetrics | None = None
 
 
 LinkType = Literal[
