@@ -25,6 +25,7 @@ class GitHubAPI(Protocol):
         workflow_id: int | str | None = None,
         branch: str | None = None,
         status: str | None = None,
+        head_sha: str | None = None,
         per_page: int = 30,
     ) -> list[dict[str, Any]]: ...
 

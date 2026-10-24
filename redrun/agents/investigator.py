@@ -195,8 +195,9 @@ class MarkovianInvestigator:
         lane: str,
         *,
         synthesis: bool = False,
+        messages: list[dict[str, str]] | None = None,
     ) -> tuple[bool, Carryover, ProposedVerdict | None, StepRecord]:
-        messages = self._messages(ctx, carryover, synthesis=synthesis)
+        messages = messages or self._messages(ctx, carryover, synthesis=synthesis)
         record = StepRecord(step=step_no, chunk=chunk, lane=lane, ok=False, attempts=0)
         self.tracer.emit(
             AGENT,
@@ -352,6 +353,39 @@ class MarkovianInvestigator:
                 cited_evidence_ids=list(top.supporting_ids),
             )
         return self._finish(records, carryover, proposed, "rule" if stopped_by_rule else "cap")
+
+    def revise(
+        self,
+        *,
+        critique: str,
+        failed_checks: list[dict],
+        carryover: Carryover,
+        prior: ProposedVerdict | None,
+    ) -> InvestigatorResult:
+        """Exactly one revision step, handed the critique and the failed checks."""
+        payload = {
+            "chunk": "revision",
+            "carryover": carryover.model_dump(mode="json"),
+            "prior_verdict": prior.model_dump(mode="json") if prior else None,
+            "skeptic_critique": critique,
+            "failed_checks": failed_checks,
+            "available_evidence": [
+                {"id": item.id, "kind": item.kind, "title": item.title} for item in self.evidence
+            ],
+            "instruction": (
+                "The skeptic contradicted the prior verdict. Revise it. Changing the cause is "
+                "expected when the critique is right. Cite only ids from available_evidence."
+            ),
+        }
+        messages = [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": json.dumps(payload, default=str)},
+        ]
+        ctx = ChunkContext(chunk="revision", evidence_ids=[item.id for item in self.evidence])
+        ok, updated, verdict, record = self._step(
+            1, "revision", ctx, carryover, "deep", messages=messages
+        )
+        return self._finish([record], updated, verdict if ok else None, "cap" if ok else "error")
 
     def _finish(
         self,

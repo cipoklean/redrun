@@ -50,7 +50,7 @@ def test_weights_are_documented_in_one_place() -> None:
         "revision_penalty",
         "against_penalty",
     }
-    assert len(DECISIVE_CHECKS) == 5
+    assert len(DECISIVE_CHECKS) == 6
 
 
 def test_confidence_is_the_sum_of_the_breakdown() -> None:

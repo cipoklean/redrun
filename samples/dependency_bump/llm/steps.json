@@ -1,0 +1,42 @@
+[
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"dependency_bump\", \"claim\": \"collecting evidence\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "usage": {
+      "prompt_tokens": 720,
+      "completion_tokens": 60,
+      "latency_ms": 40
+    }
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"dependency_bump\", \"claim\": \"collecting evidence\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "usage": {
+      "prompt_tokens": 760,
+      "completion_tokens": 60,
+      "latency_ms": 40
+    }
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"dependency_bump\", \"claim\": \"collecting evidence\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "usage": {
+      "prompt_tokens": 800,
+      "completion_tokens": 60,
+      "latency_ms": 40
+    }
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"dependency_bump\", \"claim\": \"collecting evidence\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "usage": {
+      "prompt_tokens": 840,
+      "completion_tokens": 60,
+      "latency_ms": 40
+    }
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"dependency_bump\", \"claim\": \"fastapi 0.116.0 pins httpx<0.28 while the project asks for >=0.28\", \"supporting_ids\": [\"ev_log_001\", \"ev_dep_fastapi\"], \"against_ids\": []}], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": {\"cause\": \"dependency_bump\", \"root_cause\": \"fastapi 0.116.0 pins httpx<0.28 while the project asks for >=0.28\", \"next_step\": \"Re-pin fastapi back below 0.116 or raise its httpx bound, then re-run.\", \"cited_evidence_ids\": [\"ev_log_001\", \"ev_dep_fastapi\"]}}",
+    "usage": {
+      "prompt_tokens": 980,
+      "completion_tokens": 120,
+      "latency_ms": 40
+    }
+  }
+]

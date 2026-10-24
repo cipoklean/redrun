@@ -1,0 +1,9 @@
+{
+  "jobs": [
+    {
+      "job_id": 90041,
+      "name": "test (3.11)",
+      "log": "2026-10-23T15:19:41.100Z ##[group]Run pytest -q\n2026-10-23T15:19:41.101Z pytest -q\n2026-10-23T15:19:42.500Z ============================= test session starts ==============================\n2026-10-23T15:19:42.501Z collected 41 items\n2026-10-23T15:19:44.400Z ....................................F....\n2026-10-23T15:19:44.410Z =================================== FAILURES ===================================\n2026-10-23T15:19:44.411Z ______________________ test_health_depends_on_time _______________________\n2026-10-23T15:19:44.412Z\n2026-10-23T15:19:44.413Z     def test_health_depends_on_time():\n2026-10-23T15:19:44.414Z >       assert client.get('/health').status_code == 200\n2026-10-23T15:19:44.415Z E       AssertionError: assert 503 == 200\n2026-10-23T15:19:44.416Z\n2026-10-23T15:19:44.417Z tests/test_api.py:21: AssertionError\n2026-10-23T15:19:44.500Z =========================== short test summary info ============================\n2026-10-23T15:19:44.501Z FAILED tests/test_api.py::test_health_depends_on_time - AssertionError: assert 503 == 200\n2026-10-23T15:19:44.600Z ##[error]Process completed with exit code 1.\n"
+    }
+  ]
+}

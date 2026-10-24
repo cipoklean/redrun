@@ -1,0 +1,42 @@
+[
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"expired_or_missing_secret\", \"claim\": \"collecting evidence\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "usage": {
+      "prompt_tokens": 720,
+      "completion_tokens": 60,
+      "latency_ms": 40
+    }
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"expired_or_missing_secret\", \"claim\": \"collecting evidence\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "usage": {
+      "prompt_tokens": 760,
+      "completion_tokens": 60,
+      "latency_ms": 40
+    }
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"expired_or_missing_secret\", \"claim\": \"collecting evidence\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "usage": {
+      "prompt_tokens": 800,
+      "completion_tokens": 60,
+      "latency_ms": 40
+    }
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"expired_or_missing_secret\", \"claim\": \"collecting evidence\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "usage": {
+      "prompt_tokens": 840,
+      "completion_tokens": 60,
+      "latency_ms": 40
+    }
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"expired_or_missing_secret\", \"claim\": \"the deploy workflow reads secrets.REGISTRY_TOKEN, which is empty\", \"supporting_ids\": [\"ev_log_001\", \"ev_file_001\"], \"against_ids\": []}], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": {\"cause\": \"expired_or_missing_secret\", \"root_cause\": \"the deploy workflow reads secrets.REGISTRY_TOKEN, which is empty\", \"next_step\": \"Rotate the registry token and set the repository secret, then re-run.\", \"cited_evidence_ids\": [\"ev_log_001\", \"ev_file_001\"]}}",
+    "usage": {
+      "prompt_tokens": 980,
+      "completion_tokens": 120,
+      "latency_ms": 40
+    }
+  }
+]

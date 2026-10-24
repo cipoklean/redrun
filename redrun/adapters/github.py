@@ -57,6 +57,7 @@ class GitHubClient:
         workflow_id: int | str | None = None,
         branch: str | None = None,
         status: str | None = None,
+        head_sha: str | None = None,
         per_page: int = 30,
     ) -> list[dict[str, Any]]:
         data = self._get(
@@ -64,6 +65,7 @@ class GitHubClient:
             workflow_id=workflow_id,
             branch=branch,
             status=status,
+            head_sha=head_sha,
             per_page=per_page,
         )
         return list(data.get("workflow_runs") or [])

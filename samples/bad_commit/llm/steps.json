@@ -1,0 +1,42 @@
+[
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"collecting evidence\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "usage": {
+      "prompt_tokens": 720,
+      "completion_tokens": 60,
+      "latency_ms": 40
+    }
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"collecting evidence\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "usage": {
+      "prompt_tokens": 760,
+      "completion_tokens": 60,
+      "latency_ms": 40
+    }
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"collecting evidence\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "usage": {
+      "prompt_tokens": 800,
+      "completion_tokens": 60,
+      "latency_ms": 40
+    }
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"collecting evidence\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"which change introduced this failure?\"], \"ruled_out\": []}}",
+    "usage": {
+      "prompt_tokens": 840,
+      "completion_tokens": 60,
+      "latency_ms": 40
+    }
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"the early-return refactor builds a RunInfo without created_at\", \"supporting_ids\": [\"ev_log_001\", \"ev_file_001\"], \"against_ids\": []}], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": {\"cause\": \"bad_commit\", \"root_cause\": \"the early-return refactor builds a RunInfo without created_at\", \"next_step\": \"Fix the None guard in redrun/collectors/github_runs.py, then re-run.\", \"cited_evidence_ids\": [\"ev_log_001\", \"ev_file_001\"]}}",
+    "usage": {
+      "prompt_tokens": 980,
+      "completion_tokens": 120,
+      "latency_ms": 40
+    }
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "previous_failures": [
+    {
+      "test": "tests/test_api.py::test_health_depends_on_time",
+      "sha": "deadbeefcafe",
+      "run_id": 4988
+    }
+  ]
+}

@@ -27,6 +27,7 @@ DECISIVE_CHECKS = (
     "same_sha_elsewhere",
     "test_failure_history",
     "error_change_overlap",
+    "outage_overlap",
     "dependency_timing",
     "citation_validity",
 )

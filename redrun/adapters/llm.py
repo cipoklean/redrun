@@ -52,6 +52,7 @@ class LLMClient:
         self.sample_case = sample_case
         self.timeout = TIMEOUT_SECONDS
         self.provider = "sample" if settings.sample_mode else settings.llm_provider
+        self._sample_index = 0
 
         if self.provider == "sample":
             self._client: httpx.Client | None = None
@@ -94,6 +95,28 @@ class LLMClient:
     def _sample_completion(self, lane: str) -> Completion:
         if not self.sample_case:
             raise LLMError("sample provider needs a sample case")
+
+        # A recorded step sequence wins: the investigator makes several calls per run,
+        # and replaying one fixed reply would not exercise the loop.
+        steps_path: Path = self.settings.samples_dir / self.sample_case / "llm" / "steps.json"
+        if steps_path.exists():
+            entries = json.loads(steps_path.read_text(encoding="utf-8"))
+            if not isinstance(entries, list) or not entries:
+                raise LLMError(f"{steps_path} must hold a non-empty list")
+            entry = entries[min(self._sample_index, len(entries) - 1)]
+            self._sample_index += 1
+            usage = entry.get("usage") or {}
+            return Completion(
+                text=str(entry.get("text", "")),
+                usage=Usage(
+                    prompt_tokens=int(usage.get("prompt_tokens", 0)),
+                    completion_tokens=int(usage.get("completion_tokens", 0)),
+                    latency_ms=int(usage.get("latency_ms", 0)),
+                    provider="sample",
+                    model=self.model_for(lane),
+                ),
+            )
+
         path: Path = self.settings.samples_dir / self.sample_case / "llm" / f"{lane}.json"
         if not path.exists():
             raise LLMError(f"missing sample LLM fixture: {path}")

@@ -108,6 +108,15 @@ LinkType = Literal[
 ]
 
 
+class CheckResult(BaseModel):
+    """One skeptic tool check. `status` says whether it supports the proposal."""
+
+    check: str
+    status: Literal["pass", "fail", "n/a"]
+    detail: str
+    evidence_ids: list[str] = Field(default_factory=list)
+
+
 class Link(BaseModel):
     """One cross-source join from overlap.sql: a log error tied to a change."""
 
@@ -118,6 +127,12 @@ class Link(BaseModel):
     detail: str
 
 
+class SkepticReport(BaseModel):
+    checks: list[CheckResult] = Field(default_factory=list)
+    revisions: int = 0
+    final_status: Literal["passed", "revised", "failed", "skipped"] = "skipped"
+
+
 class RunResult(BaseModel):
     run_id: str
     input: str
@@ -126,6 +141,7 @@ class RunResult(BaseModel):
     evidence: list[Evidence] = Field(default_factory=list)
     verdict: Verdict | None = None
     links: list[Link] = Field(default_factory=list)
+    skeptic: SkepticReport | None = None
     trace_id: str
     metrics: Metrics = Field(default_factory=Metrics)
 
