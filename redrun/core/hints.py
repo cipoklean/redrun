@@ -39,6 +39,7 @@ _FILE_WITH_LOCATION = re.compile(
     r"(?::\d+|::)",
 )
 _ERROR_CLASS = re.compile(r"\b([A-Z][A-Za-z0-9_]*(?:Error|Exception|Warning))\b")
+_TEST_ID = re.compile(r"(?:FAILED|ERROR)\s+(\S+::\S+)")
 
 _WORKDIR_PREFIXES = (
     re.compile(r"^/app/"),
@@ -90,3 +91,13 @@ def error_class(text: str) -> str | None:
     """The last exception class named on a line, e.g. AttributeError."""
     matches = _ERROR_CLASS.findall(text)
     return matches[-1] if matches else None
+
+
+def test_ids(text: str) -> list[str]:
+    """Pytest node ids from a failure line, e.g. tests/x.py::test_y."""
+    found: list[str] = []
+    for match in _TEST_ID.finditer(text):
+        node = match.group(1).rstrip(":-")
+        if node not in found:
+            found.append(node)
+    return found
