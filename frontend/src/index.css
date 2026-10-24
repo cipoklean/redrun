@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 240 6% 6%;
+  --panel: 240 5% 9%;
+  --raised: 240 5% 12%;
+  --line: 240 5% 19%;
+  --ink: 0 0% 96%;
+  --muted: 240 4% 66%;
+  --accent: 0 72% 55%;
+  --accent-soft: 0 55% 14%;
+  --pass: 152 58% 45%;
+  --fail: 0 70% 58%;
+  --warn: 38 92% 55%;
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--line));
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    font-size: 14px;
+    line-height: 1.55;
+    background-image: radial-gradient(
+      1100px 420px at 15% -10%,
+      hsl(0 60% 12% / 0.55),
+      transparent 70%
+    );
+  }
+
+  ::selection {
+    background: hsl(var(--accent) / 0.35);
+  }
+
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.01em;
+  }
+
+  code,
+  kbd,
+  .mono {
+    @apply font-mono;
+    font-feature-settings: "liga" 0;
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--accent) / 0.8);
+    outline-offset: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--line));
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-lg border border-line bg-panel;
+  }
+
+  .hairline {
+    @apply border-b border-line;
+  }
+
+  .label {
+    @apply text-[11px] font-medium uppercase tracking-[0.14em] text-muted;
+  }
+
+  .ev-chip {
+    @apply inline-flex items-center rounded-sm border border-line bg-raised px-1.5 py-0.5 font-mono text-[11px] text-ink/90 transition-colors;
+  }
+
+  .ev-chip:hover {
+    @apply border-accent/60 text-ink;
+  }
+
+  .card-flash {
+    animation: flash 1.4s ease-out;
+  }
+}
+
+@keyframes flash {
+  0% {
+    box-shadow: 0 0 0 1px hsl(var(--accent) / 0.9), 0 0 0 6px hsl(var(--accent) / 0.18);
+  }
+  100% {
+    box-shadow: 0 0 0 1px hsl(var(--accent) / 0), 0 0 0 6px hsl(var(--accent) / 0);
+  }
+}
+
+@keyframes pulse-line {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
