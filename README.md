@@ -149,6 +149,9 @@ npm run build     # writes frontend/dist
 npm run dev       # hot reload on 5173, API proxied to 127.0.0.1:8001
 ```
 
+If vite exits with a missing esbuild binary, npm skipped its postinstall script.
+`npm rebuild esbuild` fixes it.
+
 Two screens. `/` takes a run URL or an `owner/repo` pair, shows the provider
 strip and the sample cards. `/run/<trace_id>` streams the investigation live:
 the vertical pipeline lights up stage by stage, every investigator step shows
