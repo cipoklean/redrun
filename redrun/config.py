@@ -41,6 +41,7 @@ class Settings:
     samples_dir: Path = ROOT / "samples"
     logs_dir: Path = ROOT / "logs"
     data_dir: Path = ROOT / "data"
+    frontend_dir: Path = ROOT / "frontend" / "dist"
 
 
 def load_settings() -> Settings:
@@ -70,4 +71,5 @@ def load_settings() -> Settings:
         investigator_carryover_tokens=int(os.getenv("INVESTIGATOR_CARRYOVER_TOKENS") or 800),
         logs_dir=Path(os.getenv("REDRUN_LOGS_DIR") or ROOT / "logs"),
         data_dir=Path(os.getenv("REDRUN_DATA_DIR") or ROOT / "data"),
+        frontend_dir=Path(os.getenv("REDRUN_FRONTEND_DIR") or ROOT / "frontend" / "dist"),
     )

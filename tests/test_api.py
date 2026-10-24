@@ -31,7 +31,10 @@ def test_health_reports_sample_mode(client: TestClient) -> None:
 
 def test_provider_status_in_sample_mode(client: TestClient) -> None:
     body = client.get("/provider/status").json()
-    assert body["llm"] == {"provider": "sample", "status": "sample"}
+    assert body["llm"]["provider"] == "sample"
+    assert body["llm"]["status"] == "sample"
+    assert body["llm"]["token_set"] is False
+    assert set(body["llm"]["models"]) == {"fast", "deep", "judge"}
     assert body["zetaris"]["configured"] is False
     assert body["zetaris"]["status"] == "offline"
 

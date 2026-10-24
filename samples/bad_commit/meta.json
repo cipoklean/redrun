@@ -1,0 +1,6 @@
+{
+  "order": 2,
+  "title": "Bad commit",
+  "category": "bad_commit",
+  "description": "A refactor moves created_at construction behind an early return, so the collector crashes on a run without it."
+}

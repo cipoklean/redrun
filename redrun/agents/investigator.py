@@ -277,6 +277,14 @@ class MarkovianInvestigator:
                     "chunk": chunk,
                     "hypotheses": len(reply.carryover.hypotheses),
                     "has_verdict": reply.verdict is not None,
+                    # Only what the UI needs to preview the carryover, and only ids.
+                    "carryover": {
+                        "hypotheses": [
+                            {"cause": item.cause.value, "claim": item.claim[:160]}
+                            for item in reply.carryover.hypotheses[:2]
+                        ],
+                        "open_questions": len(reply.carryover.open_questions),
+                    },
                 },
             )
             return True, reply.carryover, reply.verdict, record

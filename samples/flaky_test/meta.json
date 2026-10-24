@@ -1,0 +1,6 @@
+{
+  "order": 4,
+  "title": "Flaky test",
+  "category": "flaky_test",
+  "description": "One test freezes the clock while the health check reads it. Same commit passes in another workflow, and the test failed before on unrelated commits."
+}

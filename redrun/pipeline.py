@@ -244,6 +244,7 @@ def investigate(
     settings: Settings | None = None,
     engine: str | None = None,
     sink=None,
+    trace_id: str | None = None,
 ) -> RunResult:
     """Investigate a failed run. `sample` selects a fixture and forces offline mode."""
     base = settings or load_settings()
@@ -254,7 +255,7 @@ def investigate(
 
     label = target.strip() if target else f"sample:{sample}"
     started = time.perf_counter()
-    trace_id = uuid.uuid4().hex[:12]
+    trace_id = trace_id or uuid.uuid4().hex[:12]
     tracer = Tracer(trace_id, base.logs_dir, sink=sink)
     tracer.emit(
         "triage",
@@ -494,6 +495,9 @@ def _investigate_prepared(
                 "trace_id": prepared.trace_id,
             },
         )
+        result_path = Path(base.data_dir) / prepared.trace_id / "result.json"
+        result_path.parent.mkdir(parents=True, exist_ok=True)
+        result_path.write_text(result.model_dump_json(indent=2) + "\n", encoding="utf-8")
         return result
     finally:
         if prepared.client is not None:

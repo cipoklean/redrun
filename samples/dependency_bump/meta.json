@@ -1,0 +1,6 @@
+{
+  "order": 1,
+  "title": "Dependency bump",
+  "category": "dependency_bump",
+  "description": "fastapi 0.116.0 widens its httpx pin mid flight, so the resolver picks 0.28 which the project code does not expect."
+}

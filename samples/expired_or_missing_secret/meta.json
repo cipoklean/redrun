@@ -1,0 +1,6 @@
+{
+  "order": 3,
+  "title": "Missing secret",
+  "category": "expired_or_missing_secret",
+  "description": "The deploy workflow reads a registry token that was never set after the repository was renamed."
+}
