@@ -282,6 +282,30 @@ def record_sample(url: str, name: str, base: Settings, *, with_baseline: bool = 
                     cited_evidence_ids=list(proposal.cited_evidence_ids),
                 )
             )
+
+        # write_sample re-reads the skeptic's live tool checks (same sha, test
+        # history, incidents) to record them, so the client has to still be open.
+        path = write_sample(
+            settings=base,
+            name=name,
+            prepared=prepared,
+            links=links,
+            engine_label=label,
+            llm_steps=llm_steps,
+            skeptic=skeptic,
+        )
+        if llm_pending:
+            write_llm_pending(path, llm_pending, captured=len(llm.steps))
+        if with_baseline:
+            try:
+                payload = baseline_module.record(
+                    live, path, baseline_module.tail_from_prepared(prepared)
+                )
+            except baseline_module.BaselineError as exc:
+                write_baseline_pending(path, str(exc))
+                print(f"  baseline not recorded: {exc}")
+            else:
+                print(f"  baseline recorded: {(payload.get('reply') or {}).get('cause')}")
     except (CollectorError, EngineError) as exc:
         print(f"record-sample failed: {exc}")
         return 2
@@ -289,27 +313,6 @@ def record_sample(url: str, name: str, base: Settings, *, with_baseline: bool = 
         if prepared.client is not None:
             prepared.client.close()
 
-    path = write_sample(
-        settings=base,
-        name=name,
-        prepared=prepared,
-        links=links,
-        engine_label=label,
-        llm_steps=llm_steps,
-        skeptic=skeptic,
-    )
-    if llm_pending:
-        write_llm_pending(path, llm_pending, captured=len(llm.steps))
-    if with_baseline:
-        try:
-            payload = baseline_module.record(
-                live, path, baseline_module.tail_from_prepared(prepared)
-            )
-        except baseline_module.BaselineError as exc:
-            write_baseline_pending(path, str(exc))
-            print(f"  baseline not recorded: {exc}")
-        else:
-            print(f"  baseline recorded: {(payload.get('reply') or {}).get('cause')}")
     note = " (LLM pending)" if llm_pending else ""
     print(f"recorded {path} ({len(llm_steps)} LLM steps, {len(links)} links, engine={label}){note}")
     return 0
