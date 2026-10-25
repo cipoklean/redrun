@@ -121,8 +121,10 @@ PUBLIC: list[dict] = [
         "root_cause_keywords": ["download", "github"],
         "constructed": False,
         "notes": (
-            "Chosen for the 2026-08-17 critical incident 'Incident with GitHub.com' "
-            "(13:40-21:15Z), inside which this run failed at 15:38Z. Its log says "
+            "Chosen for the 2026-08-17 critical incident 'Incident with GitHub.com', "
+            "id zkxwbgr0cnmx, 13:40:03-21:15:46Z. This run started 15:37:51Z and its "
+            "jobs completed as failures at 15:39:34Z and 15:40:01Z, inside that "
+            "window. Its log says "
             "`##[error]Failed to download archive "
             "'https://codeload.github.com/prefix-dev/setup-pixi/zip/...' after 3 attempts`, "
             "so the runner could not fetch an action from GitHub's own archive host. "
@@ -138,7 +140,9 @@ PUBLIC: list[dict] = [
         "constructed": False,
         "notes": (
             "Chosen for the 2026-10-21 critical incident 'Delays for Pull Requests and "
-            "Webhook deliveries' (14:52-19:22Z), inside which this run failed at 18:26Z. "
+            "Webhook deliveries', id nms1dpzmh9d9, 14:52:49-19:22:52Z. This run started "
+            "18:20:14Z and its jobs completed as failures at 18:27:33Z and 18:29:15Z, "
+            "inside that window. "
             "The tests died on `ConnectionResetError(104, 'Connection reset by peer')`, and "
             "'Linters' on the same sha (3e2fa64) succeeded. Weaker than the pandas case: a "
             "reset inside a test process could be the test's own remote call, so this one "
