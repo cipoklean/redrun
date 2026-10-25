@@ -174,6 +174,30 @@ breaking commit really fails before anything is pushed, `find_public_cases.py`
 searches incidents and public runs, `record_eval.py` records every case, and
 `make_cases.py` writes `eval/cases.yaml` from the recorded run ids.
 
+### Re-recording the set through Nightshift
+
+The samples in this repo were recorded against the provider directly. To re-record
+all fifteen through Meterless/Nightshift, with both lanes pinned to Nemotron:
+
+```bash
+LLM_PROVIDER=meterless METERLESS_RUNTIME_TOKEN=... SAMPLE_MODE=false \
+  python eval/lab/record_eval.py --force --nightshift
+```
+
+`--nightshift` refuses to run unless `LLM_PROVIDER` is `meterless`, because a
+recording that asks for Nightshift and quietly uses a direct provider has worse
+provenance than no recording. It probes the deep lane first; if that lane does not
+answer, both lanes run on `nvidia/nemotron-3.5-lightning-30b-a3b` and the
+substitution is written into every affected sample as `llm/plan.json` and
+`meta.json:recording`, with the reason. Each recorded step stores the provider, the
+model the runtime reports in its response, and the `meterless-app` /
+`meterless-scope` headers it used. The token is never written anywhere.
+
+Afterwards `python -m redrun eval --split all --mode replay --baseline` picks up the
+new samples, and the report's `agent provider` and `baseline provider` columns show
+which recordings came from which provider, so a Nightshift recording is never
+confused with a direct one.
+
 ## The interface
 
 The UI is React, Vite, TypeScript and Tailwind, with shadcn style components
