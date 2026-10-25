@@ -24,6 +24,10 @@ from redrun.pipeline import investigate
 
 VERSION = "0.1.0"
 
+# A route that answers HTML or JSON on the same URL must say so, or a browser
+# caches one shape and hands it to a request that wanted the other.
+VARY_ACCEPT = {"Vary": "Accept"}
+
 
 class RunRequest(BaseModel):
     target: str | None = None
@@ -184,7 +188,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 status_code=404,
                 detail="the frontend is not built; run npm run build in frontend/",
             )
-        return FileResponse(index)
+        # `/`, `/eval` and `/run/<id>` answer a browser with this shell and a fetch
+        # with JSON, so the choice depends on the request's Accept header. Without
+        # `Vary`, a browser that loaded /eval as a document caches the shell and
+        # then hands the shell to the page's own fetch, which cannot parse it.
+        return FileResponse(index, headers={"Vary": "Accept", "Cache-Control": "no-cache"})
 
     @app.post("/run/stream")
     def run_stream(body: RunRequest) -> StreamingResponse:
@@ -266,7 +274,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             payload = json.loads(path.read_text(encoding="utf-8"))
         except ValueError as exc:
             raise HTTPException(status_code=500, detail="stored result is not valid JSON") from exc
-        return JSONResponse(payload)
+        return JSONResponse(payload, headers=VARY_ACCEPT)
 
     @app.get("/eval")
     def eval_results(request: Request):
@@ -289,7 +297,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             payload = json.loads(reports[-1].read_text(encoding="utf-8"))
         except ValueError as exc:
             raise HTTPException(status_code=500, detail="evaluation results are not valid JSON") from exc
-        return JSONResponse(payload)
+        return JSONResponse(payload, headers=VARY_ACCEPT)
 
     assets = cfg.frontend_dir / "assets"
     if assets.is_dir():

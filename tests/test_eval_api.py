@@ -81,3 +81,21 @@ def test_eval_rejects_a_corrupt_result_file(
 def test_a_browser_asking_for_eval_gets_the_app_shell(client: TestClient) -> None:
     response = client.get("/eval", headers={"accept": "text/html"})
     assert response.status_code == 200
+
+
+def test_the_two_answers_to_one_url_vary_on_accept(client: TestClient) -> None:
+    """One URL, two shapes, so the JSON answer must declare that it did.
+
+    Without `Vary: Accept`, a browser that loaded /eval as a document caches the
+    shell and hands it to the page's own fetch, which then tries to parse HTML as
+    JSON. The eval screen did exactly that before this header existed.
+    """
+    as_json = client.get("/eval", headers={"accept": "application/json"})
+    assert as_json.status_code == 200
+    assert as_json.headers["content-type"].startswith("application/json")
+    assert as_json.headers["vary"].lower() == "accept"
+
+    as_html = client.get("/eval", headers={"accept": "text/html"})
+    if as_html.status_code == 200:  # 404 when the frontend has not been built
+        assert as_html.headers["content-type"].startswith("text/html")
+        assert as_html.headers["vary"].lower() == "accept"
