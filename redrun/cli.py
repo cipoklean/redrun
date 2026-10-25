@@ -22,6 +22,7 @@ from redrun.core.rules import rule_verdict
 from redrun.core.taxonomy import Cause
 from redrun.eval import baseline as baseline_module
 from redrun.eval import cases as cases_module
+from redrun.eval import nightshift
 from redrun.eval import runner as eval_runner
 from redrun.pipeline import _triage_cause, investigate, prepare, run_overlap
 from redrun.recording import (
@@ -68,6 +69,11 @@ def _parser() -> argparse.ArgumentParser:
         "--baseline",
         action="store_true",
         help="also record one plain-model reply on the log tail (baseline.json)",
+    )
+    record.add_argument(
+        "--nightshift",
+        action="store_true",
+        help="pin both lanes to Nemotron through LLM_PROVIDER=meterless, and record the plan",
     )
 
     scoring = sub.add_parser("eval", help="score the agent and the baseline over the case set")
@@ -212,17 +218,39 @@ def meterless_check(base: Settings, *, transport=None) -> int:
     return 0
 
 
-def record_sample(url: str, name: str, base: Settings, *, with_baseline: bool = False) -> int:
+def record_sample(
+    url: str,
+    name: str,
+    base: Settings,
+    *,
+    with_baseline: bool = False,
+    with_nightshift: bool = False,
+    lane_plan: Any | None = None,
+) -> int:
     """One live run, saved as a replayable sample. Needs credentials and network.
 
     If the model cannot be reached, the collectors and the skeptic tool checks are
     still recorded, with the LLM part marked pending. A sample that replays half a
     conversation would be a fake investigation, so partial LLM steps are never kept.
+
+    `with_nightshift` pins the Meterless/Nightshift lanes, refuses to record when the
+    provider is not meterless, and records which models answered. `lane_plan` passes
+    in a plan a batch already decided, so every sample in the batch agrees.
     """
     if base.sample_mode:
         print("record-sample needs SAMPLE_MODE=false and live credentials")
         return 1
+    if with_nightshift and lane_plan is None:
+        try:
+            lane_plan = nightshift.plan_for(base)
+        except nightshift.NightshiftError as exc:
+            print(f"record-sample refused: {exc}")
+            return 2
+    if lane_plan is not None:
+        print(f"  {nightshift.describe(lane_plan)}")
     live = replace(base, sample_mode=False)
+    if lane_plan is not None:
+        live = lane_plan.apply(live)
     prepared = prepare(url, None, live)
     engine = "zetaris" if live.zetaris_enabled else "duckdb"
     llm_pending: str | None = None
@@ -294,6 +322,7 @@ def record_sample(url: str, name: str, base: Settings, *, with_baseline: bool = 
             engine_label=label,
             llm_steps=llm_steps,
             skeptic=skeptic,
+            plan_record=lane_plan.as_record() if lane_plan is not None else None,
         )
         if llm_pending:
             write_llm_pending(path, llm_pending, captured=len(llm.steps))
@@ -384,7 +413,11 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "record-sample":
         return record_sample(
-            args.url, args.name, load_settings(), with_baseline=args.baseline
+            args.url,
+            args.name,
+            load_settings(),
+            with_baseline=args.baseline,
+            with_nightshift=args.nightshift,
         )
 
     if args.command == "eval":

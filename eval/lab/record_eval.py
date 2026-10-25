@@ -24,13 +24,15 @@ sys.path.insert(0, str(ROOT))
 from redrun.cli import record_sample  # noqa: E402
 from redrun.config import load_settings  # noqa: E402
 from redrun.eval import cases as cases_module  # noqa: E402
+from redrun.eval import nightshift  # noqa: E402
 
 
-def write_meta(sample_directory: Path, case) -> None:
+def write_meta(sample_directory: Path, case, plan: dict[str, Any] | None = None) -> None:
     """Give the sample a card on the investigate screen, sorted after the four demos.
 
     The eval cases are real and replayable, so they belong in the sample list; they
-    must not push the curated demo cases down the page though.
+    must not push the curated demo cases down the page though. When the recording ran
+    through Nightshift, the plan travels with the card so the sample explains itself.
     """
     meta = {
         "order": 500,
@@ -38,6 +40,8 @@ def write_meta(sample_directory: Path, case) -> None:
         "category": case.expected_cause.value,
         "description": (case.notes or "").strip()[:200] or "An evaluation case.",
     }
+    if plan is not None:
+        meta["recording"] = plan
     (sample_directory / "meta.json").write_text(
         json.dumps(meta, indent=2) + "\n", encoding="utf-8"
     )
@@ -83,6 +87,14 @@ def main(argv: list[str]) -> int:
         action="store_true",
         help="record the constructed cases from eval/lab/lab_runs.json, before cases.yaml exists",
     )
+    parser.add_argument(
+        "--nightshift",
+        action="store_true",
+        help=(
+            "record through LLM_PROVIDER=meterless with both lanes pinned to Nemotron, "
+            "falling back to the fast model if the deep lane will not answer"
+        ),
+    )
     args = parser.parse_args(argv)
 
     settings = load_settings()
@@ -92,6 +104,24 @@ def main(argv: list[str]) -> int:
     if not settings.github_token:
         print("GITHUB_TOKEN is required to record")
         return 2
+
+    plan = None
+    plan_record = None
+    if args.nightshift:
+        # Decided once for the whole batch, so all fifteen samples ran on the same
+        # lanes and each one records that choice instead of assuming it.
+        try:
+            plan = nightshift.plan_for(settings)
+        except nightshift.NightshiftError as exc:
+            print(f"refusing to record: {exc}")
+            return 2
+        print(nightshift.describe(plan))
+        if plan.fallback:
+            print("NOTE: the deep lane is not in this recording; both lanes use the fast model")
+        if not settings.meterless_runtime_token:
+            print("WARNING: METERLESS_RUNTIME_TOKEN is empty; the runtime may refuse the calls")
+        settings = plan.apply(settings)
+        plan_record = plan.as_record()
 
     wanted = [item.strip() for item in (args.only or "").split(",") if item.strip()]
     if args.from_lab:
@@ -114,13 +144,15 @@ def main(argv: list[str]) -> int:
                 f"[{index}/{len(selected)}] skip {case.id}: {sample_directory.name} already "
                 f"recorded (llm {'recorded' if had_llm else 'pending'})"
             )
-            write_meta(sample_directory, case)
+            write_meta(sample_directory, case, plan_record)
             continue
         print(f"[{index}/{len(selected)}] recording {case.id}")
         print(f"    {url}")
-        code = record_sample(url, case.sample, settings, with_baseline=True)
+        code = record_sample(
+            url, case.sample, settings, with_baseline=True, lane_plan=plan
+        )
         if code == 0:
-            write_meta(sample_directory, case)
+            write_meta(sample_directory, case, plan_record)
         else:
             failures.append(f"{case.id} (exit {code})")
         print(f"    exit {code}", flush=True)

@@ -15,6 +15,9 @@ import httpx
 from redrun.config import Settings
 
 NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
+# A sample recorded before the recorder kept the provider still replays, and says
+# this rather than naming a provider that never served it.
+UNRECORDED = "unrecorded"
 TIMEOUT_SECONDS = 180.0
 LANES = ("fast", "deep", "judge")
 
@@ -55,6 +58,9 @@ class LLMClient:
         self.base_url = ""
         self._sample_index = 0
         self.last_status: int | None = None
+        # The headers that route the request, kept so a recording can say which ones
+        # it used. The Authorization header is deliberately not part of this.
+        self.request_meta: dict[str, str] = {}
 
         if self.provider == "sample":
             self._client: httpx.Client | None = None
@@ -62,11 +68,8 @@ class LLMClient:
 
         if self.provider == "meterless":
             base = settings.meterless_base_url.rstrip("/")
-            headers = {
-                "meterless-app": "redrun",
-                "meterless-scope": "user",
-                "Authorization": f"Bearer {settings.meterless_runtime_token}",
-            }
+            self.request_meta = {"meterless-app": "redrun", "meterless-scope": "user"}
+            headers = {**self.request_meta, "Authorization": f"Bearer {settings.meterless_runtime_token}"}
         elif self.provider == "nvidia":
             base = NVIDIA_BASE_URL
             headers = {"Authorization": f"Bearer {settings.nvidia_api_key}"}
@@ -116,8 +119,9 @@ class LLMClient:
                     latency_ms=int(usage.get("latency_ms", 0)),
                     # The recording says which provider and model answered, so a replay
                     # reports that instead of stamping its own lane name as a model id.
-                    # Older samples carry only the lane, and fall back to the label.
-                    provider=str(entry.get("provider") or usage.get("provider") or "sample"),
+                    # A sample recorded before the recorder kept them says so, rather
+                    # than claiming a provider that never ran.
+                    provider=str(entry.get("provider") or usage.get("provider") or UNRECORDED),
                     model=str(entry.get("model") or usage.get("model") or self.model_for(lane)),
                 ),
             )
@@ -133,7 +137,7 @@ class LLMClient:
                 prompt_tokens=int(usage.get("prompt_tokens", 0)),
                 completion_tokens=int(usage.get("completion_tokens", 0)),
                 latency_ms=0,
-                provider=str(payload.get("provider") or usage.get("provider") or "sample"),
+                provider=str(payload.get("provider") or usage.get("provider") or UNRECORDED),
                 model=str(payload.get("model") or usage.get("model") or self.model_for(lane)),
             ),
         )

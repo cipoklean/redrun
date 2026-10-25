@@ -210,6 +210,7 @@ def write_sample(
     engine_label: str,
     llm_steps: list[dict[str, Any]],
     skeptic: Any | None = None,
+    plan_record: dict[str, Any] | None = None,
 ) -> Path:
     """Persist one replayable sample directory. Everything is redacted on the way out."""
     directory = settings.samples_dir / name
@@ -240,6 +241,11 @@ def write_sample(
     for filename, payload in _skeptic_payloads(prepared, skeptic).items():
         dump(f"skeptic/{filename}", payload)
 
+    if plan_record is not None:
+        # Which provider, which models, and whether the deep lane fell back. Written
+        # beside the steps so the sample explains itself without the shell history.
+        dump("llm/plan.json", {**plan_record, "recorded_at": datetime.now().isoformat()})
+
     dump(
         "llm/steps.json",
         [
@@ -254,6 +260,7 @@ def write_sample(
                 "lane": step.get("lane", "fast"),
                 "provider": (step.get("usage") or {}).get("provider") or "",
                 "model": (step.get("usage") or {}).get("model") or "",
+                "headers": redact(json.dumps(step.get("headers") or {})),
             }
             for step in llm_steps
         ],
@@ -299,6 +306,8 @@ class RecordingLLM:
                     "provider": completion.usage.provider,
                     "model": completion.usage.model,
                 },
+                # Which routing headers were used, never the credential itself.
+                "headers": dict(getattr(self.inner, "request_meta", {}) or {}),
             }
         )
         return completion

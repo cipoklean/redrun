@@ -6,7 +6,7 @@ from pathlib import Path
 import httpx
 import pytest
 
-from redrun.adapters.llm import LLMClient, LLMError
+from redrun.adapters.llm import LLMClient, LLMError, UNRECORDED
 from redrun.config import Settings
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -56,7 +56,7 @@ def test_sample_provider_reads_the_fixture_and_never_touches_the_network(tmp_pat
     assert got.text == "from the deep lane"
     assert got.usage.prompt_tokens == 42
     assert got.usage.completion_tokens == 7
-    assert got.usage.provider == "sample"
+    assert got.usage.provider == UNRECORDED
     assert got.usage.model == "sample/deep"
 
 
