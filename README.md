@@ -33,6 +33,8 @@ Built for the Open Agent Hackathon 2026, Track 2 (The Agent That Can Explain Why
 - **Computed confidence** from named signals in `confidence_breakdown`; the model
   never emits a score, and any it returns is stripped and logged.
 - **Live events**: every stage writes to the JSONL trace and to an SSE stream.
+- **An evaluation set of 15 real cases**, scored against a plain-model baseline,
+  replayed offline: `python -m redrun eval --split all --mode replay --baseline`.
 - CLI and API, four offline sample cases, and a recorder for new ones.
 
 ## The evidence engines
@@ -135,6 +137,43 @@ curl -s -X POST localhost:8000/run -H 'content-type: application/json' -d '{"sam
 Traces land in `./logs`. Inside the container the Meterless runtime is reached at
 `http://host.docker.internal:8088/v1`; compose sets that for you.
 
+## The evaluation
+
+`eval/cases.yaml` is the set: 15 cases, each with the run URL, the cause it was
+built to have, and two to four words a correct explanation has to contain. Twelve
+are constructed in [cipoklean/redrun-lab](https://github.com/cipoklean/redrun-lab),
+a tiny package whose branches each carry a green run followed by a real breaking
+commit: a loosened pin, a resolver conflict, a logic bug, a rename, a syntax error,
+two flakes, a missing secret, an invalid token, a Python version, an env var and a
+working directory. Two are public runs that line up with a GitHub Actions incident
+and later passed on the same sha; one is a public run with no usable signal, where
+`unknown` is the right answer.
+
+The split was drawn from the seed in the file before anything was run, and
+`tests/test_eval_cases.py` recomputes that draw, so the holdout cannot move after
+its results are known.
+
+`redrun/eval/baseline.py` is the comparison: one plain call on the same fast lane,
+given only the last 300 redacted log lines and the cause taxonomy. No collectors,
+no evidence tables, no cross-source query, no skeptic, no citations.
+
+```bash
+python -m redrun eval --split all --mode replay --baseline
+```
+
+Replay reads the recorded samples under `samples/eval_*`, so it needs no network
+and no credentials. It writes `eval/results/<timestamp>.json` and `eval/RESULTS.md`
+(both generated; do not edit the report by hand) with category accuracy, root-cause
+keyword matches, citation validity, calibration, latency percentiles, tokens and a
+confusion matrix, for dev, holdout and all, agent beside baseline. A case whose
+model steps were never recorded is listed as pending and scored on nothing.
+
+Files under `eval/lab/` are how the case set was built and can be re-run:
+`build_lab.py` creates the runs in redrun-lab, `validate_lab.py` proves each
+breaking commit really fails before anything is pushed, `find_public_cases.py`
+searches incidents and public runs, `record_eval.py` records every case, and
+`make_cases.py` writes `eval/cases.yaml` from the recorded run ids.
+
 ## The interface
 
 The UI is React, Vite, TypeScript and Tailwind, with shadcn style components
@@ -152,8 +191,10 @@ npm run dev       # hot reload on 5173, API proxied to 127.0.0.1:8001
 If vite exits with a missing esbuild binary, npm skipped its postinstall script.
 `npm rebuild esbuild` fixes it.
 
-Two screens. `/` takes a run URL or an `owner/repo` pair, shows the provider
-strip and the sample cards. `/run/<trace_id>` streams the investigation live:
+Three screens. `/` takes a run URL or an `owner/repo` pair, shows the provider
+strip and the sample cards. `/eval` reads the newest results file and shows the
+totals per split with the baseline beside the agent, then one row per case.
+`/run/<trace_id>` streams the investigation live:
 the vertical pipeline lights up stage by stage, every investigator step shows
 its lane, model, tokens and carryover, the skeptic checks appear as pass, fail
 or n/a chips, and a critique handoff is drawn as an arrow back to the
