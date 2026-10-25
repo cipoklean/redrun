@@ -13,6 +13,60 @@ from redrun.core.tables import build_tables
 from redrun.pipeline import Prepared
 
 
+def _stamp() -> str:
+    return datetime.now().isoformat(timespec="seconds")
+
+
+def write_llm_pending(directory: Path, reason: str, *, captured: int = 0) -> Path:
+    """Mark the model half of a sample as unrecorded.
+
+    A partially recorded conversation cannot be replayed: the investigator's steps
+    depend on each other, so half of one is a different investigation. Nothing is
+    written to steps.json, and the reason is kept where a human will find it.
+    """
+    path = Path(directory) / "llm" / "pending.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(
+            {
+                "recorded_at": _stamp(),
+                "reason": reason,
+                "replayable": False,
+                "steps_captured_before_failure": captured,
+                "note": (
+                    "The collectors, the evidence tables and the skeptic tool checks in "
+                    "this sample are real. The investigator's model replies are missing, "
+                    "so nothing here replays as an investigation. Record them with "
+                    "`python -m redrun record-sample <url> --name <name>` once a model is "
+                    "reachable, and never author them by hand."
+                ),
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    return path
+
+
+def write_baseline_pending(directory: Path, reason: str) -> Path:
+    """The baseline could not be recorded either. Say so in the sample folder."""
+    path = Path(directory) / "baseline_pending.json"
+    path.write_text(
+        json.dumps(
+            {
+                "recorded_at": _stamp(),
+                "reason": reason,
+                "note": "No baseline reply was recorded, and none has been invented.",
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    return path
+
+
 def _run_payload(runs) -> dict[str, Any]:
     workflow = {
         "id": 0,

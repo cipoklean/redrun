@@ -7,6 +7,8 @@
 import argparse
 import sys
 from dataclasses import replace
+from pathlib import Path
+from typing import Any
 
 from redrun.adapters.base import EngineError
 from redrun.adapters.llm import LLMClient, LLMError
@@ -16,9 +18,18 @@ from redrun.agents.skeptic import Skeptic
 from redrun.collectors.base import CollectorError
 from redrun.config import Settings, load_settings
 from redrun.core.models import RunResult, Verdict
+from redrun.core.rules import rule_verdict
 from redrun.core.taxonomy import Cause
+from redrun.eval import baseline as baseline_module
+from redrun.eval import cases as cases_module
+from redrun.eval import runner as eval_runner
 from redrun.pipeline import _triage_cause, investigate, prepare, run_overlap
-from redrun.recording import RecordingLLM, write_sample
+from redrun.recording import (
+    RecordingLLM,
+    write_baseline_pending,
+    write_llm_pending,
+    write_sample,
+)
 from redrun.world.context import ContextBuilder
 from redrun.world.ingest import ingest
 
@@ -52,6 +63,24 @@ def _parser() -> argparse.ArgumentParser:
     record = sub.add_parser("record-sample", help="record a live run as a replayable sample")
     record.add_argument("url", help="https://github.com/owner/repo/actions/runs/<id>")
     record.add_argument("--name", required=True, help="sample directory name")
+    record.add_argument(
+        "--baseline",
+        action="store_true",
+        help="also record one plain-model reply on the log tail (baseline.json)",
+    )
+
+    scoring = sub.add_parser("eval", help="score the agent and the baseline over the case set")
+    scoring.add_argument("--split", choices=("dev", "holdout", "all"), default="all")
+    scoring.add_argument("--mode", choices=("replay", "live"), default="replay")
+    scoring.add_argument(
+        "--baseline",
+        action="store_true",
+        dest="with_baseline",
+        help="score the recorded baseline alongside the agent",
+    )
+    scoring.add_argument("--cases", help="path to the case file (default eval/cases.yaml)")
+    scoring.add_argument("--out-dir", help="where to write results/<timestamp>.json")
+    scoring.add_argument("--markdown", help="where to write the rendered report")
     return parser
 
 
@@ -182,34 +211,54 @@ def meterless_check(base: Settings, *, transport=None) -> int:
     return 0
 
 
-def record_sample(url: str, name: str, base: Settings) -> int:
-    """One live run, saved as a replayable sample. Needs credentials and network."""
+def record_sample(url: str, name: str, base: Settings, *, with_baseline: bool = False) -> int:
+    """One live run, saved as a replayable sample. Needs credentials and network.
+
+    If the model cannot be reached, the collectors and the skeptic tool checks are
+    still recorded, with the LLM part marked pending. A sample that replays half a
+    conversation would be a fake investigation, so partial LLM steps are never kept.
+    """
     if base.sample_mode:
         print("record-sample needs SAMPLE_MODE=false and live credentials")
         return 1
     live = replace(base, sample_mode=False)
     prepared = prepare(url, None, live)
     engine = "zetaris" if live.zetaris_enabled else "duckdb"
+    llm_pending: str | None = None
+    llm_steps: list[dict[str, Any]] = []
     try:
         links, label, _skipped = run_overlap(prepared, live, engine)
         llm = RecordingLLM(LLMClient(live, sample_case=None))
-        world = ingest(
-            trace_id=prepared.trace_id,
-            runs=prepared.runs,
-            changes=prepared.changes,
-            job_logs=prepared.job_logs,
-            deps=prepared.deps,
-            links=links,
-            evidence=prepared.evidence,
-        )
-        investigator = MarkovianInvestigator(
-            llm=llm,
-            tracer=prepared.tracer,
-            builder=ContextBuilder(world, prepared.evidence),
-            evidence=prepared.evidence,
-            max_steps=live.investigator_max_steps,
-        )
-        investigated = investigator.run(triage_cause=_triage_cause(links, prepared.job_logs))
+        proposal: Any = None
+        try:
+            world = ingest(
+                trace_id=prepared.trace_id,
+                runs=prepared.runs,
+                changes=prepared.changes,
+                job_logs=prepared.job_logs,
+                deps=prepared.deps,
+                links=links,
+                evidence=prepared.evidence,
+            )
+            investigator = MarkovianInvestigator(
+                llm=llm,
+                tracer=prepared.tracer,
+                builder=ContextBuilder(world, prepared.evidence),
+                evidence=prepared.evidence,
+                max_steps=live.investigator_max_steps,
+            )
+            investigated = investigator.run(triage_cause=_triage_cause(links, prepared.job_logs))
+            proposal = investigated.verdict
+            llm_steps = llm.steps
+        except LLMError as exc:
+            llm_pending = str(exc)
+            print(f"  LLM unavailable ({exc}); recording collectors and skeptic only")
+            proposal = rule_verdict(
+                prepared.evidence,
+                prepared.runs.failed_run,
+                prepared.runs.last_green_run,
+                links,
+            )
         skeptic = Skeptic(
             settings=live,
             tracer=prepared.tracer,
@@ -222,8 +271,7 @@ def record_sample(url: str, name: str, base: Settings) -> int:
             sample_case=None,
             github=prepared.client,
         )
-        if investigated.verdict is not None:
-            proposal = investigated.verdict
+        if proposal is not None:
             skeptic.check(
                 Verdict(
                     cause=proposal.cause,
@@ -234,7 +282,7 @@ def record_sample(url: str, name: str, base: Settings) -> int:
                     cited_evidence_ids=list(proposal.cited_evidence_ids),
                 )
             )
-    except (CollectorError, EngineError, LLMError) as exc:
+    except (CollectorError, EngineError) as exc:
         print(f"record-sample failed: {exc}")
         return 2
     finally:
@@ -247,10 +295,75 @@ def record_sample(url: str, name: str, base: Settings) -> int:
         prepared=prepared,
         links=links,
         engine_label=label,
-        llm_steps=llm.steps,
+        llm_steps=llm_steps,
         skeptic=skeptic,
     )
-    print(f"recorded {path} ({len(llm.steps)} LLM steps, {len(links)} links, engine={label})")
+    if llm_pending:
+        write_llm_pending(path, llm_pending, captured=len(llm.steps))
+    if with_baseline:
+        try:
+            payload = baseline_module.record(
+                live, path, baseline_module.tail_from_prepared(prepared)
+            )
+        except baseline_module.BaselineError as exc:
+            write_baseline_pending(path, str(exc))
+            print(f"  baseline not recorded: {exc}")
+        else:
+            print(f"  baseline recorded: {(payload.get('reply') or {}).get('cause')}")
+    note = " (LLM pending)" if llm_pending else ""
+    print(f"recorded {path} ({len(llm_steps)} LLM steps, {len(links)} links, engine={label}){note}")
+    return 0
+
+
+def eval_command(args: argparse.Namespace, base: Settings) -> int:
+    """Score the agent — and optionally the baseline — over the case set."""
+    try:
+        case_set = cases_module.load(Path(args.cases) if args.cases else None)
+    except cases_module.CaseError as exc:
+        print(f"redrun eval: {exc}", file=sys.stderr)
+        return 2
+
+    print(f"case file   : {args.cases or cases_module.CASES_PATH}")
+    print(f"cases       : {len(case_set)}  seed={case_set.seed}")
+    for name in ("dev", "holdout"):
+        selected = case_set.selected(name)
+        print(f"  {name:<8} {len(selected)}  {', '.join(case.id for case in selected)}")
+    print(f"mode        : {args.mode}  split={args.split}  baseline={args.with_baseline}")
+
+    try:
+        payload = eval_runner.run(
+            case_set,
+            split=args.split,
+            mode=args.mode,
+            settings=base,
+            with_baseline=args.with_baseline,
+            out_dir=Path(args.out_dir) if args.out_dir else None,
+            markdown_path=Path(args.markdown) if args.markdown else None,
+            on_case=lambda message: print(message, flush=True),
+        )
+    except (ValueError, CollectorError, EngineError, LLMError) as exc:
+        print(f"redrun eval: {exc}", file=sys.stderr)
+        return 2
+
+    for name, summary in payload["summaries"].items():
+        agent, other = summary["agent"], summary["baseline"]
+        line = (
+            f"{name:<8} agent cause {agent['cause_hits']}/{agent['cases']} "
+            f"keywords {agent['keyword_hits']}/{agent['cases']}"
+        )
+        if args.with_baseline:
+            line += (
+                f" | baseline cause {other['cause_hits']}/{other['cases']} "
+                f"keywords {other['keyword_hits']}/{other['cases']}"
+            )
+        print(line)
+
+    pending = payload["pending"]
+    if pending:
+        print("pending live recording: " + ", ".join(item["id"] for item in pending))
+    else:
+        print("pending live recording: none")
+    print(f"wrote {eval_runner.RESULTS_DIR}/<timestamp>.json and {eval_runner.MARKDOWN_PATH}")
     return 0
 
 
@@ -264,7 +377,12 @@ def main(argv: list[str] | None = None) -> int:
         return meterless_check(load_settings())
 
     if args.command == "record-sample":
-        return record_sample(args.url, args.name, load_settings())
+        return record_sample(
+            args.url, args.name, load_settings(), with_baseline=args.baseline
+        )
+
+    if args.command == "eval":
+        return eval_command(args, load_settings())
 
     if args.command != "investigate":
         _parser().print_help()
