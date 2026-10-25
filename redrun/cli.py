@@ -322,7 +322,7 @@ def record_sample(url: str, name: str, base: Settings, *, with_baseline: bool = 
 
 
 def eval_command(args: argparse.Namespace, base: Settings) -> int:
-    """Score the agent — and optionally the baseline — over the case set."""
+    """Score the agent, and optionally the baseline, over the case set."""
     try:
         case_set = cases_module.load(Path(args.cases) if args.cases else None)
     except cases_module.CaseError as exc:
