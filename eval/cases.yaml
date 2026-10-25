@@ -140,11 +140,13 @@ cases:
   - github
   split: dev
   constructed: false
-  notes: Chosen for the 2026-08-17 critical incident 'Incident with GitHub.com', id zkxwbgr0cnmx, 13:40:03-21:15:46Z.
+  notes: 'Chosen for the 2026-08-17 critical incident ''Incident with GitHub.com'', id zkxwbgr0cnmx, 13:40:03-21:15:46Z.
     This run started 15:37:51Z and its jobs completed as failures at 15:39:34Z and 15:40:01Z, inside that
-    window. Its log says `##[error]Failed to download archive 'https://codeload.github.com/prefix-dev/setup-pixi/zip/...'
-    after 3 attempts`, so the runner could not fetch an action from GitHub's own archive host. Three other
-    workflows on the same sha (4444662) succeeded, so the commit is not what broke.
+    window. Its log says `##[error]Failed to download archive ''https://codeload.github.com/prefix-dev/setup-pixi/zip/...''
+    after 3 attempts`, with `##[error]Response status code does not indicate success: 429 (Too Many Requests)`
+    from codeload, so the runner could not fetch an action from GitHub''s own archive host while GitHub
+    was degraded. Three other workflows on the same sha (4444662) succeeded, so the commit is not what
+    broke.'
 - id: secret_invalid
   url: https://github.com/cipoklean/redrun-lab/actions/runs/40229631099
   expected_cause: expired_or_missing_secret

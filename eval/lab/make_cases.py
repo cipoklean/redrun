@@ -127,7 +127,9 @@ PUBLIC: list[dict] = [
             "window. Its log says "
             "`##[error]Failed to download archive "
             "'https://codeload.github.com/prefix-dev/setup-pixi/zip/...' after 3 attempts`, "
-            "so the runner could not fetch an action from GitHub's own archive host. "
+            "with `##[error]Response status code does not indicate success: 429 (Too Many "
+            "Requests)` from codeload, so the runner could not fetch an action from "
+            "GitHub's own archive host while GitHub was degraded. "
             "Three other workflows on the same sha (4444662) succeeded, so the commit is "
             "not what broke."
         ),
