@@ -37,17 +37,44 @@ def _tick(flag: bool | None) -> str:
 
 def meta_block(payload: dict[str, Any]) -> str:
     meta = payload["meta"]
-    models = ", ".join(f"`{name}`" for name in (meta.get("agent_models") or [])) or "unknown"
+    every = meta.get("agent_models") or []
+    recorded = [name for name in every if not str(name).startswith("sample/")]
+    labels = ", ".join(f"`{name}`" for name in (meta.get("agent_lane_labels") or every)) or "none"
+    replayed = meta["mode"] == "replay"
+    agent_line = (
+        "- agent: Markovian investigator → skeptic → citation guard → computed confidence"
+    )
+    if recorded:
+        agent_line += f", recorded live on {', '.join(f'`{m}`' for m in recorded)}"
     lines = [
         f"- run: `{meta['timestamp']}`",
         f"- mode: `{meta['mode']}` · split: `{meta['split']}` · seed: `{meta['seed']}`",
         f"- cases: {meta['case_count']} from `{meta['cases_path']}`",
-        f"- agent: Markovian investigator → skeptic → citation guard → computed confidence, "
-        f"on {models}",
+        agent_line,
         f"- baseline: one `{meta.get('baseline_model') or 'fast lane'}` call on the last "
         f"{meta['baseline_lines']} redacted log lines",
         f"- git: `{meta.get('git_sha') or 'unknown'}`",
     ]
+    if replayed:
+        detail = (
+            "Every figure below is the one the model produced when the sample was "
+            "recorded live: the agent's steps come from `samples/<case>/llm/steps.json`, "
+            "and the baseline is its recorded reply. No model was called for this run, so "
+            "a latency of 97s is the recorded model's own time and not this run's."
+        )
+        if recorded:
+            lines.append(f"- {detail}")
+        else:
+            lines.append(
+                f"- {detail} These samples were recorded before the recorder kept the "
+                f"model id, so the agent's {labels} are the replay client's lane names, "
+                "not models. The baseline's model is recorded and named above."
+            )
+    else:
+        lines.append(
+            "- both systems ran for real in this run: the agent against its provider and "
+            "the baseline against the fast lane."
+        )
     if meta.get("notes"):
         lines.append(f"- {meta['notes']}")
     return "\n".join(lines)
@@ -192,8 +219,9 @@ def per_case_table(payload: dict[str, Any]) -> str:
 def pending_block(payload: dict[str, Any]) -> str:
     if not payload["pending"]:
         return (
-            "None. Every case in this run went through the agent pipeline, so nothing "
-            "here is waiting on a live recording."
+            "None. Every case in this run has a recorded model sequence to replay, so "
+            "nothing is missing a recording. This says the samples are complete, not that "
+            "a model ran here."
         )
     rows = ["| case | split | why | rules-only verdict (diagnostic) |", "| --- | --- | --- | --- |"]
     for item in payload["pending"]:
@@ -207,7 +235,7 @@ def pending_block(payload: dict[str, Any]) -> str:
 def baseline_pending_block(payload: dict[str, Any]) -> str:
     items = payload.get("baseline_pending") or []
     if not items:
-        return "None. Every case in this run has a recorded baseline reply."
+        return "None. Every case in this run has a recorded baseline reply to replay."
     rows = ["| case | split | why |", "| --- | --- | --- |"]
     for item in items:
         rows.append(f"| {item['id']} | {item['split']} | {item['reason']} |")
@@ -270,7 +298,7 @@ def render(payload: dict[str, Any]) -> str:
         "",
         per_case_table(payload),
         "",
-        "## Cases pending a live recording",
+        "## Cases whose recording has no model half",
         "",
         pending_block(payload),
         "",

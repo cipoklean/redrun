@@ -252,6 +252,8 @@ def write_sample(
                     "latency_ms": 0,
                 },
                 "lane": step.get("lane", "fast"),
+                "provider": (step.get("usage") or {}).get("provider") or "",
+                "model": (step.get("usage") or {}).get("model") or "",
             }
             for step in llm_steps
         ],
@@ -272,7 +274,12 @@ def write_sample(
 
 
 class RecordingLLM:
-    """Wraps a client and keeps every (lane, text, usage) for steps.json."""
+    """Wraps a client and keeps every (lane, text, usage) for steps.json.
+
+    The provider and model that answered are kept too. Without them a replayed
+    sample can only say which lane ran, and a report that named the lane as if it
+    were a model would be claiming provenance it does not have.
+    """
 
     def __init__(self, inner):
         self.inner = inner
@@ -289,6 +296,8 @@ class RecordingLLM:
                     "prompt_tokens": completion.usage.prompt_tokens,
                     "completion_tokens": completion.usage.completion_tokens,
                     "latency_ms": completion.usage.latency_ms,
+                    "provider": completion.usage.provider,
+                    "model": completion.usage.model,
                 },
             }
         )

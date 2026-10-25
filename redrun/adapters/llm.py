@@ -114,8 +114,11 @@ class LLMClient:
                     prompt_tokens=int(usage.get("prompt_tokens", 0)),
                     completion_tokens=int(usage.get("completion_tokens", 0)),
                     latency_ms=int(usage.get("latency_ms", 0)),
-                    provider="sample",
-                    model=self.model_for(lane),
+                    # The recording says which provider and model answered, so a replay
+                    # reports that instead of stamping its own lane name as a model id.
+                    # Older samples carry only the lane, and fall back to the label.
+                    provider=str(entry.get("provider") or usage.get("provider") or "sample"),
+                    model=str(entry.get("model") or usage.get("model") or self.model_for(lane)),
                 ),
             )
 
@@ -130,8 +133,8 @@ class LLMClient:
                 prompt_tokens=int(usage.get("prompt_tokens", 0)),
                 completion_tokens=int(usage.get("completion_tokens", 0)),
                 latency_ms=0,
-                provider="sample",
-                model=self.model_for(lane),
+                provider=str(payload.get("provider") or usage.get("provider") or "sample"),
+                model=str(payload.get("model") or usage.get("model") or self.model_for(lane)),
             ),
         )
 

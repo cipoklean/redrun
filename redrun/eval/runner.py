@@ -281,6 +281,18 @@ def run(
             for model in (row["agent"].get("models") or [])
         }
     )
+    # What the agent computed on. In replay that is whatever the recording says
+    # answered, or the replay client's lane label when the sample predates the
+    # recorder keeping the model. Named separately from the baseline so nobody reads
+    # `sample/deep` as a model id.
+    agent_lane_labels = sorted(
+        {
+            label
+            for page in (row.get("agent") or {} for row in rows)
+            for label in (page.get("models") or [])
+            if label.startswith("sample/")
+        }
+    )
     payload: dict[str, Any] = {
         "meta": {
             "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -294,6 +306,9 @@ def run(
             "baseline_lines": baseline_module.BASELINE_LINES,
             "baseline_model": baseline_model,
             "agent_models": agent_models,
+            "agent_lane_labels": agent_lane_labels,
+            "agent_replayed": mode == "replay",
+            "baseline_replayed": mode == "replay",
             "git_sha": _git_sha(),
             "notes": case_set.notes,
         },

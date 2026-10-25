@@ -366,9 +366,9 @@ def eval_command(args: argparse.Namespace, base: Settings) -> int:
 
     pending = payload["pending"]
     if pending:
-        print("pending live recording: " + ", ".join(item["id"] for item in pending))
+        print("cases missing a recorded model half: " + ", ".join(item["id"] for item in pending))
     else:
-        print("pending live recording: none")
+        print("cases missing a recorded model half: none")
     print(f"wrote {eval_runner.RESULTS_DIR}/<timestamp>.json and {eval_runner.MARKDOWN_PATH}")
     return 0
 
