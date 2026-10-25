@@ -82,6 +82,10 @@ def summarise(observations: list[dict[str, Any]], *, system: str) -> dict[str, A
     correct_confidence = [row["confidence"] for row in with_confidence if row["category_ok"]]
     wrong_confidence = [row["confidence"] for row in with_confidence if not row["category_ok"]]
 
+    abstained = {"unknown", "invalid", "", None}
+    answered = [row for row in observations if row.get("cause") not in abstained]
+    answered_correct = [row for row in answered if row["category_ok"]]
+
     citations = [row["citation_ok"] for row in observations if row.get("citation_ok") is not None]
     confusion: dict[str, dict[str, int]] = {}
     for row in observations:
@@ -97,6 +101,11 @@ def summarise(observations: list[dict[str, Any]], *, system: str) -> dict[str, A
         "cause_accuracy": round(len(cause_hits) / total, 4) if total else None,
         "keyword_hits": len(keyword_hits),
         "keyword_accuracy": round(len(keyword_hits) / total, 4) if total else None,
+        "answered": len(answered),
+        "answered_correct": len(answered_correct),
+        "answered_precision": (
+            round(len(answered_correct) / len(answered), 4) if answered else None
+        ),
         "citation_evaluated": len(citations),
         "citation_pass": sum(1 for item in citations if item) if citations else None,
         "citation_pass_rate": (

@@ -85,6 +85,24 @@ def totals_table(payload: dict[str, Any]) -> str:
     return "\n".join(rows)
 
 
+def abstention_table(payload: dict[str, Any]) -> str:
+    rows = [
+        "| split | system | answered with a cause | right when it answered |",
+        "| --- | --- | --- | --- |",
+    ]
+    for name, summary in payload["summaries"].items():
+        for system in ("agent", "baseline"):
+            entry = summary[system]
+            if not entry["cases"]:
+                continue
+            rows.append(
+                f"| {name} | {system} | {entry['answered']}/{entry['cases']} | "
+                f"{entry['answered_correct']}/{entry['answered']} "
+                f"({_pct(entry['answered_precision'])}) |"
+            )
+    return "\n".join(rows)
+
+
 def calibration_table(payload: dict[str, Any]) -> str:
     rows = [
         "| split | agent mean confidence (correct) | agent mean confidence (wrong) | difference |",
@@ -216,6 +234,16 @@ def render(payload: dict[str, Any]) -> str:
         "appears in the returned explanation. Citation validity is the share of verdicts "
         "that satisfy the citation guard; the baseline is not asked to cite, so it is n/a.",
         "",
+        "Each row counts only what ran: a case with no recording is left out of that "
+        "system's denominator and listed under the pending tables at the end.",
+        "",
+        "## Abstention",
+        "",
+        "`unknown` is a real answer, so it is not a wrong one. This is what each system "
+        "said when it committed to a cause, which is the number to read next to accuracy.",
+        "",
+        abstention_table(payload),
+        "",
         "## Calibration",
         "",
         "A useful confidence number is higher when the answer is right. The agent's is "
@@ -224,6 +252,9 @@ def render(payload: dict[str, Any]) -> str:
         calibration_table(payload),
         "",
         "## Cost",
+        "",
+        "Latency is the model's own, summed over its steps, so a replay reports what the "
+        "investigation actually cost rather than how long it took to read the fixtures.",
         "",
         cost_table(payload),
         "",

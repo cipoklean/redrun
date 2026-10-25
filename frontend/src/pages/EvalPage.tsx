@@ -172,13 +172,11 @@ export function EvalPage() {
               <thead>
                 <tr className="label">
                   <th className="px-3 py-2 text-left">case</th>
-                  <th className="px-3 py-2 text-left">expected</th>
-                  <th className="px-3 py-2 text-left">split</th>
-                  <th className="px-3 py-2 text-left">source</th>
                   <th className="px-3 py-2 text-left">agent</th>
-                  <th className="px-3 py-2 text-left">keywords</th>
+                  <th className="px-3 py-2 text-left">agent keywords</th>
                   <th className="px-3 py-2 text-left">conf</th>
                   <th className="px-3 py-2 text-left">baseline</th>
+                  <th className="px-3 py-2 text-left">baseline keywords</th>
                 </tr>
               </thead>
               <tbody>
@@ -192,11 +190,10 @@ export function EvalPage() {
                           <Dot tone={row.agent ? (row.agent.category_ok ? "pass" : "fail") : "warn"} />
                           <span className="mono text-[12px] text-ink">{row.id}</span>
                         </div>
-                      </td>
-                      <td className="mono px-3 py-2 text-[12px] text-muted">{row.expected_cause}</td>
-                      <td className="px-3 py-2 text-muted">{row.split}</td>
-                      <td className="px-3 py-2 text-muted">
-                        {row.constructed ? "constructed" : "public"}
+                        <div className="pl-4 text-[11px] text-muted">
+                          expected <span className="mono">{row.expected_cause}</span> · {row.split} ·{" "}
+                          {row.constructed ? "constructed" : "public"}
+                        </div>
                       </td>
                       <td className="px-3 py-2">
                         {row.agent ? (
@@ -228,6 +225,19 @@ export function EvalPage() {
                           <Badge tone={baseline.tone}>{baseline.label}</Badge>
                         ) : (
                           <span className="text-[12px] text-muted">not recorded</span>
+                        )}
+                      </td>
+                      <td className="px-3 py-2 text-[12px] text-muted">
+                        {row.baseline ? (
+                          row.baseline.keywords_ok ? (
+                            "all"
+                          ) : (
+                            <span className="text-fail">
+                              missing {row.baseline.keywords_missing.join(", ")}
+                            </span>
+                          )
+                        ) : (
+                          "n/a"
                         )}
                       </td>
                     </tr>

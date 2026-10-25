@@ -135,8 +135,8 @@ describe("the eval screen", () => {
     render(<EvalPage />);
 
     expect(await screen.findByText("Totals")).toBeInTheDocument();
-    const splits = screen.getAllByText("dev").length + screen.getAllByText("holdout").length;
-    expect(splits).toBeGreaterThanOrEqual(4); // the totals row and the per-case row for each
+    expect(screen.getAllByText("dev").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText("holdout").length).toBeGreaterThanOrEqual(1);
     // dev: agent 1/1, baseline 0/1
     expect(screen.getAllByText(/1\/1/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/0\/1/).length).toBeGreaterThan(0);
@@ -157,9 +157,14 @@ describe("the eval screen", () => {
     stubFetch(RESULTS);
     render(<EvalPage />);
 
-    expect(await screen.findByText("constructed")).toBeInTheDocument();
-    expect(screen.getByText("public")).toBeInTheDocument();
-    expect(screen.getAllByText("dependency_bump").length).toBeGreaterThan(0);
+    // The case cell stacks the id, the expected cause, the split and the source.
+    const cell = await screen.findByText("dep_bump_unpinned");
+    const line = cell.parentElement?.parentElement?.textContent ?? "";
+    expect(line).toContain("expected dependency_bump");
+    expect(line).toContain("dev");
+    expect(line).toContain("constructed");
+    expect(screen.getAllByText("infra_outage_a").length).toBeGreaterThan(0);
+    expect(screen.getByText(/public/)).toBeInTheDocument();
     expect(screen.getAllByText("flaky_test").length).toBeGreaterThan(0);
   });
 

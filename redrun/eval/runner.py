@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 from redrun.adapters.llm import LLMError
+from redrun.collectors.base import CollectorError
 from redrun.config import ROOT, Settings
 from redrun.core.models import Verdict
 from redrun.core.rules import rule_verdict
@@ -83,8 +84,27 @@ def observe_agent(case: Case, settings: Settings, mode: str) -> dict[str, Any]:
         replayed = replace(settings, sample_mode=True)
         try:
             result = investigate(None, sample=case.sample, settings=replayed)
+        except CollectorError as exc:
+            return {
+                "path": NOT_RUN,
+                "path_reason": f"no recorded sample for this case ({exc})",
+                "agent": None,
+                "diagnostic": {},
+                "trace_id": "",
+                "seconds": None,
+            }
         except LLMError as exc:
-            verdict, evidence_ids, trace_id, elapsed = _rules_only(case, replayed)
+            try:
+                verdict, evidence_ids, trace_id, elapsed = _rules_only(case, replayed)
+            except CollectorError as inner:
+                return {
+                    "path": NOT_RUN,
+                    "path_reason": f"no recorded sample for this case ({inner})",
+                    "agent": None,
+                    "diagnostic": {},
+                    "trace_id": "",
+                    "seconds": None,
+                }
             return {
                 "path": RULES_ONLY,
                 "path_reason": (
@@ -104,10 +124,15 @@ def observe_agent(case: Case, settings: Settings, mode: str) -> dict[str, Any]:
     markovian = result.metrics.markovian
     trace_path = Path(settings.logs_dir) / f"{result.trace_id}.jsonl"
     agent = _verdict_observation(verdict, evidence_ids)
+    # In replay the wall clock measures the replay, not the investigation, so report
+    # the recorded model latency when there is one: otherwise the agent's "latency"
+    # is a few milliseconds of file reading next to the baseline's real seconds.
+    recorded_latency = sum(step.latency_ms for step in markovian.per_step) if markovian else 0
     agent.update(
         {
             "guard_intervened": metrics.guard_intervened(trace_path),
-            "latency_ms": result.metrics.latency_ms,
+            "latency_ms": recorded_latency or result.metrics.latency_ms,
+            "replay_ms": result.metrics.latency_ms,
             "tokens_in": result.metrics.tokens_in,
             "tokens_out": result.metrics.tokens_out,
             "steps": markovian.steps if markovian else 0,
