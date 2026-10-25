@@ -50,6 +50,93 @@ export interface SampleSummary {
   order: number;
 }
 
+/** One system's score for one split, as written by the eval runner. */
+export interface EvalSummary {
+  system: string;
+  cases: number;
+  cause_hits: number;
+  cause_accuracy: number | null;
+  keyword_hits: number;
+  keyword_accuracy: number | null;
+  citation_evaluated: number;
+  citation_pass: number | null;
+  citation_pass_rate: number | null;
+  guard_interventions: number;
+  latency_p50_ms: number | null;
+  latency_p95_ms: number | null;
+  tokens_in: number;
+  tokens_out: number;
+  calibration: {
+    correct: number | null;
+    wrong: number | null;
+    correct_cases: number;
+    wrong_cases: number;
+  };
+  confusion: Record<string, Record<string, number>>;
+}
+
+export interface EvalObservation {
+  cause: string | null;
+  root_cause: string;
+  next_step: string;
+  confidence: number | null;
+  citation_ok: boolean | null;
+  category_ok: boolean;
+  keywords_ok: boolean;
+  keywords_missing: string[];
+  latency_ms?: number;
+  tokens_in?: number;
+  tokens_out?: number;
+  guard_intervened?: boolean;
+  steps?: number;
+  stop_reason?: string | null;
+  engine?: string | null;
+  model?: string;
+}
+
+export interface EvalRow {
+  id: string;
+  url: string;
+  expected_cause: string;
+  root_cause_keywords: string[];
+  split: string;
+  constructed: boolean;
+  notes: string;
+  path: string;
+  path_reason: string;
+  agent: EvalObservation | null;
+  baseline: EvalObservation | null;
+  baseline_reason?: string;
+  diagnostic: Record<string, unknown>;
+}
+
+export interface EvalResults {
+  meta: {
+    timestamp: string;
+    mode: string;
+    split: string;
+    seed: number;
+    case_count: number;
+    baseline_model: string | null;
+    baseline_lines: number;
+    git_sha: string | null;
+    notes: string;
+  };
+  rows: EvalRow[];
+  summaries: Record<string, { agent: EvalSummary; baseline: EvalSummary }>;
+  pending: { id: string; split: string; path: string; reason: string; rules_cause?: string }[];
+  baseline_pending: { id: string; split: string; reason: string }[];
+}
+
+export async function fetchEvalResults(): Promise<EvalResults | null> {
+  try {
+    return await getJson<EvalResults>("/eval");
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) return null;
+    throw error;
+  }
+}
+
 export class ApiError extends Error {
   status: number;
 

@@ -1,5 +1,6 @@
 import { Link, Route, Routes } from "react-router-dom";
 
+import { EvalPage } from "@/pages/EvalPage";
 import { InvestigatePage } from "@/pages/InvestigatePage";
 import { RunPage } from "@/pages/RunPage";
 
@@ -8,7 +9,8 @@ function NotFound() {
     <div className="mx-auto flex max-w-3xl flex-col items-start gap-3 px-4 py-16">
       <h1 className="text-lg font-semibold">That page does not exist.</h1>
       <p className="text-[13px] text-muted">
-        RedRun has two screens: investigate a run, then read its verdict.
+        RedRun has three screens: investigate a run, read its verdict, and the
+        evaluation the two systems are scored on.
       </p>
       <Link to="/" className="text-[13px] text-accent hover:underline">
         Back to investigate
@@ -38,6 +40,9 @@ export function App() {
             <Link to="/" className="transition-colors hover:text-ink">
               Investigate
             </Link>
+            <Link to="/eval" className="transition-colors hover:text-ink">
+              Eval
+            </Link>
             <a
               href="/docs"
               className="hidden transition-colors hover:text-ink sm:inline"
@@ -53,6 +58,7 @@ export function App() {
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<InvestigatePage />} />
+          <Route path="/eval" element={<EvalPage />} />
           <Route path="/run/:id" element={<RunPage />} />
           <Route path="/run/:id/verdict" element={<RunPage />} />
           <Route path="*" element={<NotFound />} />

@@ -260,6 +260,29 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             raise HTTPException(status_code=500, detail="stored result is not valid JSON") from exc
         return JSONResponse(payload)
 
+    @app.get("/eval")
+    def eval_results(request: Request):
+        """The newest evaluation run, as written by `python -m redrun eval ...`.
+
+        Read-only, and it says so when there is nothing: an empty table would look
+        like a score of zero rather than a run that has not happened.
+        """
+        if _wants_html(request):
+            return _index()
+        from redrun.eval.runner import RESULTS_DIR
+
+        reports = sorted(RESULTS_DIR.glob("*.json")) if RESULTS_DIR.is_dir() else []
+        if not reports:
+            raise HTTPException(
+                status_code=404,
+                detail="no evaluation results yet: run `python -m redrun eval --split all --mode replay --baseline`",
+            )
+        try:
+            payload = json.loads(reports[-1].read_text(encoding="utf-8"))
+        except ValueError as exc:
+            raise HTTPException(status_code=500, detail="evaluation results are not valid JSON") from exc
+        return JSONResponse(payload)
+
     assets = cfg.frontend_dir / "assets"
     if assets.is_dir():
         app.mount("/assets", StaticFiles(directory=assets), name="assets")
