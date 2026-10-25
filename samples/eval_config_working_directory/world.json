@@ -1,0 +1,10 @@
+{
+  "note": "entity and fact counts at record time",
+  "tables": {
+    "runs": 2,
+    "changes": 1,
+    "log_errors": 0,
+    "dependencies": 0
+  },
+  "engine": "duckdb"
+}

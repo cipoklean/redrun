@@ -1,0 +1,6 @@
+{
+  "order": 500,
+  "title": "eval: infra outage django connection reset",
+  "category": "infra_outage",
+  "description": "Chosen for the 2026-10-21 critical incident 'Delays for Pull Requests and Webhook deliveries' (14:52-19:22Z), inside which this run failed at 18:26Z. The tests died on `ConnectionResetError(104, 'Conn"
+}

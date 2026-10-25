@@ -1,0 +1,47 @@
+[
+  {
+    "text": "{\"carryover\":{\"hypotheses\":[{\"cause\":\"expired_or_missing_secret\",\"claim\":\"triage candidate: expired_or_missing_secret\",\"supporting_ids\":[\"ev_file_001\"],\"against_ids\":[]}],\"open_questions\":[\"Why is LAB_MISSING_TOKEN empty or missing?\"],\"ruled_out\":[]},\"verdict\":{\"cause\":\"expired_or_missing_secret\",\"root_cause\":\"The CI workflow (.github/workflows/ci.yml) was modified to add a publish step referencing secret LAB_MISSING_TOKEN, which is empty/missing; the accompanying Python code exits if LAB_TOKEN is not set, causing the publish step to fail.\",\"next_step\":\"Verify and restore the LAB_MISSING_TOKEN (or LAB_TOKEN) secret in the CI environment, ensuring it is not expired or empty, then re-trigger the CI pipeline.\",\"cited_evidence_ids\":[\"ev_file_001\"]}}",
+    "usage": {
+      "prompt_tokens": 554,
+      "completion_tokens": 2397,
+      "latency_ms": 19679
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"expired_or_missing_secret\",\n        \"claim\": \"LAB_TOKEN is empty or missing in the CI environment, blocking the publish step\",\n        \"supporting_ids\": [\"ev_file_001\", \"ev_log_001\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\"Why is LAB_TOKEN empty or missing in the CI environment?\"],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"expired_or_missing_secret\",\n    \"root_cause\": \"The LAB_TOKEN secret is empty or missing in the CI runtime, likely due to a recent workflow config change (ev_file_001) that added a publish step requiring it, causing the process to exit with \\\"refusing to publish: required secret LAB_TOKEN is empty\\\" (ev_log_001).\",\n    \"next_step\": \"Configure or restore the LAB_TOKEN secret in the GitHub Actions secrets settings for the repository, then re-run the CI workflow to verify the fix.\",\n    \"cited_evidence_ids\": [\"ev_log_001\", \"ev_file_001\"]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 3357,
+      "completion_tokens": 2764,
+      "latency_ms": 30602
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"expired_or_missing_secret\",\n        \"claim\": \"LAB_TOKEN is empty or missing in the CI environment, blocking the publish step\",\n        \"supporting_ids\": [\"ev_commit_50f362\", \"ev_file_001\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\"Why is LAB_TOKEN empty or missing in the CI environment?\"],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"expired_or_missing_secret\",\n    \"root_cause\": \"The LAB_TOKEN secret is missing or empty in the CI environment. The recent commit (50f3623) introduced a publish step that requires this secret, and the CI workflow (ci.yml) was modified to reference it, but the secret was never configured.\",\n    \"next_step\": \"Configure the LAB_TOKEN secret in the CI system's secret store and re-run the workflow to verify the publish step succeeds.\",\n    \"cited_evidence_ids\": [\"ev_commit_50f362\", \"ev_file_001\"]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 814,
+      "completion_tokens": 2634,
+      "latency_ms": 23677
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"expired_or_missing_secret\", \"claim\": \"LAB_TOKEN is empty or missing in the CI environment, blocking the publish step\", \"supporting_ids\": [\"ev_run_40229628003\"], \"against_ids\": []}], \"open_questions\": [\"Why is LAB_TOKEN empty or missing in the CI environment?\"], \"ruled_out\": []}, \"verdict\": {\"cause\": \"expired_or_missing_secret\", \"root_cause\": \"LAB_TOKEN is empty or missing in the CI environment, causing the publish step to fail in the ci workflow on branch case/secret-missing\", \"next_step\": \"Restore or rotate LAB_TOKEN in the CI environment and re-invoke the workflow\", \"cited_evidence_ids\": [\"ev_run_40229628003\", \"ev_run_40229516551\"]}}",
+    "usage": {
+      "prompt_tokens": 1156,
+      "completion_tokens": 3425,
+      "latency_ms": 28023
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"expired_or_missing_secret\",\n        \"claim\": \"LAB_TOKEN is empty or missing in the CI environment, blocking the publish step\",\n        \"supporting_ids\": [\"ev_run_40229628003\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\n      \"Why is LAB_TOKEN empty or missing in the CI environment?\"\n    ],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"expired_or_missing_secret\",\n    \"root_cause\": \"LAB_TOKEN secret is not configured in the CI environment, causing the publish step to fail\",\n    \"next_step\": \"Add the LAB_TOKEN secret to the CI environment\",\n    \"cited_evidence_ids\": [\n      \"ev_commit_50f362\",\n      \"ev_run_40229628003\"\n    ]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 600,
+      "completion_tokens": 1209,
+      "latency_ms": 23173
+    },
+    "lane": "deep"
+  }
+]

@@ -1,0 +1,6 @@
+{
+  "order": 500,
+  "title": "eval: dep bump unpinned",
+  "category": "dependency_bump",
+  "description": "The pin is loosened, so pip installs the newest packaging, which no longer exports LegacyVersion. A removed API arriving through an unpinned floor."
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"bad_commit\",\n        \"claim\": \"triage candidate: bad_commit\",\n        \"supporting_ids\": [],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [],\n    \"ruled_out\": []\n  },\n  \"verdict\": null\n}",
+    "usage": {
+      "prompt_tokens": 275,
+      "completion_tokens": 1456,
+      "latency_ms": 10952
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"triage candidate: bad_commit\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": null}",
+    "usage": {
+      "prompt_tokens": 2608,
+      "completion_tokens": 3515,
+      "latency_ms": 34470
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"dependency_bump\", \"claim\": \"Relaxing packaging constraint from ==21.3 to >=21 in requirements.txt introduced an incompatible dependency, causing CI failure.\", \"supporting_ids\": [\"ev_commit_360930\", \"ev_file_001\", \"ev_dep_packaging\"], \"against_ids\": []}], \"open_questions\": [\"What exact packaging version resolved and triggered the failure?\"], \"ruled_out\": [\"bad_commit\"]}, \"verdict\": {\"cause\": \"dependency_bump\", \"root_cause\": \"Commit 360930b changed packaging constraint in requirements.txt from packaging==21.3 to packaging>=21 (evidence ev_file_001, ev_commit_360930), allowing a newer packaging version to be resolved that is incompatible with the rest of the dependency chain (ev_dep_packaging shows packaging 21.3 -> >=21, released_between_runs=False).\", \"next_step\": \"Pin packaging version to ==21.3 in requirements.txt and re-run CI to confirm fix, or identify the exact incompatible version.\", \"cited_evidence_ids\": [\"ev_commit_360930\", \"ev_file_001\", \"ev_dep_packaging\"]}}",
+    "usage": {
+      "prompt_tokens": 834,
+      "completion_tokens": 3556,
+      "latency_ms": 37280
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"dependency_bump\",\n        \"claim\": \"Relaxing packaging constraint from ==21.3 to >=21 in requirements.txt introduced an incompatible dependency, causing CI failure.\",\n        \"supporting_ids\": [\"ev_run_40229501321\", \"ev_run_40229610003\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\"What exact packaging version resolved and triggered the failure?\"],\n    \"ruled_out\": [\"bad_commit\"]\n  },\n  \"verdict\": {\n    \"cause\": \"dependency_bump\",\n    \"root_cause\": \"Relaxing the packaging constraint from ==21.3 to >=21 in requirements.txt introduced an incompatible dependency, leading to test failure in CI.\",\n    \"next_step\": \"Pin dependency to ==21.3 in requirements.txt and re-trigger CI to confirm resolution.\",\n    \"cited_evidence_ids\": [\"ev_run_40229501321\", \"ev_run_40229610003\"]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 1181,
+      "completion_tokens": 4821,
+      "latency_ms": 35527
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"dependency_bump\",\n        \"claim\": \"Relaxing packaging constraint from ==21.3 to >=21 in requirements.txt introduced an incompatible dependency, causing CI failure.\",\n        \"supporting_ids\": [\n          \"ev_run_40229501321\",\n          \"ev_run_40229610003\"\n        ],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\n      \"What exact packaging version resolved and triggered the failure?\"\n    ],\n    \"ruled_out\": [\n      \"bad_commit\"\n    ]\n  },\n  \"verdict\": {\n    \"cause\": \"dependency_bump\",\n    \"root_cause\": \"incompatible dependency introduced by relaxing packaging constraint from ==21.3 to >=21\",\n    \"next_step\": \"pin packaging version or revert the requirements.txt change\",\n    \"cited_evidence_ids\": [\n      \"ev_commit_360930\",\n      \"ev_file_001\",\n      \"ev_dep_packaging\"\n    ]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 652,
+      "completion_tokens": 962,
+      "latency_ms": 24773
+    },
+    "lane": "deep"
+  }
+]

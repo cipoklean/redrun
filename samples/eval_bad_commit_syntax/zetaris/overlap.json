@@ -1,0 +1,15 @@
+{
+  "recorded_from": "duckdb",
+  "note": "Recorded by redrun record-sample on a live run.",
+  "recorded_at": "2026-10-25T20:36:52.616870",
+  "row_count": 1,
+  "rows": [
+    {
+      "link_type": "file_match",
+      "log_evidence_id": "ev_log_001",
+      "change_evidence_id": "ev_file_001",
+      "score_hint": 0.8,
+      "detail": "failing log line names lab/parse.py which changed in lab/parse.py"
+    }
+  ]
+}

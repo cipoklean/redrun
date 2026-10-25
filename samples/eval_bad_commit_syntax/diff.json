@@ -1,0 +1,19 @@
+{
+  "commits": [
+    {
+      "sha": "e3a379295bfc98a1a535adb1087f12bcebc335ab",
+      "message": "drop the colon from the loop header",
+      "author": "cipoklean",
+      "date": "2026-10-25T20:12:01+00:00"
+    }
+  ],
+  "files": [
+    {
+      "filename": "lab/parse.py",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "patch": "@@ -4,7 +4,7 @@\n def parse_row(line: str) -> dict[str, str]:\n     \"\"\"Split `key=[REDACTED] into a dict.\"\"\"\n     fields: dict[str, str] = {}\n-    for part in line.split(\",\"):\n+    for part in line.split(\",\")\n         key, _, value = part.partition(\"=\")\n         fields[key.strip()] = value.strip()\n     return fields"
+    }
+  ]
+}

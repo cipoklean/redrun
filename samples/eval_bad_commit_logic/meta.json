@@ -1,0 +1,6 @@
+{
+  "order": 500,
+  "title": "eval: bad commit logic",
+  "category": "bad_commit",
+  "description": "A wrong-value assertion: the test file is unchanged, the source is not."
+}

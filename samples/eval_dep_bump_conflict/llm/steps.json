@@ -1,0 +1,47 @@
+[
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"dependency_bump\",\n        \"claim\": \"triage candidate: dependency_bump\",\n        \"supporting_ids\": [],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [],\n    \"ruled_out\": []\n  },\n  \"verdict\": null\n}",
+    "usage": {
+      "prompt_tokens": 277,
+      "completion_tokens": 1071,
+      "latency_ms": 9484
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"dependency_bump\",\n        \"claim\": \"triage candidate: dependency_bump\",\n        \"supporting_ids\": [\"ev_log_001\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"dependency_bump\",\n    \"root_cause\": \"requirements.txt specifies httpcore==0.16.0 while httpx==0.27.0 requires httpcore==1.*, causing a dependency resolution failure\",\n    \"next_step\": \"Align httpcore version constraints across requirements.txt and httpx, or loosen version ranges to allow pip to resolve the conflict\",\n    \"cited_evidence_ids\": [\"ev_log_001\"]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 3098,
+      "completion_tokens": 1171,
+      "latency_ms": 13578
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"dependency_bump\",\n        \"claim\": \"triage candidate: dependency_bump\",\n        \"supporting_ids\": [\"ev_log_001\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"dependency_bump\",\n    \"root_cause\": \"Commit dbd92b4 pinned httpcore to version 0.16.0 in requirements.txt, which is incompatible with httpx==0.27.0, causing the CI failure.\",\n    \"next_step\": \"Revert the httpcore pin to a version compatible with httpx, or adjust the httpx pin to match the httpcore version.\",\n    \"cited_evidence_ids\": [\"ev_commit_dbd92b\", \"ev_file_001\", \"ev_dep_httpcore\"]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 926,
+      "completion_tokens": 4730,
+      "latency_ms": 51716
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"dependency_bump\",\n        \"claim\": \"triage candidate: dependency_bump\",\n        \"supporting_ids\": [\"ev_log_001\", \"ev_run_40229504375\", \"ev_run_40229612895\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"dependency_bump\",\n    \"root_cause\": \"Dependency bump conflict on branch case/dep-bump-conflict caused install step failure in failed run dbd92b4; green run at 61c2877 succeeded with same branch pattern, indicating environment-dependent bump application.\",\n    \"next_step\": \"Review dependency resolution logs and reconcile version changes between commits 61c2877 and dbd92b4.\",\n    \"cited_evidence_ids\": [\"ev_run_40229504375\", \"ev_run_40229612895\"]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 1122,
+      "completion_tokens": 3529,
+      "latency_ms": 34400
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"dependency_bump\",\n        \"claim\": \"triage candidate: dependency_bump\",\n        \"supporting_ids\": [\n          \"ev_commit_dbd92b\",\n          \"ev_dep_httpcore\",\n          \"ev_file_001\",\n          \"ev_log_001\",\n          \"ev_run_40229612895\"\n        ],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"dependency_bump\",\n    \"root_cause\": \"Pinning httpcore to a version incompatible with httpx (httpcore 0.16.0) introduced by commit dbd92b\",\n    \"next_step\": \"Adjust dependency constraints or revert the httpcore pin to resolve incompatibility\",\n    \"cited_evidence_ids\": [\n      \"ev_commit_dbd92b\",\n      \"ev_dep_httpcore\",\n      \"ev_file_001\",\n      \"ev_log_001\",\n      \"ev_run_40229612895\"\n    ]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 631,
+      "completion_tokens": 1751,
+      "latency_ms": 19347
+    },
+    "lane": "deep"
+  }
+]

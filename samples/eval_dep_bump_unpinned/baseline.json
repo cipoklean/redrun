@@ -1,0 +1,19 @@
+{
+  "recorded_at": "2026-10-25T20:48:59",
+  "lane": "fast",
+  "provider": "nvidia",
+  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "prompt_lines": 300,
+  "reply": {
+    "cause": "dependency_bump",
+    "root_cause": "The test imports LegacyVersion from packaging.version, which was removed in packaging >= 24; the runner installed packaging 26.3, causing an ImportError during test collection.",
+    "next_step": "Pin packaging to a compatible version (e.g., <24) or replace the import with a supported alternative."
+  },
+  "raw": "{\"cause\": \"dependency_bump\", \"root_cause\": \"The test imports LegacyVersion from packaging.version, which was removed in packaging >= 24; the runner installed packaging 26.3, causing an ImportError during test collection.\", \"next_step\": \"Pin packaging to a compatible version (e.g., <24) or replace the import with a supported alternative.\"}",
+  "usage": {
+    "prompt_tokens": 9437,
+    "completion_tokens": 3391,
+    "latency_ms": 25345
+  },
+  "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
+}

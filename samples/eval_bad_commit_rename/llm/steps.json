@@ -1,0 +1,47 @@
+[
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"bad_commit\",\n        \"claim\": \"triage candidate: bad_commit\",\n        \"supporting_ids\": [],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [],\n    \"ruled_out\": []\n  },\n  \"verdict\": null\n}",
+    "usage": {
+      "prompt_tokens": 275,
+      "completion_tokens": 1020,
+      "latency_ms": 6602
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"triage candidate: bad_commit\", \"supporting_ids\": [\"ev_log_001\"], \"against_ids\": []}, {\"cause\": \"config_change\", \"claim\": \"config change may have altered lab.summary import path\", \"supporting_ids\": [\"ev_log_001\"], \"against_ids\": []}], \"open_questions\": [\"Which commit or config change caused the missing 'format_total' import in lab/summary.py?\"], \"ruled_out\": []}, \"verdict\": {\"cause\": \"bad_commit\", \"root_cause\": \"ImportError: cannot import name 'format_total' from 'lab.summary' as seen in ev_log_001; likely removed or renamed in a recent commit\", \"next_step\": \"Review git history for changes to lab/summary.py around the time of run:40229618647\", \"cited_evidence_ids\": [\"ev_log_001\"]}}",
+    "usage": {
+      "prompt_tokens": 2584,
+      "completion_tokens": 2618,
+      "latency_ms": 21683
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"triage candidate: bad_commit\", \"supporting_ids\": [\"ev_log_001\", \"ev_commit_2650b9\", \"ev_file_001\"], \"against_ids\": []}, {\"cause\": \"config_change\", \"claim\": \"config change may have altered lab.summary import path\", \"supporting_ids\": [\"ev_log_001\"], \"against_ids\": [\"ev_commit_2650b9\", \"ev_file_001\"]}], \"open_questions\": [\"Which commit or config change caused the missing 'format_total' import in lab/summary.py?\"], \"ruled_out\": []}, \"verdict\": {\"cause\": \"bad_commit\", \"root_cause\": \"Commit 2650b9f renamed format_total to render_total in lab/summary.py without updating all references, causing import failure and CI failure.\", \"next_step\": \"Search for all references to format_total in the codebase and update them to render_total, or revert the rename if unintended.\", \"cited_evidence_ids\": [\"ev_commit_2650b9\", \"ev_file_001\"]}}",
+    "usage": {
+      "prompt_tokens": 750,
+      "completion_tokens": 2758,
+      "latency_ms": 20437
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"bad_commit\",\n        \"claim\": \"triage candidate: bad_commit\",\n        \"supporting_ids\": [\"ev_log_001\", \"ev_commit_2650b9\", \"ev_file_001\", \"ev_run_40229618647\"],\n        \"against_ids\": []\n      },\n      {\n        \"cause\": \"config_change\",\n        \"claim\": \"config change may have altered lab.summary import path\",\n        \"supporting_ids\": [\"ev_log_001\"],\n        \"against_ids\": [\"ev_commit_2650b9\", \"ev_file_001\", \"ev_run_40229618647\"]\n      }\n    ],\n    \"open_questions\": [\"Which commit or config change caused the missing 'format_total' import in lab/summary.py?\"],\n    \"ruled_out\": [\"config_change\"]\n  },\n  \"verdict\": {\n    \"cause\": \"bad_commit\",\n    \"root_cause\": \"Commit 2650b9f (run ev_run_40229618647) on branch case/bad-commit-rename introduced a test failure, likely due to missing 'format_total' import in lab/summary.py, as the green run at c18ecd6 (ev_run_40229509787) on the same branch succeeded.\",\n    \"next_step\": \"Inspect the diff of commit 2650b9f to confirm the missing import and implement a fix.\",\n    \"cited_evidence_ids\": [\"ev_run_40229618647\", \"ev_run_40229509787\"]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 1224,
+      "completion_tokens": 4100,
+      "latency_ms": 32652
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"bad_commit\",\n        \"claim\": \"triage candidate: bad_commit\",\n        \"supporting_ids\": [\n          \"ev_log_001\",\n          \"ev_commit_2650b9\",\n          \"ev_file_001\",\n          \"ev_run_40229618647\"\n        ],\n        \"against_ids\": []\n      },\n      {\n        \"cause\": \"config_change\",\n        \"claim\": \"config change may have altered lab.summary import path\",\n        \"supporting_ids\": [\n          \"ev_log_001\"\n        ],\n        \"against_ids\": [\n          \"ev_commit_2650b9\",\n          \"ev_file_001\",\n          \"ev_run_40229618647\"\n        ]\n      }\n    ],\n    \"open_questions\": [\n      \"Which commit or config change caused the missing 'format_total' import in lab/summary.py?\"\n    ],\n    \"ruled_out\": [\n      \"config_change\"\n    ]\n  },\n  \"verdict\": {\n    \"cause\": \"bad_commit\",\n    \"root_cause\": \"Commit 2650b9 renamed format_total at its definition, causing the import in lab/summary.py to be missing, leading to test failure\",\n    \"next_step\": \"Inspect commit 2650b9 and the lab/summary.py changes to confirm import path and fix the missing import\",\n    \"cited_evidence_ids\": [\n      \"ev_commit_2650b9\",\n      \"ev_file_001\",\n      \"ev_run_40229618647\"\n    ]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 700,
+      "completion_tokens": 1420,
+      "latency_ms": 10257
+    },
+    "lane": "deep"
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": null}",
+    "usage": {
+      "prompt_tokens": 242,
+      "completion_tokens": 818,
+      "latency_ms": 7756
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": null}",
+    "usage": {
+      "prompt_tokens": 242,
+      "completion_tokens": 1518,
+      "latency_ms": 10088
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": null}",
+    "usage": {
+      "prompt_tokens": 244,
+      "completion_tokens": 1784,
+      "latency_ms": 14535
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [],\n    \"open_questions\": [],\n    \"ruled_out\": []\n  },\n  \"verdict\": null\n}",
+    "usage": {
+      "prompt_tokens": 1087,
+      "completion_tokens": 1364,
+      "latency_ms": 11959
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"bad_commit\",\n        \"claim\": \"The failed PR run was caused by a bad commit introduced in the PR associated with run #40183021230\",\n        \"supporting_ids\": [\n          \"ev_run_40183021230\",\n          \"ev_run_40182915045\"\n        ],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\n      \"What specific change in the commit introduced the failure?\",\n      \"Can the failure be reproduced locally?\"\n    ],\n    \"ruled_out\": [\n      \"infra_outage\",\n      \"flaky_test\",\n      \"dependency_bump\",\n      \"config_change\",\n      \"expired_or_missing_secret\"\n    ]\n  },\n  \"verdict\": {\n    \"cause\": \"bad_commit\",\n    \"root_cause\": \"erroneous code change introduced in the PR commit\",\n    \"next_step\": \"Revert the suspect commit to confirm the cause\",\n    \"cited_evidence_ids\": [\n      \"ev_run_40183021230\",\n      \"ev_run_40182915045\"\n    ]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 422,
+      "completion_tokens": 1379,
+      "latency_ms": 29776
+    },
+    "lane": "deep"
+  }
+]

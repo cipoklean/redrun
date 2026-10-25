@@ -1,0 +1,19 @@
+{
+  "recorded_at": "2026-10-25T20:39:15",
+  "lane": "fast",
+  "provider": "nvidia",
+  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "prompt_lines": 300,
+  "reply": {
+    "cause": "unknown",
+    "root_cause": "The test test_app_mode_is_known in tests/test_mode.py calls app_mode() which reads os.environ['LAB_APP_MODE'], but the environment variable is not set in the GitHub Actions job, resulting in a KeyError.",
+    "next_step": "Add LAB_APP_MODE as an environment variable or secret in the workflow configuration to provide the required value."
+  },
+  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The test test_app_mode_is_known in tests/test_mode.py calls app_mode() which reads os.environ['LAB_APP_MODE'], but the environment variable is not set in the GitHub Actions job, resulting in a KeyError.\", \"next_step\": \"Add LAB_APP_MODE as an environment variable or secret in the workflow configuration to provide the required value.\"}",
+  "usage": {
+    "prompt_tokens": 9854,
+    "completion_tokens": 1984,
+    "latency_ms": 13967
+  },
+  "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
+}

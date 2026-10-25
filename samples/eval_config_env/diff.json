@@ -1,0 +1,19 @@
+{
+  "commits": [
+    {
+      "sha": "a33919434258a86fd1471a070f33428b03dbfa54",
+      "message": "rename the env var the reader expects",
+      "author": "cipoklean",
+      "date": "2026-10-25T20:11:59+00:00"
+    }
+  ],
+  "files": [
+    {
+      "filename": ".github/workflows/ci.yml",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "patch": "@@ -8,7 +8,7 @@ jobs:\n   test:\n     runs-on: ubuntu-latest\n     env:\n-      LAB_APP_MODE: ci\n+      LAB_RUN_MODE: ci\n     steps:\n       - uses: actions/checkout@v4\n       - uses: actions/setup-python@v5"
+    }
+  ]
+}

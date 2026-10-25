@@ -1,0 +1,56 @@
+[
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"bad_commit\",\n        \"claim\": \"triage candidate: bad_commit\",\n        \"supporting_ids\": [],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [],\n    \"ruled_out\": []\n  },\n  \"verdict\": null\n}",
+    "usage": {
+      "prompt_tokens": 275,
+      "completion_tokens": 1441,
+      "latency_ms": 8782
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"triage candidate: bad_commit\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [\"What introduced the cache warm time regression?\"], \"ruled_out\": []}, \"verdict\": null}",
+    "usage": {
+      "prompt_tokens": 2628,
+      "completion_tokens": 2036,
+      "latency_ms": 17022
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"triage candidate: bad_commit - commit bf98274 added random warm-up nudge (nudge 1) to lab/cache.py\", \"supporting_ids\": [\"ev_commit_bf9827\", \"ev_file_001\"], \"against_ids\": []}], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": {\"cause\": \"bad_commit\", \"root_cause\": \"Commit bf98274 introduced a random warm-up pause (time.sleep(0.001 + random.uniform(0.0, 0.10)) and comment # nudge 1) in lab/cache.py, causing non-deterministic warm-up time regression.\", \"next_step\": \"Revert or fix the warm-up timing in commit bf98274; re-run the affected pipeline (run:40230034828) to confirm resolution.\", \"cited_evidence_ids\": [\"ev_commit_bf9827\", \"ev_file_001\"]}",
+    "usage": {
+      "prompt_tokens": 708,
+      "completion_tokens": 2977,
+      "latency_ms": 23414
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"bad_commit\",\n        \"claim\": \"triage candidate: bad_commit\",\n        \"supporting_ids\": [\"ev_commit_bf9827\", \"ev_file_001\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\"What introduced the cache warm time regression?\"],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"bad_commit\",\n    \"root_cause\": \"Commit bf98274 added a random warm-up pause in lab/cache.py (nudge 1), introducing timing non-determinism that caused the CI regression.\",\n    \"next_step\": \"Revert or adjust the warm-up pause in lab/cache.py and re-run the CI pipeline to confirm the fix.\",\n    \"cited_evidence_ids\": [\"ev_commit_bf9827\", \"ev_file_001\"]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 744,
+      "completion_tokens": 2268,
+      "latency_ms": 23224
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"bad_commit\",\n        \"claim\": \"triage candidate: bad_commit\",\n        \"supporting_ids\": [\"ev_commit_bf9827\", \"ev_file_001\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\"What introduced the cache warm time regression?\"],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"flaky_test\",\n    \"root_cause\": \"Test failure on case/flaky-timing branch; green run ev_run_40229937280 concluded success, failed run ev_run_40230034828 concluded failure with failing steps: test, branch name indicates flakiness\",\n    \"next_step\": \"Rerun the CI pipeline or isolate the test to confirm flakiness\",\n    \"cited_evidence_ids\": [\"ev_run_40230034828\"]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 1147,
+      "completion_tokens": 4036,
+      "latency_ms": 28276
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"bad_commit\",\n        \"claim\": \"triage candidate: bad_commit\",\n        \"supporting_ids\": [\n          \"ev_commit_bf9827\",\n          \"ev_file_001\"\n        ],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\n      \"What introduced the cache warm time regression?\"\n    ],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"bad_commit\",\n    \"root_cause\": \"Commit bf9827 introduced a cache warm-up pause in lab/cache.py, causing the test timing regression.\",\n    \"next_step\": \"Review the change in lab/cache.py and its impact on test execution timing.\",\n    \"cited_evidence_ids\": [\n      \"ev_commit_bf9827\",\n      \"ev_file_001\"\n    ]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 590,
+      "completion_tokens": 970,
+      "latency_ms": 19415
+    },
+    "lane": "deep"
+  }
+]

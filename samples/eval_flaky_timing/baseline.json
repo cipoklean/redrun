@@ -1,0 +1,19 @@
+{
+  "recorded_at": "2026-10-25T20:52:44",
+  "lane": "fast",
+  "provider": "nvidia",
+  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "prompt_lines": 300,
+  "reply": {
+    "cause": "unknown",
+    "root_cause": "The log shows a test assertion failure due to cache warm timing (0.079s exceeding the 0.05s threshold), but without repository context, previous green runs, or diff information, the root cause category cannot be definitively determined from the log alone.",
+    "next_step": "Obtain the previous green run, repository diff, or additional test history to identify the actual cause."
+  },
+  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The log shows a test assertion failure due to cache warm timing (0.079s exceeding the 0.05s threshold), but without repository context, previous green runs, or diff information, the root cause category cannot be definitively determined from the log alone.\", \"next_step\": \"Obtain the previous green run, repository diff, or additional test history to identify the actual cause.\"}",
+  "usage": {
+    "prompt_tokens": 9408,
+    "completion_tokens": 2981,
+    "latency_ms": 24775
+  },
+  "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
+}

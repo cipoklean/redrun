@@ -1,0 +1,47 @@
+[
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": null}",
+    "usage": {
+      "prompt_tokens": 242,
+      "completion_tokens": 1400,
+      "latency_ms": 23235
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [],\n    \"open_questions\": [],\n    \"ruled_out\": []\n  },\n  \"verdict\": null\n}",
+    "usage": {
+      "prompt_tokens": 242,
+      "completion_tokens": 722,
+      "latency_ms": 5198
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"config_change\",\n        \"claim\": \"The CI workflow config was modified to add working-directory: lab to the install step, which may cause pip install to fail if requirements.txt is not accessible from lab/.\",\n        \"supporting_ids\": [\"ev_commit_bffa5a\", \"ev_file_001\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\n      \"Is requirements.txt present in the lab/ directory?\",\n      \"Was the working-directory change intentional?\"\n    ],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"config_change\",\n    \"root_cause\": \"Commit bffa5a7 modified .github/workflows/ci.yml to add working-directory: lab to the install step, causing the pip install command to execute relative to lab/ where requirements.txt may not exist, resulting in CI failure.\",\n    \"next_step\": \"Revert the working-directory change or ensure requirements.txt is available in lab/, then re-run CI to confirm fix.\",\n    \"cited_evidence_ids\": [\"ev_commit_bffa5a\", \"ev_file_001\"]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 666,
+      "completion_tokens": 3160,
+      "latency_ms": 27846
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"config_change\", \"claim\": \"The CI workflow config was modified to add working-directory: lab to the install step, which may cause pip install to fail if requirements.txt is not accessible from lab/.\", \"supporting_ids\": [\"ev_commit_bffa5a\", \"ev_file_001\"], \"against_ids\": []}], \"open_questions\": [\"Is requirements.txt present in the lab/ directory?\", \"Was the working-directory change intentional?\"], \"ruled_out\": []}, \"verdict\": null}",
+    "usage": {
+      "prompt_tokens": 1169,
+      "completion_tokens": 3217,
+      "latency_ms": 27049
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"config_change\",\n        \"claim\": \"The CI workflow config was modified to add working-directory: lab to the install step, which may cause pip install to fail if requirements.txt is not accessible from lab/.\",\n        \"supporting_ids\": [\"ev_commit_bffa5a\", \"ev_file_001\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\n      \"Is requirements.txt present in the lab/ directory?\",\n      \"Was the working-directory change intentional?\"\n    ],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"config_change\",\n    \"root_cause\": \"The CI workflow was changed to set working-directory to lab/, causing pip install to look for requirements.txt in that directory, which is missing, leading to the failure.\",\n    \"next_step\": \"Verify that requirements.txt exists in the lab/ directory and either add it or adjust/revert the working-directory setting.\",\n    \"cited_evidence_ids\": [\n      \"ev_commit_bffa5a\",\n      \"ev_file_001\",\n      \"ev_run_40229643536\"\n    ]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 589,
+      "completion_tokens": 935,
+      "latency_ms": 20166
+    },
+    "lane": "deep"
+  }
+]

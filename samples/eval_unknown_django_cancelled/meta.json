@@ -1,0 +1,6 @@
+{
+  "order": 500,
+  "title": "eval: unknown django cancelled",
+  "category": "unknown",
+  "description": "A cancelled run with nothing to read: its only job was cancelled, the whole log is 253 lines that end at 'Cleaning up orphan processes', and none of the collector's error patterns match a line of it. "
+}

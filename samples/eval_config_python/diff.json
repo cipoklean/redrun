@@ -1,0 +1,19 @@
+{
+  "commits": [
+    {
+      "sha": "7d71e2d005903209461b4e99720935e5410ac009",
+      "message": "run the job on Python 3.9, below what the annotations need",
+      "author": "cipoklean",
+      "date": "2026-10-25T20:11:57+00:00"
+    }
+  ],
+  "files": [
+    {
+      "filename": ".github/workflows/ci.yml",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "patch": "@@ -11,7 +11,7 @@ jobs:\n       - uses: actions/checkout@v4\n       - uses: actions/setup-python@v5\n         with:\n-          python-version: '3.11'\n+          python-version: '3.9'\n       - name: install\n         run: python -m pip install --upgrade pip && python -m pip install -r requirements.txt\n       - name: test"
+    }
+  ]
+}

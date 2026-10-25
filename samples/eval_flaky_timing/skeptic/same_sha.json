@@ -1,0 +1,28 @@
+{
+  "runs": [
+    {
+      "run_id": 40230100084,
+      "workflow": "ci",
+      "conclusion": "success",
+      "head_sha": "bf982742e845f26e5167608f499c2575a3cb927e"
+    },
+    {
+      "run_id": 40230077629,
+      "workflow": "ci",
+      "conclusion": "failure",
+      "head_sha": "bf982742e845f26e5167608f499c2575a3cb927e"
+    },
+    {
+      "run_id": 40230056077,
+      "workflow": "ci",
+      "conclusion": "failure",
+      "head_sha": "bf982742e845f26e5167608f499c2575a3cb927e"
+    },
+    {
+      "run_id": 40230034828,
+      "workflow": "ci",
+      "conclusion": "failure",
+      "head_sha": "bf982742e845f26e5167608f499c2575a3cb927e"
+    }
+  ]
+}

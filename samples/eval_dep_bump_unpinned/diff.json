@@ -1,0 +1,19 @@
+{
+  "commits": [
+    {
+      "sha": "360930b76f9d9fb2b23ac635ac1c1d6942256dde",
+      "message": "let packaging float to whatever the resolver picks",
+      "author": "cipoklean",
+      "date": "2026-10-25T20:11:39+00:00"
+    }
+  ],
+  "files": [
+    {
+      "filename": "requirements.txt",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "patch": "@@ -1,2 +1,2 @@\n pytest==8.3.4\n-packaging==21.3\n+packaging>=21"
+    }
+  ]
+}

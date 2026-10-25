@@ -1,0 +1,19 @@
+{
+  "commits": [
+    {
+      "sha": "d40f2b389d9b8355e2d79a84a7f2bc7de088ef63",
+      "message": "make the index build fail about half the time (nudge 2)",
+      "author": "cipoklean",
+      "date": "2026-10-25T20:16:25+00:00"
+    }
+  ],
+  "files": [
+    {
+      "filename": "lab/index.py",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 0,
+      "patch": "@@ -11,3 +11,5 @@ def build_index(rows: list[str]) -> dict[str, int]:\n     return {row: position for position, row in enumerate(rows)}\n \n # nudge 1\n+\n+# nudge 2"
+    }
+  ]
+}

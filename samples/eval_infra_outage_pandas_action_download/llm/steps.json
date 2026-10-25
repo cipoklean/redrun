@@ -1,0 +1,38 @@
+[
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": null}",
+    "usage": {
+      "prompt_tokens": 242,
+      "completion_tokens": 956,
+      "latency_ms": 7575
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": null}",
+    "usage": {
+      "prompt_tokens": 242,
+      "completion_tokens": 1074,
+      "latency_ms": 7870
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"config_change\", \"claim\": \"Modification to .github/workflows/wheels.yml changed the Python version matrix, which may have caused the CI failure.\", \"supporting_ids\": [\"ev_file_001\"], \"against_ids\": []}], \"open_questions\": [\"What specific test failure occurred in run:32042902095?\"], \"ruled_out\": []}, \"verdict\": {\"cause\": \"config_change\", \"root_cause\": \"The change to wheels.yml altered the Python dependency configuration, leading to a CI failure in run:32042902095.\", \"next_step\": \"Examine the CI run logs for version-related errors and validate the Python matrix compatibility.\", \"cited_evidence_ids\": [\"ev_file_001\", \"ev_commit_444466\"]}",
+    "usage": {
+      "prompt_tokens": 903,
+      "completion_tokens": 5353,
+      "latency_ms": 57375
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"config_change\", \"claim\": \"The 'Fix syntax' commit modified the python version matrix in .github/workflows/wheels.yml, restructuring the cp314t and cp315 dependencies.\", \"supporting_ids\": [\"ev_commit_444466\", \"ev_file_001\"], \"against_ids\": []}], \"open_questions\": [\"What caused the python version list to change unexpectedly?\"], \"ruled_out\": []}, \"verdict\": {\"cause\": \"config_change\", \"root_cause\": \"Commit 4444662 'Fix syntax' altered the python configuration in wheels.yml, which is likely the root cause of the CI failure.\", \"next_step\": \"Review and revert/adjust the wheels.yml python matrix to resolve the CI failure.\", \"cited_evidence_ids\": [\"ev_commit_444466\", \"ev_file_001\"]}",
+    "usage": {
+      "prompt_tokens": 939,
+      "completion_tokens": 3430,
+      "latency_ms": 27261
+    },
+    "lane": "fast"
+  }
+]

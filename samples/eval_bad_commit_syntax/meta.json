@@ -1,0 +1,6 @@
+{
+  "order": 500,
+  "title": "eval: bad commit syntax",
+  "category": "bad_commit",
+  "description": "A syntax error in a changed module: pytest cannot even import it, and the traceback names the changed file, so the log-to-change join has something to join on."
+}

@@ -1,0 +1,19 @@
+{
+  "recorded_at": "2026-10-25T20:36:02",
+  "lane": "fast",
+  "provider": "nvidia",
+  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "prompt_lines": 300,
+  "reply": {
+    "cause": "bad_commit",
+    "root_cause": "The checked-out commit case/bad-commit-rename modified lab/summary.py, removing the format_total function that test_dashboard.py depends on, resulting in an ImportError during test collection.",
+    "next_step": "Examine lab/summary.py in the committed code and restore or rename the format_total function to resolve the import failure."
+  },
+  "raw": "{\"cause\": \"bad_commit\", \"root_cause\": \"The checked-out commit case/bad-commit-rename modified lab/summary.py, removing the format_total function that test_dashboard.py depends on, resulting in an ImportError during test collection.\", \"next_step\": \"Examine lab/summary.py in the committed code and restore or rename the format_total function to resolve the import failure.\"}",
+  "usage": {
+    "prompt_tokens": 9418,
+    "completion_tokens": 3381,
+    "latency_ms": 29518
+  },
+  "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
+}

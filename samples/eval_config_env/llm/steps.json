@@ -1,0 +1,47 @@
+[
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"triage candidate: bad_commit\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": null}",
+    "usage": {
+      "prompt_tokens": 275,
+      "completion_tokens": 992,
+      "latency_ms": 8102
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"triage candidate: bad_commit\", \"supporting_ids\": [], \"against_ids\": [\"ev_log_001\"]}], \"open_questions\": [\"Why is LAB_APP_MODE environment variable not set in CI run?\"], \"ruled_out\": []}, \"verdict\": {\"cause\": \"expired_or_missing_secret\", \"root_cause\": \"The CI run lacked the LAB_APP_MODE environment variable, causing KeyError in app_mode() at lab/mode.py:8\", \"next_step\": \"Restore or configure LAB_APP_MODE in the CI secrets/workflow configuration\", \"cited_evidence_ids\": [\"ev_log_001\"]}}",
+    "usage": {
+      "prompt_tokens": 2540,
+      "completion_tokens": 5002,
+      "latency_ms": 34949
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"config_change\",\n        \"claim\": \"triage candidate: config change renamed env var in CI workflow\",\n        \"supporting_ids\": [\"ev_commit_a33919\", \"ev_file_001\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\"What downstream components or scripts still reference the LAB_APP_MODE variable?\"],\n    \"ruled_out\": [\"bad_commit\"]\n  },\n  \"verdict\": {\n    \"cause\": \"config_change\",\n    \"root_cause\": \"Commit a339194 renamed the environment variable LAB_APP_MODE to LAB_RUN_MODE in .github/workflows/ci.yml, causing the CI run to not set the previously expected variable.\",\n    \"next_step\": \"Update or audit downstream steps/jobs that reference LAB_APP_MODE to use LAB_RUN_MODE instead, or revert the rename if unintended.\",\n    \"cited_evidence_ids\": [\"ev_commit_a33919\", \"ev_file_001\"]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 703,
+      "completion_tokens": 3552,
+      "latency_ms": 20962
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"config_change\", \"claim\": \"triage candidate: config change renamed env var in CI workflow\", \"supporting_ids\": [\"ev_commit_a33919\", \"ev_file_001\"], \"against_ids\": []}], \"open_questions\": [\"What downstream components or scripts still reference the LAB_APP_MODE variable?\"], \"ruled_out\": [\"bad_commit\"]}, \"verdict\": null}",
+    "usage": {
+      "prompt_tokens": 1147,
+      "completion_tokens": 2669,
+      "latency_ms": 22594
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"config_change\",\n        \"claim\": \"triage candidate: config change renamed env var in CI workflow\",\n        \"supporting_ids\": [\n          \"ev_commit_a33919\",\n          \"ev_file_001\"\n        ],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\n      \"What downstream components or scripts still reference the LAB_APP_MODE variable?\"\n    ],\n    \"ruled_out\": [\n      \"bad_commit\"\n    ]\n  },\n  \"verdict\": {\n    \"cause\": \"config_change\",\n    \"root_cause\": \"The CI workflow config was changed to rename the LAB_APP_MODE environment variable, causing tests that still expect the old name to fail.\",\n    \"next_step\": \"Search for remaining references to LAB_APP_MODE in the codebase and update or restore the variable name.\",\n    \"cited_evidence_ids\": [\n      \"ev_commit_a33919\",\n      \"ev_file_001\",\n      \"ev_run_40229637246\",\n      \"ev_log_tail_121278380729\"\n    ]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 597,
+      "completion_tokens": 1112,
+      "latency_ms": 11084
+    },
+    "lane": "deep"
+  }
+]

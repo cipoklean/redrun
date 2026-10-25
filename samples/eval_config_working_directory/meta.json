@@ -1,0 +1,6 @@
+{
+  "order": 500,
+  "title": "eval: config working directory",
+  "category": "config_change",
+  "description": "Only the workflow changes. The step starts, then pip cannot find the manifest it was pointed at."
+}

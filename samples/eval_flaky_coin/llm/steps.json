@@ -1,0 +1,56 @@
+[
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"triage candidate: bad_commit\", \"supporting_ids\": [], \"against_ids\": []}], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": null}",
+    "usage": {
+      "prompt_tokens": 275,
+      "completion_tokens": 1168,
+      "latency_ms": 8134
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"bad_commit\",\n        \"claim\": \"triage candidate: bad_commit\",\n        \"supporting_ids\": [],\n        \"against_ids\": [\"ev_log_001\"]\n      },\n      {\n        \"cause\": \"flaky_test\",\n        \"claim\": \"test involves coin flip causing non-deterministic index building\",\n        \"supporting_ids\": [\"ev_log_001\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\n      \"Determine whether the failure is primarily due to flakiness from the coin flip mechanism or a recent bad commit.\"\n    ],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"flaky_test\",\n    \"root_cause\": \"The test test_index_covers_every_row contains a coin flip that decides execution flow, leading to non-deterministic index population. The observed failure in run 40229984837 (assert 0 == 3, len({}) == 0) is consistent with intermittent flakiness.\",\n    \"next_step\": \"Refactor the test to remove the coin flip dependency, ensuring deterministic index construction, or add safeguards to mitigate flakiness.\",\n    \"cited_evidence_ids\": [\"ev_log_001\"]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 2591,
+      "completion_tokens": 7186,
+      "latency_ms": 61052
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"triage candidate: bad_commit\", \"supporting_ids\": [], \"against_ids\": [\"ev_log_001\"]}, {\"cause\": \"flaky_test\", \"claim\": \"test involves coin flip causing non-deterministic index building\", \"supporting_ids\": [\"ev_log_001\", \"ev_commit_d40f2b\", \"ev_file_001\"], \"against_ids\": []}], \"open_questions\": [], \"ruled_out\": [\"bad_commit\"]}, \"verdict\": {\"cause\": \"flaky_test\", \"root_cause\": \"Commit d40f2b3 added '# nudge 2' (and '# nudge 1') comments to lab/index.py, implementing a coin-flip mechanism that causes the index build to fail non-deterministically about half the time.\", \"next_step\": \"Trace the nudge mechanism in the build pipeline to identify the exact non-deterministic trigger and confirm the flakiness source.\", \"cited_evidence_ids\": [\"ev_commit_d40f2b\", \"ev_file_001\"]}",
+    "usage": {
+      "prompt_tokens": 751,
+      "completion_tokens": 6284,
+      "latency_ms": 44056
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"bad_commit\",\n        \"claim\": \"triage candidate: bad_commit\",\n        \"supporting_ids\": [],\n        \"against_ids\": [\"ev_log_001\"]\n      },\n      {\n        \"cause\": \"flaky_test\",\n        \"claim\": \"test involves coin flip causing non-deterministic index building\",\n        \"supporting_ids\": [\"ev_log_001\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\n      \"Determine whether the failure is primarily due to flakiness from the coin flip mechanism or a recent bad commit.\"\n    ],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"bad_commit\",\n    \"root_cause\": \"Commit d40f2b3 introduced 'nudge 2' which causes the index build to fail about half the time, introducing non-determinism.\",\n    \"next_step\": \"Revert commit d40f2b3 and re-run the build to confirm stability and eliminate the flaky failure.\",\n    \"cited_evidence_ids\": [\"ev_commit_d40f2b\", \"ev_file_001\"]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 787,
+      "completion_tokens": 2194,
+      "latency_ms": 18841
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"triage candidate: bad_commit\", \"supporting_ids\": [], \"against_ids\": [\"ev_log_001\"]}, {\"cause\": \"flaky_test\", \"claim\": \"test involves coin flip causing non-deterministic index building\", \"supporting_ids\": [\"ev_log_001\"], \"against_ids\": []}], \"open_questions\": [\"Determine whether the failure is primarily due to flakiness from the coin flip mechanism or a recent bad commit.\"], \"ruled_out\": []}, \"verdict\": null}",
+    "usage": {
+      "prompt_tokens": 1187,
+      "completion_tokens": 4087,
+      "latency_ms": 27358
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"bad_commit\",\n        \"claim\": \"triage candidate: bad_commit\",\n        \"supporting_ids\": [],\n        \"against_ids\": [\"ev_log_001\"]\n      },\n      {\n        \"cause\": \"flaky_test\",\n        \"claim\": \"test involves coin flip causing non-deterministic index building\",\n        \"supporting_ids\": [\"ev_log_001\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\n      \"Determine whether the failure is primarily due to flakiness from the coin flip mechanism or a recent bad commit.\"\n    ],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"bad_commit\",\n    \"root_cause\": \"Commit d40f2b introduced a change that makes the index build fail about half the time, causing intermittent test failures.\",\n    \"next_step\": \"Examine commit d40f2b and the modified lab/index.py to identify the specific change causing the intermittent failure.\",\n    \"cited_evidence_ids\": [\n      \"ev_commit_d40f2b\",\n      \"ev_file_001\",\n      \"ev_run_40229984837\",\n      \"ev_run_40229961975\"\n    ]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 634,
+      "completion_tokens": 1483,
+      "latency_ms": 39086
+    },
+    "lane": "deep"
+  }
+]

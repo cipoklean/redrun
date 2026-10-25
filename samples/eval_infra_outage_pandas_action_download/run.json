@@ -1,0 +1,4935 @@
+{
+  "repository": {
+    "owner": "pandas-dev",
+    "repo": "pandas"
+  },
+  "workflow": {
+    "id": 0,
+    "name": "Unit Tests",
+    "path": ".github/workflows/unit-tests.yml"
+  },
+  "branch": "bld/3_15",
+  "runner_image": "ubuntu-24.04",
+  "failed_run": {
+    "run_id": 32042902095,
+    "head_sha": "444466231323fb394bfa19e6fa9fa9abb1ecae66",
+    "created_at": "2026-08-17T15:37:51+00:00",
+    "conclusion": "failure",
+    "jobs": [
+      {
+        "job_id": 95425269119,
+        "name": "Clang (ASAN/UBSAN)",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Get Sanitizer Path",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269133,
+        "name": "Windows-MinGW",
+        "conclusion": "failure",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "failure"
+          },
+          {
+            "number": 4,
+            "name": "Build pandas",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 8,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269144,
+        "name": "Linux-32-bit",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout pandas Repo",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Build environment",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run Tests",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269152,
+        "name": "macos-15 py311",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269159,
+        "name": "Pyodide build",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout pandas Repo",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Set up Node.js",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Set up Python",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Install pyodide-build",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Save Emscripten version",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Set up Emscripten toolchain",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Build pandas for Pyodide",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Set up Pyodide virtual environment",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Test pandas for Pyodide",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Set up Python",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Set up Node.js",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Post Checkout pandas Repo",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269169,
+        "name": "macos-15 py314",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269190,
+        "name": "python-dev (macos-15)",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Set up Python Dev Version",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Build Environment",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run Tests",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Post Set up Python Dev Version",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269207,
+        "name": "python-dev (ubuntu-24.04)",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Set up Python Dev Version",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Build Environment",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run Tests",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Post Set up Python Dev Version",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269218,
+        "name": "windows-2025 py311",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269220,
+        "name": "Linux-Musl",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout pandas Repo",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Configure System Packages",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Build environment",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Run Tests",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269231,
+        "name": "macos-15-intel py314",
+        "conclusion": "failure",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "failure"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269239,
+        "name": "python-dev (windows-2025)",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Set up Python Dev Version",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Build Environment",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run Tests",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Post Set up Python Dev Version",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269243,
+        "name": "python-dev (macos-15-intel)",
+        "conclusion": "failure",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Set up Python Dev Version",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Build Environment",
+            "conclusion": "failure"
+          },
+          {
+            "number": 5,
+            "name": "Run Tests",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 9,
+            "name": "Post Set up Python Dev Version",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 10,
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269245,
+        "name": "macos-15 py313",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269250,
+        "name": "macos-15-intel py313",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269276,
+        "name": "windows-2025 py313",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269292,
+        "name": "macos-15 py312",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269312,
+        "name": "macos-15-intel py312",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269324,
+        "name": "windows-2025 py312",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269335,
+        "name": "windows-2025 py314",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269341,
+        "name": "macos-15-intel py311",
+        "conclusion": "failure",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "failure"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269345,
+        "name": "ubuntu-24.04-arm py313",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269347,
+        "name": "PANDAS_FUTURE_INFER_STRING=0",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269359,
+        "name": "ubuntu-24.04 py313",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269366,
+        "name": "Numpy Nightly",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269393,
+        "name": "ubuntu-24.04 py314",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269427,
+        "name": "ubuntu-24.04 py311",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269437,
+        "name": "ubuntu-24.04-arm py312",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269439,
+        "name": "Minimum Versions",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269468,
+        "name": "Pyarrow Nightly",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269477,
+        "name": "Without PyArrow",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269496,
+        "name": "Downstream Compat",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269503,
+        "name": "ubuntu-24.04 py312",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269511,
+        "name": "ubuntu-24.04-arm py311",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269517,
+        "name": "ubuntu-24.04-arm py314",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269544,
+        "name": "Locale: it_IT",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269588,
+        "name": "Freethreading",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269635,
+        "name": "Locale: zh_CN",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95425269690,
+        "name": "PANDAS_FUTURE_PYTHON_SCALARS=1",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  },
+  "last_green_run": {
+    "run_id": 31980027940,
+    "head_sha": "ad3413c68acaf07528145ab890526bdb1f553682",
+    "created_at": "2026-08-16T23:45:32+00:00",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "job_id": 95245200537,
+        "name": "Pyodide build",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout pandas Repo",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Set up Node.js",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Set up Python",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Install pyodide-build",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Save Emscripten version",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Set up Emscripten toolchain",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Build pandas for Pyodide",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Set up Pyodide virtual environment",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Test pandas for Pyodide",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Set up Python",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Set up Node.js",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Post Checkout pandas Repo",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200580,
+        "name": "Linux-Musl",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout pandas Repo",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Configure System Packages",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Build environment",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Run Tests",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200602,
+        "name": "python-dev (windows-2025)",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Set up Python Dev Version",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Build Environment",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run Tests",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Post Set up Python Dev Version",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200609,
+        "name": "Linux-32-bit",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout pandas Repo",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Build environment",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run Tests",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200640,
+        "name": "Windows-MinGW",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200642,
+        "name": "Clang (ASAN/UBSAN)",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Get Sanitizer Path",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200666,
+        "name": "python-dev (macos-15)",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Set up Python Dev Version",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Build Environment",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run Tests",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Post Set up Python Dev Version",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200668,
+        "name": "python-dev (ubuntu-24.04)",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Set up Python Dev Version",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Build Environment",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run Tests",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Post Set up Python Dev Version",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200686,
+        "name": "python-dev (macos-15-intel)",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Set up Python Dev Version",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Build Environment",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run Tests",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Post Set up Python Dev Version",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200775,
+        "name": "windows-2025 py312",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200787,
+        "name": "macos-15 py313",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200797,
+        "name": "macos-15-intel py311",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200804,
+        "name": "windows-2025 py314",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200807,
+        "name": "macos-15-intel py312",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200825,
+        "name": "windows-2025 py313",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200880,
+        "name": "macos-15 py314",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200881,
+        "name": "windows-2025 py311",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200892,
+        "name": "macos-15-intel py314",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200905,
+        "name": "macos-15-intel py313",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200907,
+        "name": "macos-15 py311",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200939,
+        "name": "ubuntu-24.04-arm py312",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200946,
+        "name": "Pyarrow Nightly",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200957,
+        "name": "PANDAS_FUTURE_INFER_STRING=0",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200968,
+        "name": "macos-15 py312",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Remove link.EXE for Windows",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Test",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245200972,
+        "name": "Numpy Nightly",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245201013,
+        "name": "ubuntu-24.04 py313",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245201016,
+        "name": "Downstream Compat",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245201021,
+        "name": "ubuntu-24.04-arm py314",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245201031,
+        "name": "ubuntu-24.04 py312",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245201042,
+        "name": "Locale: zh_CN",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245201057,
+        "name": "Freethreading",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245201095,
+        "name": "ubuntu-24.04 py311",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245201096,
+        "name": "ubuntu-24.04-arm py311",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245201114,
+        "name": "PANDAS_FUTURE_PYTHON_SCALARS=1",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245201128,
+        "name": "Minimum Versions",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245201135,
+        "name": "ubuntu-24.04 py314",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245201167,
+        "name": "Locale: it_IT",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245201172,
+        "name": "Without PyArrow",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 95245201221,
+        "name": "ubuntu-24.04-arm py313",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Initialize containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Generate extra locales",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 5,
+            "name": "Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build pandas",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Import check",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Test (not single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Test (single_cpu)",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Upload test coverage to Codecov",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Create virtual environment with Pixi",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Stop containers",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  }
+}

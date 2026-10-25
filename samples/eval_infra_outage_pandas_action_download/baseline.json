@@ -1,0 +1,19 @@
+{
+  "recorded_at": "2026-10-25T21:12:56",
+  "lane": "fast",
+  "provider": "nvidia",
+  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "prompt_lines": 300,
+  "reply": {
+    "cause": "unknown",
+    "root_cause": "The log ends with HTTP 429 (Too Many Requests) and 503 (Service Unavailable) errors when downloading the 'fast_float' submodule from GitHub, but without repository diff, previous green run data, or knowledge of recent changes, the exact cause cannot be definitively classified.",
+    "next_step": "Retry the workflow after a pause to accommodate transient GitHub rate limits, and inspect the 'fast_float' submodule/dependency configuration if failures persist."
+  },
+  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The log ends with HTTP 429 (Too Many Requests) and 503 (Service Unavailable) errors when downloading the 'fast_float' submodule from GitHub, but without repository diff, previous green run data, or knowledge of recent changes, the exact cause cannot be definitively classified.\", \"next_step\": \"Retry the workflow after a pause to accommodate transient GitHub rate limits, and inspect the 'fast_float' submodule/dependency configuration if failures persist.\"}",
+  "usage": {
+    "prompt_tokens": 13298,
+    "completion_tokens": 2167,
+    "latency_ms": 15400
+  },
+  "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
+}

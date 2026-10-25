@@ -1,0 +1,6 @@
+{
+  "order": 500,
+  "title": "eval: infra outage pandas action download",
+  "category": "infra_outage",
+  "description": "Chosen for the 2026-08-17 critical incident 'Incident with GitHub.com' (13:40-21:15Z), inside which this run failed at 15:38Z. Its log says `##[error]Failed to download archive 'https://codeload.githu"
+}

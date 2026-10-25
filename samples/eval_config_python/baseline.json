@@ -1,0 +1,19 @@
+{
+  "recorded_at": "2026-10-25T20:41:54",
+  "lane": "fast",
+  "provider": "nvidia",
+  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "prompt_lines": 300,
+  "reply": {
+    "cause": "unknown",
+    "root_cause": "The test collection failed with TypeError: unsupported operand type(s) for |: 'type' and 'NoneType' in lab/reporting.py:9, which uses Python 3.10+ union type syntax on a Python 3.9 runtime; the log does not provide enough context to map this to one of the specified causes without repository details.",
+    "next_step": "Review the repository's Python version configuration and update lab/reporting.py to use compatible type annotations or adjust the runner's Python version."
+  },
+  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The test collection failed with TypeError: unsupported operand type(s) for |: 'type' and 'NoneType' in lab/reporting.py:9, which uses Python 3.10+ union type syntax on a Python 3.9 runtime; the log does not provide enough context to map this to one of the specified causes without repository details.\", \"next_step\": \"Review the repository's Python version configuration and update lab/reporting.py to use compatible type annotations or adjust the runner's Python version.\"}",
+  "usage": {
+    "prompt_tokens": 10496,
+    "completion_tokens": 4204,
+    "latency_ms": 34158
+  },
+  "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
+}

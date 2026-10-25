@@ -1,0 +1,119 @@
+{
+  "repository": {
+    "owner": "django",
+    "repo": "django"
+  },
+  "workflow": {
+    "id": 0,
+    "name": "PR Quality Checks",
+    "path": ".github/workflows/check_pr_quality.yml"
+  },
+  "branch": "ticket-37306",
+  "runner_image": "ubuntu-latest",
+  "failed_run": {
+    "run_id": 40183021230,
+    "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689",
+    "created_at": "2026-10-25T10:01:02+00:00",
+    "conclusion": "cancelled",
+    "jobs": [
+      {
+        "job_id": 121137883366,
+        "name": "Run Quality Checks on a PR",
+        "conclusion": "cancelled",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Set up Python",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Run PR quality checks",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Post Set up Python",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  },
+  "last_green_run": {
+    "run_id": 40182915045,
+    "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689",
+    "created_at": "2026-10-25T09:59:36+00:00",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "job_id": 121137581917,
+        "name": "check-commit-suffix",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Run actions/checkout@v7",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Set base",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Fetch relevant branches",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Check commit messages suffix",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Post Run actions/checkout@v7",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 121137583054,
+        "name": "check-commit-prefix",
+        "conclusion": "skipped",
+        "steps": []
+      }
+    ]
+  }
+}

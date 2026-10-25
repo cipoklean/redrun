@@ -1,0 +1,19 @@
+{
+  "recorded_at": "2026-10-25T21:14:37",
+  "lane": "fast",
+  "provider": "nvidia",
+  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "prompt_lines": 300,
+  "reply": {
+    "cause": "unknown",
+    "root_cause": "The log excerpt ends after 'Post job cleanup' with no error messages, exit codes, or failure indicators visible; the PR quality check script ran but was skipped for an established contributor, and no diagnostic output is present.",
+    "next_step": "Obtain the full job log or workflow run summary to locate the failure point and error details."
+  },
+  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The log excerpt ends after 'Post job cleanup' with no error messages, exit codes, or failure indicators visible; the PR quality check script ran but was skipped for an established contributor, and no diagnostic output is present.\", \"next_step\": \"Obtain the full job log or workflow run summary to locate the failure point and error details.\"}",
+  "usage": {
+    "prompt_tokens": 10984,
+    "completion_tokens": 1332,
+    "latency_ms": 22230
+  },
+  "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
+}

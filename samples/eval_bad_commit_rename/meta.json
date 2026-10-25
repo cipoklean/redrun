@@ -1,0 +1,6 @@
+{
+  "order": 500,
+  "title": "eval: bad commit rename",
+  "category": "bad_commit",
+  "description": "An import error in a changed module: the importer is the unchanged file."
+}

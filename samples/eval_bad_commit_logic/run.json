@@ -1,0 +1,123 @@
+{
+  "repository": {
+    "owner": "cipoklean",
+    "repo": "redrun-lab"
+  },
+  "workflow": {
+    "id": 0,
+    "name": "ci",
+    "path": ".github/workflows/ci.yml"
+  },
+  "branch": "case/bad-commit-logic",
+  "runner_image": "ubuntu-latest",
+  "failed_run": {
+    "run_id": 40229615670,
+    "head_sha": "440440a98147010aebb5d9b1673d3c214faf4982",
+    "created_at": "2026-10-25T20:11:46+00:00",
+    "conclusion": "failure",
+    "jobs": [
+      {
+        "job_id": 121278321957,
+        "name": "test",
+        "conclusion": "failure",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Run actions/setup-python@v5",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "install",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "test",
+            "conclusion": "failure"
+          },
+          {
+            "number": 9,
+            "name": "Post Run actions/setup-python@v5",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 10,
+            "name": "Post Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  },
+  "last_green_run": {
+    "run_id": 40229506539,
+    "head_sha": "508f087cce119ae4e54400204e9d280f5da525a0",
+    "created_at": "2026-10-25T20:10:24+00:00",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "job_id": 121277992859,
+        "name": "test",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Run actions/setup-python@v5",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "install",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "test",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Post Run actions/setup-python@v5",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Post Run actions/checkout@v4",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  }
+}

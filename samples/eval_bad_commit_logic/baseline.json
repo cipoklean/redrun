@@ -1,0 +1,19 @@
+{
+  "recorded_at": "2026-10-25T20:27:47",
+  "lane": "fast",
+  "provider": "nvidia",
+  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "prompt_lines": 300,
+  "reply": {
+    "cause": "bad_commit",
+    "root_cause": "The job checked out branch 'case/bad-commit-logic' which contains an `order_total` function with flawed shipping calculation logic, resulting in three pytest assertions failing due to mismatched Decimal values.",
+    "next_step": "Review the commit diff on case/bad-commit-logic or revert to the previous green run to identify and fix the calculation error."
+  },
+  "raw": "{\"cause\": \"bad_commit\", \"root_cause\": \"The job checked out branch 'case/bad-commit-logic' which contains an `order_total` function with flawed shipping calculation logic, resulting in three pytest assertions failing due to mismatched Decimal values.\", \"next_step\": \"Review the commit diff on case/bad-commit-logic or revert to the previous green run to identify and fix the calculation error.\"}",
+  "usage": {
+    "prompt_tokens": 10829,
+    "completion_tokens": 4663,
+    "latency_ms": 29780
+  },
+  "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
+}

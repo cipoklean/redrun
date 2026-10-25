@@ -1,0 +1,19 @@
+{
+  "recorded_at": "2026-10-25T20:44:02",
+  "lane": "fast",
+  "provider": "nvidia",
+  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "prompt_lines": 300,
+  "reply": {
+    "cause": "unknown",
+    "root_cause": "The pipeline failed during pip install because requirements.txt was not present in the checked-out repository at commit bffa5a7bf0f90342375150216bfa2eddd14863c0.",
+    "next_step": "Locate or restore requirements.txt in the repository and verify the pip install step references the correct path."
+  },
+  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The pipeline failed during pip install because requirements.txt was not present in the checked-out repository at commit bffa5a7bf0f90342375150216bfa2eddd14863c0.\", \"next_step\": \"Locate or restore requirements.txt in the repository and verify the pip install step references the correct path.\"}",
+  "usage": {
+    "prompt_tokens": 7430,
+    "completion_tokens": 3018,
+    "latency_ms": 21103
+  },
+  "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
+}

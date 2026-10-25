@@ -1,0 +1,6 @@
+{
+  "order": 500,
+  "title": "eval: secret missing",
+  "category": "expired_or_missing_secret",
+  "description": "secrets.LAB_MISSING_TOKEN does not exist, so the step refuses to publish."
+}

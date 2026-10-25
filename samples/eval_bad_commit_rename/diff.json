@@ -1,0 +1,19 @@
+{
+  "commits": [
+    {
+      "sha": "2650b9f6ebd399b453d7194c3d32e58db8ea8626",
+      "message": "rename format_total at its definition and nowhere else",
+      "author": "cipoklean",
+      "date": "2026-10-25T20:11:46+00:00"
+    }
+  ],
+  "files": [
+    {
+      "filename": "lab/summary.py",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "patch": "@@ -1,5 +1,5 @@\n \"\"\"Totals for the dashboard.\"\"\"\n \n \n-def format_total(amount: float) -> str:\n+def render_total(amount: float) -> str:\n     return f\"{amount:.2f}\""
+    }
+  ]
+}

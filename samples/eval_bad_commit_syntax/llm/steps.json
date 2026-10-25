@@ -1,0 +1,29 @@
+[
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"triage candidate: bad_commit\", \"supporting_ids\": [\"ev_file_001\"], \"against_ids\": []}], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": {\"cause\": \"bad_commit\", \"root_cause\": \"Evidence ev_file_001 links a failing log line to changes in lab/parse.py, where the string split logic was modified, consistent with a bad commit introducing the failure.\", \"next_step\": \"Review the commit history for lab/parse.py to identify and revert/fix the offending change.\", \"cited_evidence_ids\": [\"ev_file_001\"]}}",
+    "usage": {
+      "prompt_tokens": 511,
+      "completion_tokens": 1601,
+      "latency_ms": 12186
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"bad_commit\",\n        \"claim\": \"A bad commit removed the trailing colon from the for-loop header in lab/parse.py, causing a SyntaxError during test collection.\",\n        \"supporting_ids\": [\"ev_log_001\", \"ev_file_001\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"bad_commit\",\n    \"root_cause\": \"A commit modified lab/parse.py line 7, removing the trailing colon from 'for part in line.split(\\\",\\\"):', resulting in SyntaxError: expected ':' when pytest attempted to import lab.parse.\",\n    \"next_step\": \"Revert the offending commit or restore the colon in lab/parse.py, then re-run the test suite to confirm resolution.\",\n    \"cited_evidence_ids\": [\"ev_log_001\", \"ev_file_001\"]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 2718,
+      "completion_tokens": 1874,
+      "latency_ms": 11491
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"bad_commit\",\n        \"claim\": \"A bad commit removed the trailing colon from the for-loop header in lab/parse.py, causing a SyntaxError during test collection.\",\n        \"supporting_ids\": [\"ev_log_001\", \"ev_file_001\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"bad_commit\",\n    \"root_cause\": \"Commit e3a3792 removed the colon from the loop header in lab/parse.py, introducing a SyntaxError that prevented test collection.\",\n    \"next_step\": \"Revert the problematic commit or fix the syntax error in lab/parse.py.\",\n    \"cited_evidence_ids\": [\n      \"ev_commit_e3a379\",\n      \"ev_file_001\",\n      \"ev_log_001\",\n      \"ev_run_40229640647\"\n    ]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 586,
+      "completion_tokens": 918,
+      "latency_ms": 23163
+    },
+    "lane": "deep"
+  }
+]

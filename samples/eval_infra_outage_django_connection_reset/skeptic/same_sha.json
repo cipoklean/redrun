@@ -1,0 +1,70 @@
+{
+  "runs": [
+    {
+      "run_id": 39651790910,
+      "workflow": "Tests",
+      "conclusion": "failure",
+      "head_sha": "3e2fa643f3b3b88dd341ad1156ea3424e8df4dc3"
+    },
+    {
+      "run_id": 39651790776,
+      "workflow": "Linters",
+      "conclusion": "success",
+      "head_sha": "3e2fa643f3b3b88dd341ad1156ea3424e8df4dc3"
+    },
+    {
+      "run_id": 39651790742,
+      "workflow": "Visual Regression Tests",
+      "conclusion": "skipped",
+      "head_sha": "3e2fa643f3b3b88dd341ad1156ea3424e8df4dc3"
+    },
+    {
+      "run_id": 39651790716,
+      "workflow": "Benchmark",
+      "conclusion": "skipped",
+      "head_sha": "3e2fa643f3b3b88dd341ad1156ea3424e8df4dc3"
+    },
+    {
+      "run_id": 39651790824,
+      "workflow": "GeoDjango Tests",
+      "conclusion": "skipped",
+      "head_sha": "3e2fa643f3b3b88dd341ad1156ea3424e8df4dc3"
+    },
+    {
+      "run_id": 39651790725,
+      "workflow": "Python Matrix from config file",
+      "conclusion": "skipped",
+      "head_sha": "3e2fa643f3b3b88dd341ad1156ea3424e8df4dc3"
+    },
+    {
+      "run_id": 39651791005,
+      "workflow": "Coverage Tests",
+      "conclusion": "skipped",
+      "head_sha": "3e2fa643f3b3b88dd341ad1156ea3424e8df4dc3"
+    },
+    {
+      "run_id": 39651790732,
+      "workflow": "Playwright Tests",
+      "conclusion": "skipped",
+      "head_sha": "3e2fa643f3b3b88dd341ad1156ea3424e8df4dc3"
+    },
+    {
+      "run_id": 39651790722,
+      "workflow": "Check commit prefix",
+      "conclusion": "success",
+      "head_sha": "3e2fa643f3b3b88dd341ad1156ea3424e8df4dc3"
+    },
+    {
+      "run_id": 39651790935,
+      "workflow": "Docs",
+      "conclusion": "success",
+      "head_sha": "3e2fa643f3b3b88dd341ad1156ea3424e8df4dc3"
+    },
+    {
+      "run_id": 39651786935,
+      "workflow": "PR Quality Checks",
+      "conclusion": "success",
+      "head_sha": "3e2fa643f3b3b88dd341ad1156ea3424e8df4dc3"
+    }
+  ]
+}

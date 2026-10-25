@@ -1,0 +1,6 @@
+{
+  "order": 500,
+  "title": "eval: flaky coin",
+  "category": "flaky_test",
+  "description": "Same SHA has to fail once and then pass on rerun: that is the flake signal."
+}

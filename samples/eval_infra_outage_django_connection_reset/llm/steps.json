@@ -1,0 +1,47 @@
+[
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"expired_or_missing_secret\",\n        \"claim\": \"triage candidate: expired_or_missing_secret\",\n        \"supporting_ids\": [],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [],\n    \"ruled_out\": []\n  },\n  \"verdict\": null\n}",
+    "usage": {
+      "prompt_tokens": 280,
+      "completion_tokens": 1287,
+      "latency_ms": 9739
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"expired_or_missing_secret\",\n        \"claim\": \"triage candidate: expired_or_missing_secret\",\n        \"supporting_ids\": [],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [],\n    \"ruled_out\": []\n  },\n  \"verdict\": null\n}",
+    "usage": {
+      "prompt_tokens": 4298,
+      "completion_tokens": 2887,
+      "latency_ms": 20373
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"expired_or_missing_secret\", \"claim\": \"triage candidate: expired_or_missing_secret\", \"supporting_ids\": [\"ev_log_004\", \"ev_log_006\"], \"against_ids\": []}], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": {\"cause\": \"expired_or_missing_secret\", \"root_cause\": \"CI run run:39651790910 produced auth_or_secret error class logs (ev_log_004, ev_log_006), indicating a missing or expired secret/credential required for CSRF or authentication handling.\", \"next_step\": \"Rotate and re-configure the relevant secret/credential in the test environment, then re-run the affected tests to confirm the auth_or_secret errors cease.\", \"cited_evidence_ids\": [\"ev_log_004\", \"ev_log_006\"]}",
+    "usage": {
+      "prompt_tokens": 4439,
+      "completion_tokens": 1921,
+      "latency_ms": 12791
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"expired_or_missing_secret\", \"claim\": \"triage candidate: expired_or_missing_secret\", \"supporting_ids\": [\"ev_log_004\", \"ev_log_006\"], \"against_ids\": []}], \"open_questions\": [], \"ruled_out\": []}, \"verdict\": {\"cause\": \"expired_or_missing_secret\", \"root_cause\": \"Authentication secret expiration or misconfiguration caused CSRF and 403 errors during test execution, as evidenced by auth_or_secret error classes in logs.\", \"next_step\": \"Review and rotate CI authentication secrets, verify environment variable configuration.\", \"cited_evidence_ids\": [\"ev_log_004\", \"ev_log_006\"]}}",
+    "usage": {
+      "prompt_tokens": 4475,
+      "completion_tokens": 3602,
+      "latency_ms": 24849
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"expired_or_missing_secret\",\n        \"claim\": \"triage candidate: expired_or_missing_secret\",\n        \"supporting_ids\": [\"ev_log_004\", \"ev_log_006\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"expired_or_missing_secret\",\n    \"root_cause\": \"auth_or_secret failure due to missing or expired secret causing test timeouts\",\n    \"next_step\": \"investigate and renew/rotate the secret, then re-run the failing tests\",\n    \"cited_evidence_ids\": [\"ev_log_004\", \"ev_log_006\"]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 2600,
+      "completion_tokens": 801,
+      "latency_ms": 12794
+    },
+    "lane": "deep"
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "recorded_at": "2026-10-25T20:54:53",
+  "lane": "fast",
+  "provider": "nvidia",
+  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "prompt_lines": 300,
+  "reply": {
+    "cause": "expired_or_missing_secret",
+    "root_cause": "The workflow step performed a curl to the GitHub API with an Authorization header that returned HTTP 401, indicating the authentication token (LAB_TOKEN or similar) is missing, expired, or invalid.",
+    "next_step": "Check and refresh the LAB_TOKEN or relevant secret in the GitHub Actions workflow settings, ensuring it has proper permissions and is not expired."
+  },
+  "raw": "{\"cause\": \"expired_or_missing_secret\", \"root_cause\": \"The workflow step performed a curl to the GitHub API with an Authorization header that returned HTTP 401, indicating the authentication token (LAB_TOKEN or similar) is missing, expired, or invalid.\", \"next_step\": \"Check and refresh the LAB_TOKEN or relevant secret in the GitHub Actions workflow settings, ensuring it has proper permissions and is not expired.\"}",
+  "usage": {
+    "prompt_tokens": 9479,
+    "completion_tokens": 3230,
+    "latency_ms": 30080
+  },
+  "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
+}

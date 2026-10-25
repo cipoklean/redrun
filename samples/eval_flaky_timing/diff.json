@@ -1,0 +1,19 @@
+{
+  "commits": [
+    {
+      "sha": "bf982742e845f26e5167608f499c2575a3cb927e",
+      "message": "let the warm-up pause for a random slice of a second (nudge 1)",
+      "author": "cipoklean",
+      "date": "2026-10-25T20:17:01+00:00"
+    }
+  ],
+  "files": [
+    {
+      "filename": "lab/cache.py",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 0,
+      "patch": "@@ -8,3 +8,5 @@ def warm(entries: int) -> int:\n     \"\"\"Populate `entries` slots. Returns the number warmed.\"\"\"\n     time.sleep(0.001 + random.uniform(0.0, 0.10))\n     return entries\n+\n+# nudge 1"
+    }
+  ]
+}

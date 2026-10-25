@@ -1,0 +1,19 @@
+{
+  "commits": [
+    {
+      "sha": "440440a98147010aebb5d9b1673d3c214faf4982",
+      "message": "invert the free shipping comparison",
+      "author": "cipoklean",
+      "date": "2026-10-25T20:11:43+00:00"
+    }
+  ],
+  "files": [
+    {
+      "filename": "lab/pricing.py",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "patch": "@@ -9,7 +9,7 @@\n \n def order_total(subtotal: Decimal, express: bool = False) -> Decimal:\n     \"\"\"Subtotal plus shipping; shipping is free over the threshold.\"\"\"\n-    shipping = Decimal(\"0.00\") if subtotal >= FREE_SHIPPING_OVER else STANDARD_SHIPPING\n+    shipping = Decimal(\"0.00\") if subtotal <= FREE_SHIPPING_OVER else STANDARD_SHIPPING\n     if express:\n         shipping += EXPRESS_SURCHARGE\n     return (subtotal + shipping).quantize(Decimal(\"0.01\"))"
+    }
+  ]
+}

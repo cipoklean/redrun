@@ -1,0 +1,15 @@
+{
+  "recorded_from": "duckdb",
+  "note": "Recorded by redrun record-sample on a live run.",
+  "recorded_at": "2026-10-25T20:57:01.697618",
+  "row_count": 1,
+  "rows": [
+    {
+      "link_type": "secret_or_config_match",
+      "log_evidence_id": "ev_log_001",
+      "change_evidence_id": "ev_file_001",
+      "score_hint": 0.75,
+      "detail": "auth or secret failure alongside changed .github/workflows/ci.yml"
+    }
+  ]
+}

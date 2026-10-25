@@ -1,0 +1,47 @@
+[
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"bad_commit\",\n        \"claim\": \"triage candidate: bad_commit\",\n        \"supporting_ids\": [],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [],\n    \"ruled_out\": []\n  },\n  \"verdict\": null\n}",
+    "usage": {
+      "prompt_tokens": 275,
+      "completion_tokens": 1216,
+      "latency_ms": 10079
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"bad_commit\",\n        \"claim\": \"triage candidate: bad_commit; evidence ev_log_001 shows TypeError from float | None annotation\",\n        \"supporting_ids\": [\"ev_log_001\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\n      \"Whether the TypeError stems from a code change introducing Python 3.10+ syntax or from the CI Python version being 3.9.\"\n    ],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"config_change\",\n    \"root_cause\": \"lab/reporting.py:9 uses 'float | None' type annotation, which is evaluated at runtime in Python 3.9.25 and fails with TypeError because '|' on types requires Python 3.10+ or a future import. The CI run used Python 3.9.25.\",\n    \"next_step\": \"Update lab/reporting.py to replace 'float | None' with 'Optional[float]' from the typing module, or add 'from __future__ import annotations' at the module level, then re-trigger the CI pipeline.\",\n    \"cited_evidence_ids\": [\"ev_log_001\"]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 2484,
+      "completion_tokens": 4985,
+      "latency_ms": 41322
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"bad_commit\",\n        \"claim\": \"triage candidate: bad_commit; evidence ev_log_001 shows TypeError from float | None annotation\",\n        \"supporting_ids\": [\"ev_log_001\", \"ev_commit_7d71e2\", \"ev_file_001\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\"Whether the TypeError stems from a code change introducing Python 3.10+ syntax or from the CI Python version being 3.9.\"],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"bad_commit\",\n    \"root_cause\": \"Commit 7d71e2d changed the CI Python runner version from 3.11 to 3.9, but the codebase uses Python 3.11+ annotations, causing a TypeError when the job executed on Python 3.9.\",\n    \"next_step\": \"Revert the Python version in .github/workflows/ci.yml back to 3.11 or update the code annotations for Python 3.9 compatibility, then re-run the CI pipeline.\",\n    \"cited_evidence_ids\": [\"ev_commit_7d71e2\", \"ev_file_001\"]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 783,
+      "completion_tokens": 3410,
+      "latency_ms": 32154
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\"carryover\": {\"hypotheses\": [{\"cause\": \"bad_commit\", \"claim\": \"triage candidate: bad_commit; evidence ev_log_001 shows TypeError from float | None annotation\", \"supporting_ids\": [\"ev_log_001\", \"ev_commit_7d71e2\", \"ev_file_001\"], \"against_ids\": []}], \"open_questions\": [\"Whether the TypeError stems from a code change introducing Python 3.10+ syntax or from the CI Python version being 3.9.\"], \"ruled_out\": []}, \"verdict\": {\"cause\": \"bad_commit\", \"root_cause\": \"Commit 7d71e2d introduced a TypeError in test steps due to float | None annotation, causing test failure; contrasted with green run at 2352ecc.\", \"next_step\": \"Investigate Python version compatibility and confirm the exact commit change causing the TypeError.\", \"cited_evidence_ids\": [\"ev_run_40229521593\", \"ev_run_40229634046\"]}}",
+    "usage": {
+      "prompt_tokens": 1179,
+      "completion_tokens": 3453,
+      "latency_ms": 26668
+    },
+    "lane": "fast"
+  },
+  {
+    "text": "{\n  \"carryover\": {\n    \"hypotheses\": [\n      {\n        \"cause\": \"bad_commit\",\n        \"claim\": \"triage candidate: bad_commit; evidence ev_log_001 shows TypeError from float | None annotation\",\n        \"supporting_ids\": [\"ev_log_001\", \"ev_commit_7d71e2\", \"ev_file_001\"],\n        \"against_ids\": []\n      }\n    ],\n    \"open_questions\": [\n      \"Whether the TypeError stems from a code change introducing Python 3.10+ syntax or from the CI Python version being 3.9.\"\n    ],\n    \"ruled_out\": []\n  },\n  \"verdict\": {\n    \"cause\": \"bad_commit\",\n    \"root_cause\": \"The commit forced the CI job to run on Python 3.9, which does not support the '|' type annotation syntax introduced in Python 3.10, causing a TypeError in the test.\",\n    \"next_step\": \"Revert the commit to use Python 3.10+ in CI or update the workflow to a compatible Python version.\",\n    \"cited_evidence_ids\": [\"ev_commit_7d71e2\", \"ev_log_001\", \"ev_file_001\"]\n  }\n}",
+    "usage": {
+      "prompt_tokens": 640,
+      "completion_tokens": 690,
+      "latency_ms": 11293
+    },
+    "lane": "deep"
+  }
+]

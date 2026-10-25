@@ -1,0 +1,106 @@
+{
+  "runs": [
+    {
+      "run_id": 40183046913,
+      "workflow": "Labels",
+      "conclusion": "success",
+      "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689"
+    },
+    {
+      "run_id": 40183046831,
+      "workflow": "PR Quality Checks",
+      "conclusion": "success",
+      "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689"
+    },
+    {
+      "run_id": 40183046633,
+      "workflow": "Check commit prefix",
+      "conclusion": "success",
+      "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689"
+    },
+    {
+      "run_id": 40183021230,
+      "workflow": "PR Quality Checks",
+      "conclusion": "cancelled",
+      "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689"
+    },
+    {
+      "run_id": 40183020880,
+      "workflow": "Check commit prefix",
+      "conclusion": "success",
+      "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689"
+    },
+    {
+      "run_id": 40183021193,
+      "workflow": "Labels",
+      "conclusion": "success",
+      "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689"
+    },
+    {
+      "run_id": 40182914883,
+      "workflow": "Visual Regression Tests",
+      "conclusion": "skipped",
+      "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689"
+    },
+    {
+      "run_id": 40182914873,
+      "workflow": "Playwright Tests",
+      "conclusion": "skipped",
+      "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689"
+    },
+    {
+      "run_id": 40182914881,
+      "workflow": "Coverage Tests",
+      "conclusion": "skipped",
+      "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689"
+    },
+    {
+      "run_id": 40182914865,
+      "workflow": "Python Matrix from config file",
+      "conclusion": "skipped",
+      "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689"
+    },
+    {
+      "run_id": 40182914890,
+      "workflow": "GeoDjango Tests",
+      "conclusion": "skipped",
+      "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689"
+    },
+    {
+      "run_id": 40182915016,
+      "workflow": "Benchmark",
+      "conclusion": "skipped",
+      "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689"
+    },
+    {
+      "run_id": 40182915045,
+      "workflow": "Check commit prefix",
+      "conclusion": "success",
+      "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689"
+    },
+    {
+      "run_id": 40182914933,
+      "workflow": "Linters",
+      "conclusion": "success",
+      "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689"
+    },
+    {
+      "run_id": 40182914868,
+      "workflow": "Docs",
+      "conclusion": "success",
+      "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689"
+    },
+    {
+      "run_id": 40182914864,
+      "workflow": "Tests",
+      "conclusion": "success",
+      "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689"
+    },
+    {
+      "run_id": 40182913601,
+      "workflow": "PR Quality Checks",
+      "conclusion": "success",
+      "head_sha": "989faac222a0460130e35fc21aecc1d2bc40f689"
+    }
+  ]
+}

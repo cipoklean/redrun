@@ -1,0 +1,274 @@
+{
+  "repository": {
+    "owner": "django",
+    "repo": "django"
+  },
+  "workflow": {
+    "id": 0,
+    "name": "Tests",
+    "path": ".github/workflows/tests.yml"
+  },
+  "branch": "ticket_34402",
+  "runner_image": "ubuntu-latest",
+  "failed_run": {
+    "run_id": 39651790910,
+    "head_sha": "3e2fa643f3b3b88dd341ad1156ea3424e8df4dc3",
+    "created_at": "2026-10-21T18:20:14+00:00",
+    "conclusion": "failure",
+    "jobs": [
+      {
+        "job_id": 119402485259,
+        "name": "Ubuntu, SQLite, Python 3.15t",
+        "conclusion": "failure",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Set up Python",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Install and upgrade packaging tools",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run python -m pip install -r tests/requirements/py3-free-threading.txt -e .",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Show GIL status",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Run tests",
+            "conclusion": "failure"
+          },
+          {
+            "number": 13,
+            "name": "Post Set up Python",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 14,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 15,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 119402485547,
+        "name": "Scripts tests",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Set up Python",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Run python -m unittest discover -v -s scripts/",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Post Set up Python",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 119402485629,
+        "name": "Windows, SQLite, Python 3.15",
+        "conclusion": "failure",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Set up Python",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Install gettext",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Install and upgrade packaging tools",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Run python -m pip install -r tests/requirements/py3.txt -e .",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Run tests",
+            "conclusion": "failure"
+          },
+          {
+            "number": 13,
+            "name": "Post Set up Python",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 14,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 15,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "job_id": 119402485834,
+        "name": "JavaScript tests",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Set up Node.js",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Run npm install",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run npm test",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Post Set up Node.js",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  },
+  "last_green_run": {
+    "run_id": 39651786935,
+    "head_sha": "3e2fa643f3b3b88dd341ad1156ea3424e8df4dc3",
+    "created_at": "2026-10-21T18:20:13+00:00",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "job_id": 119401719091,
+        "name": "Run Quality Checks on a PR",
+        "conclusion": "success",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Set up Python",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Run PR quality checks",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Post Set up Python",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Post Checkout",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Complete job",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  }
+}

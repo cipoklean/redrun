@@ -1,0 +1,19 @@
+{
+  "recorded_at": "2026-10-25T21:08:53",
+  "lane": "fast",
+  "provider": "nvidia",
+  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "prompt_lines": 300,
+  "reply": {
+    "cause": "unknown",
+    "root_cause": "The log shows a test assertion failure in test_index_covers_every_row but does not provide definitive evidence linking the failure to any of the specified causes without access to the repository, diff, or previous run history.",
+    "next_step": "Obtain the repository state, previous green run, and build_index module code to determine the actual root cause."
+  },
+  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The log shows a test assertion failure in test_index_covers_every_row but does not provide definitive evidence linking the failure to any of the specified causes without access to the repository, diff, or previous run history.\", \"next_step\": \"Obtain the repository state, previous green run, and build_index module code to determine the actual root cause.\"}",
+  "usage": {
+    "prompt_tokens": 9298,
+    "completion_tokens": 3772,
+    "latency_ms": 23467
+  },
+  "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
+}
