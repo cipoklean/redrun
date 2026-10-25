@@ -96,7 +96,9 @@ def choose_holdout(cases: list[Case] | tuple[Case, ...], seed: int) -> tuple[str
             f"the set has {len(causes)} non-unknown causes; cannot draw {HOLDOUT_SIZE}"
         )
     rng.shuffle(causes)
-    return tuple(sorted(rng.choice(by_cause[cause]) for cause in causes[:HOLDOUT_SIZE]))
+    # The candidate list is sorted before the draw so the result depends on the set
+    # of cases and the seed, and not on the order they happen to be listed in.
+    return tuple(sorted(rng.choice(sorted(by_cause[cause])) for cause in causes[:HOLDOUT_SIZE]))
 
 
 def _parse(raw: dict[str, Any]) -> Case:

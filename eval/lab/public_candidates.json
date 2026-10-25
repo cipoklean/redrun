@@ -1,0 +1,951 @@
+{
+  "incidents": [
+    {
+      "id": "ntrfd2jqldn6",
+      "name": "Delayed Actions status check results",
+      "impact": "minor",
+      "status": "resolved",
+      "created_at": "2026-10-23T07:29:03.081Z",
+      "resolved_at": "2026-10-23T08:05:27.354Z",
+      "components": [
+        "Actions"
+      ],
+      "url": "https://stspg.io/kmk42jg3v1sm"
+    },
+    {
+      "id": "wq8305lppdc2",
+      "name": "Project updates delayed",
+      "impact": "minor",
+      "status": "resolved",
+      "created_at": "2026-10-22T15:28:03.986Z",
+      "resolved_at": "2026-10-23T02:30:25.221Z",
+      "components": [
+        "API Requests",
+        "Issues",
+        "Pull Requests",
+        "Actions",
+        "Packages"
+      ],
+      "url": "https://stspg.io/sx51v1tlpqjc"
+    },
+    {
+      "id": "q29p76qtnkyk",
+      "name": "Incident with Actions Results",
+      "impact": "minor",
+      "status": "resolved",
+      "created_at": "2026-10-22T14:18:15.723Z",
+      "resolved_at": "2026-10-22T15:18:46.284Z",
+      "components": [
+        "Actions"
+      ],
+      "url": "https://stspg.io/44w94j036yc8"
+    },
+    {
+      "id": "nms1dpzmh9d9",
+      "name": "Delays for Pull Requests and Webhook deliveries",
+      "impact": "critical",
+      "status": "resolved",
+      "created_at": "2026-10-21T14:52:49.979Z",
+      "resolved_at": "2026-10-21T19:22:52.633Z",
+      "components": [
+        "Webhooks",
+        "Pull Requests",
+        "Actions"
+      ],
+      "url": "https://stspg.io/gnnt0tx9nxmk"
+    },
+    {
+      "id": "8tzbpcnl75jp",
+      "name": "Degraded availability for GitHub Actions, GitHub Pages and Webhooks",
+      "impact": "critical",
+      "status": "resolved",
+      "created_at": "2026-10-19T15:49:25.828Z",
+      "resolved_at": "2026-10-19T16:56:58.390Z",
+      "components": [
+        "Webhooks",
+        "Actions",
+        "Pages"
+      ],
+      "url": "https://stspg.io/nrv2k8s68bwn"
+    },
+    {
+      "id": "93njd414rpbx",
+      "name": "Incident with Actions, Pull Requests and Issues",
+      "impact": "minor",
+      "status": "resolved",
+      "created_at": "2026-10-12T12:21:47.972Z",
+      "resolved_at": "2026-10-12T20:16:07.447Z",
+      "components": [
+        "Issues",
+        "Pull Requests",
+        "Actions"
+      ],
+      "url": "https://stspg.io/flldq0dn2wdz"
+    },
+    {
+      "id": "qpfv5p86dmrl",
+      "name": "Incident with Git Operations, Issues, Actions and Pull Requests",
+      "impact": "critical",
+      "status": "resolved",
+      "created_at": "2026-10-07T17:17:05.776Z",
+      "resolved_at": "2026-10-07T18:04:49.441Z",
+      "components": [
+        "Git Operations",
+        "Issues",
+        "Pull Requests",
+        "Actions"
+      ],
+      "url": "https://stspg.io/4p8x0jnnsx7m"
+    },
+    {
+      "id": "djlmxz2zd0j7",
+      "name": "Incident with Git Operations, Pull Requests and Actions",
+      "impact": "critical",
+      "status": "resolved",
+      "created_at": "2026-10-07T15:14:45.614Z",
+      "resolved_at": "2026-10-07T16:25:14.000Z",
+      "components": [
+        "Git Operations",
+        "Webhooks",
+        "Issues",
+        "Pull Requests",
+        "Actions"
+      ],
+      "url": "https://stspg.io/96smrcth8bpg"
+    },
+    {
+      "id": "3q1yb5m7ltvb",
+      "name": "Incident with Actions",
+      "impact": "critical",
+      "status": "resolved",
+      "created_at": "2026-10-05T19:11:58.382Z",
+      "resolved_at": "2026-10-05T22:49:42.660Z",
+      "components": [
+        "Actions",
+        "Pages"
+      ],
+      "url": "https://stspg.io/c11dc9nb1zdq"
+    },
+    {
+      "id": "2dpbcq5j165n",
+      "name": "Actions Job Delays",
+      "impact": "minor",
+      "status": "resolved",
+      "created_at": "2026-10-01T14:47:48.138Z",
+      "resolved_at": "2026-10-01T17:56:54.260Z",
+      "components": [
+        "Actions"
+      ],
+      "url": "https://stspg.io/kdqxfjn5qg6q"
+    },
+    {
+      "id": "0rn90wk115q9",
+      "name": "Incident with several GitHub Services",
+      "impact": "critical",
+      "status": "resolved",
+      "created_at": "2026-09-13T09:16:11.480Z",
+      "resolved_at": "2026-09-13T10:44:55.016Z",
+      "components": [
+        "API Requests",
+        "Issues",
+        "Pull Requests",
+        "Actions",
+        "Pages"
+      ],
+      "url": "https://stspg.io/8f3xch4y0v2k"
+    },
+    {
+      "id": "kfspvrz14xr0",
+      "name": "Incident with Actions and Pull Requests",
+      "impact": "minor",
+      "status": "resolved",
+      "created_at": "2026-08-26T22:56:31.800Z",
+      "resolved_at": "2026-08-27T00:26:44.772Z",
+      "components": [
+        "Pull Requests",
+        "Actions"
+      ],
+      "url": "https://stspg.io/nrbwjftcz72d"
+    },
+    {
+      "id": "y1t7p9fzrlj2",
+      "name": "Incident with Actions",
+      "impact": "critical",
+      "status": "resolved",
+      "created_at": "2026-08-26T15:11:58.254Z",
+      "resolved_at": "2026-08-26T18:01:30.665Z",
+      "components": [
+        "Actions",
+        "Pages"
+      ],
+      "url": "https://stspg.io/pg14nv9m3095"
+    },
+    {
+      "id": "lyppgxbq1nyk",
+      "name": "Actions delays in starting runs",
+      "impact": "minor",
+      "status": "resolved",
+      "created_at": "2026-08-24T13:56:54.972Z",
+      "resolved_at": "2026-08-24T14:34:42.451Z",
+      "components": [
+        "Actions"
+      ],
+      "url": "https://stspg.io/v6ysclb9vcbd"
+    },
+    {
+      "id": "zkxwbgr0cnmx",
+      "name": "Incident with GitHub.com",
+      "impact": "critical",
+      "status": "resolved",
+      "created_at": "2026-08-17T13:40:03.629Z",
+      "resolved_at": "2026-08-17T21:15:46.623Z",
+      "components": [
+        "Git Operations",
+        "Webhooks",
+        "API Requests",
+        "Issues",
+        "Pull Requests",
+        "Actions",
+        "Pages",
+        "Copilot"
+      ],
+      "url": "https://stspg.io/y1fl26l6wpzr"
+    }
+  ],
+  "outage": [
+    {
+      "repo": "django/django",
+      "run_url": "https://github.com/django/django/actions/runs/39651790910",
+      "run_id": 39651790910,
+      "workflow": "Tests",
+      "branch": "ticket_34402",
+      "sha": "3e2fa643f3b3b88dd341ad1156ea3424e8df4dc3",
+      "created_at": "2026-10-21T18:20:14Z",
+      "attempt": 1,
+      "failing_steps": [
+        {
+          "job": "Ubuntu, SQLite, Python 3.15t",
+          "step": "Run tests",
+          "conclusion": "failure"
+        },
+        {
+          "job": "Windows, SQLite, Python 3.15",
+          "step": "Run tests",
+          "conclusion": "failure"
+        }
+      ],
+      "jobs": [
+        {
+          "name": "Ubuntu, SQLite, Python 3.15t",
+          "conclusion": "failure"
+        },
+        {
+          "name": "Scripts tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Windows, SQLite, Python 3.15",
+          "conclusion": "failure"
+        },
+        {
+          "name": "JavaScript tests",
+          "conclusion": "success"
+        }
+      ],
+      "log_lines": 29356,
+      "environment_lines": [
+        "2026-10-21T18:26:36.1460978Z future: <Future finished exception=ConnectionResetError(104, 'Connection reset by peer')>",
+        "2026-10-21T18:26:36.1690478Z ConnectionResetError: [Errno 104] Connection reset by peer"
+      ],
+      "later_success_run": null,
+      "fetch_note": "",
+      "incident": {
+        "id": "nms1dpzmh9d9",
+        "name": "Delays for Pull Requests and Webhook deliveries",
+        "impact": "critical",
+        "created_at": "2026-10-21T14:52:49.979Z",
+        "resolved_at": "2026-10-21T19:22:52.633Z",
+        "url": "https://stspg.io/gnnt0tx9nxmk"
+      }
+    },
+    {
+      "repo": "astral-sh/uv",
+      "run_url": "https://github.com/astral-sh/uv/actions/runs/39280284481",
+      "run_id": 39280284481,
+      "workflow": "CI",
+      "branch": "main",
+      "sha": "5389aa198276ddf214b594a3da7b619fe8e4e991",
+      "created_at": "2026-10-19T15:44:40Z",
+      "attempt": 2,
+      "failing_steps": [
+        {
+          "job": "test-system / python3.9 via chocolatey",
+          "step": "Install Python",
+          "conclusion": "failure"
+        }
+      ],
+      "jobs": [
+        {
+          "name": "test-system / python3.9 via chocolatey",
+          "conclusion": "failure"
+        },
+        {
+          "name": "build-dev-binaries / windows aarch64",
+          "conclusion": "success"
+        },
+        {
+          "name": "test-integration / termux on android",
+          "conclusion": "success"
+        },
+        {
+          "name": "test-system / python on macos x86-64",
+          "conclusion": "success"
+        },
+        {
+          "name": "test-system / python on debian:12",
+          "conclusion": "success"
+        },
+        {
+          "name": "check-release / dist plan",
+          "conclusion": "success"
+        },
+        {
+          "name": "check-lint / ty",
+          "conclusion": "success"
+        },
+        {
+          "name": "check-publish / cargo publish dry-run",
+          "conclusion": "success"
+        }
+      ],
+      "log_lines": 196,
+      "environment_lines": [
+        "2026-10-19T16:42:20.0983086Z  Failed to fetch results from V2 feed at 'https://community.chocolatey.org/api/v2/Packages(Id='python3',Version='3.9.13')' with following message : Res"
+      ],
+      "later_success_run": null,
+      "fetch_note": "",
+      "incident": {
+        "id": "8tzbpcnl75jp",
+        "name": "Degraded availability for GitHub Actions, GitHub Pages and Webhooks",
+        "impact": "critical",
+        "created_at": "2026-10-19T15:49:25.828Z",
+        "resolved_at": "2026-10-19T16:56:58.390Z",
+        "url": "https://stspg.io/nrv2k8s68bwn"
+      }
+    }
+  ],
+  "unknown": [
+    {
+      "repo": "home-assistant/core",
+      "run_url": "https://github.com/home-assistant/core/actions/runs/40221889851",
+      "run_id": 40221889851,
+      "workflow": "CI",
+      "branch": "dev",
+      "sha": "d57bf215c4a5bab7d697dd4031c6d25ae4128965",
+      "created_at": "2026-10-25T18:34:24Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "push"
+    },
+    {
+      "repo": "home-assistant/core",
+      "run_url": "https://github.com/home-assistant/core/actions/runs/40214089376",
+      "run_id": 40214089376,
+      "workflow": "CI",
+      "branch": "dev",
+      "sha": "90ff01904760ec214752027aa1eda379edeca2af",
+      "created_at": "2026-10-25T16:56:45Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "push"
+    },
+    {
+      "repo": "home-assistant/core",
+      "run_url": "https://github.com/home-assistant/core/actions/runs/40209658899",
+      "run_id": 40209658899,
+      "workflow": "CI",
+      "branch": "dev",
+      "sha": "2fbc4b0a666b8a56140c236ea77ca317d6b66f62",
+      "created_at": "2026-10-25T16:01:02Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "push"
+    },
+    {
+      "repo": "django/django",
+      "run_url": "https://github.com/django/django/actions/runs/40183021230",
+      "run_id": 40183021230,
+      "workflow": "PR Quality Checks",
+      "branch": "ticket-37306",
+      "sha": "989faac222a0460130e35fc21aecc1d2bc40f689",
+      "created_at": "2026-10-25T10:01:02Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request_target"
+    },
+    {
+      "repo": "django/django",
+      "run_url": "https://github.com/django/django/actions/runs/40182001897",
+      "run_id": 40182001897,
+      "workflow": "PR Quality Checks",
+      "branch": "ticket-37306",
+      "sha": "2d201853ac2521a9b088861ef7d037d828b1ddc5",
+      "created_at": "2026-10-25T09:46:02Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request_target"
+    },
+    {
+      "repo": "django/django",
+      "run_url": "https://github.com/django/django/actions/runs/40182001676",
+      "run_id": 40182001676,
+      "workflow": "Check commit prefix",
+      "branch": "ticket-37306",
+      "sha": "2d201853ac2521a9b088861ef7d037d828b1ddc5",
+      "created_at": "2026-10-25T09:46:01Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled",
+        "skipped"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "django/django",
+      "run_url": "https://github.com/django/django/actions/runs/40001145123",
+      "run_id": 40001145123,
+      "workflow": "Check commit prefix",
+      "branch": "ticket-29111",
+      "sha": "3b8880cb14605fb60773a22b5065f519d8379476",
+      "created_at": "2026-10-23T18:10:35Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled",
+        "skipped"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "django/django",
+      "run_url": "https://github.com/django/django/actions/runs/40001145543",
+      "run_id": 40001145543,
+      "workflow": "Labels",
+      "branch": "ticket-29111",
+      "sha": "3b8880cb14605fb60773a22b5065f519d8379476",
+      "created_at": "2026-10-23T18:10:35Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request_target"
+    },
+    {
+      "repo": "django/django",
+      "run_url": "https://github.com/django/django/actions/runs/40001145919",
+      "run_id": 40001145919,
+      "workflow": "PR Quality Checks",
+      "branch": "ticket-29111",
+      "sha": "3b8880cb14605fb60773a22b5065f519d8379476",
+      "created_at": "2026-10-23T18:10:35Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request_target"
+    },
+    {
+      "repo": "django/django",
+      "run_url": "https://github.com/django/django/actions/runs/39852643806",
+      "run_id": 39852643806,
+      "workflow": "Python Matrix from config file",
+      "branch": "ticket_30949",
+      "sha": "67b369f348512fa7a81e5c458c21328dfd25342e",
+      "created_at": "2026-10-22T20:52:59Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "django/django",
+      "run_url": "https://github.com/django/django/actions/runs/39852643382",
+      "run_id": 39852643382,
+      "workflow": "GeoDjango Tests",
+      "branch": "ticket_30949",
+      "sha": "67b369f348512fa7a81e5c458c21328dfd25342e",
+      "created_at": "2026-10-22T20:52:59Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "django/django",
+      "run_url": "https://github.com/django/django/actions/runs/39490822196",
+      "run_id": 39490822196,
+      "workflow": "GeoDjango Tests",
+      "branch": "ticket-37433",
+      "sha": "45f1750045b9e635780eb193e247c36a392622a3",
+      "created_at": "2026-10-20T20:18:18Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "django/django",
+      "run_url": "https://github.com/django/django/actions/runs/39395874641",
+      "run_id": 39395874641,
+      "workflow": "Check commit prefix",
+      "branch": "csp/sentinel-safeguard",
+      "sha": "3d4149c6dc57d68821aad743cc8daaf9d0d2708c",
+      "created_at": "2026-10-20T08:46:55Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled",
+        "skipped"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "django/django",
+      "run_url": "https://github.com/django/django/actions/runs/39395871128",
+      "run_id": 39395871128,
+      "workflow": "PR Quality Checks",
+      "branch": "csp/sentinel-safeguard",
+      "sha": "3d4149c6dc57d68821aad743cc8daaf9d0d2708c",
+      "created_at": "2026-10-20T08:46:53Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request_target"
+    },
+    {
+      "repo": "pandas-dev/pandas",
+      "run_url": "https://github.com/pandas-dev/pandas/actions/runs/40210756347",
+      "run_id": 40210756347,
+      "workflow": "Doc Build and Upload",
+      "branch": "main",
+      "sha": "3e0515298953d45cf1ed97afda1215351de2f688",
+      "created_at": "2026-10-25T16:14:52Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "pandas-dev/pandas",
+      "run_url": "https://github.com/pandas-dev/pandas/actions/runs/40210270384",
+      "run_id": 40210270384,
+      "workflow": "Doc Build and Upload",
+      "branch": "main",
+      "sha": "cd9ac7a5dc0ff1bdd4b4783d9509d8824aff5a34",
+      "created_at": "2026-10-25T16:08:41Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "pandas-dev/pandas",
+      "run_url": "https://github.com/pandas-dev/pandas/actions/runs/40148160643",
+      "run_id": 40148160643,
+      "workflow": "Wheel builder",
+      "branch": "bug-67986",
+      "sha": "a8a0079e8127f9cbc9c5df1c739284d311a39149",
+      "created_at": "2026-10-25T00:48:58Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "pandas-dev/pandas",
+      "run_url": "https://github.com/pandas-dev/pandas/actions/runs/40148160642",
+      "run_id": 40148160642,
+      "workflow": "Package Checks",
+      "branch": "bug-67986",
+      "sha": "a8a0079e8127f9cbc9c5df1c739284d311a39149",
+      "created_at": "2026-10-25T00:48:58Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "pandas-dev/pandas",
+      "run_url": "https://github.com/pandas-dev/pandas/actions/runs/40147311154",
+      "run_id": 40147311154,
+      "workflow": "Wheel builder",
+      "branch": "bug-71475",
+      "sha": "aeeb34e1448a0af613c6fb2c442d6f50ea5e760b",
+      "created_at": "2026-10-25T00:35:48Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled",
+        "skipped"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "pandas-dev/pandas",
+      "run_url": "https://github.com/pandas-dev/pandas/actions/runs/40146563670",
+      "run_id": 40146563670,
+      "workflow": "Wheel builder",
+      "branch": "bug-71510",
+      "sha": "63ed3cdd4db88dec76fe76c5851e589ed446d38f",
+      "created_at": "2026-10-25T00:24:23Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled",
+        "skipped"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "pandas-dev/pandas",
+      "run_url": "https://github.com/pandas-dev/pandas/actions/runs/40115157874",
+      "run_id": 40115157874,
+      "workflow": "Wheel builder",
+      "branch": "auto-backport-of-pr-71512-on-3.1.x",
+      "sha": "6d1c9e4652f75099a3f1b06b6c3458849bc44d9e",
+      "created_at": "2026-10-24T17:13:43Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled",
+        "skipped"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "scikit-learn/scikit-learn",
+      "run_url": "https://github.com/scikit-learn/scikit-learn/actions/runs/40177770722",
+      "run_id": 40177770722,
+      "workflow": "Running Copilot cloud agent",
+      "branch": "copilot/fix-windows-x64-pymin-conda-forge-openblas",
+      "sha": "9e5f0b112b4147c17cb94823bc2b3dce2163bf4b",
+      "created_at": "2026-10-25T08:43:43Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "dynamic"
+    },
+    {
+      "repo": "scikit-learn/scikit-learn",
+      "run_url": "https://github.com/scikit-learn/scikit-learn/actions/runs/39966340821",
+      "run_id": 39966340821,
+      "workflow": "Test Emscripten/Pyodide build",
+      "branch": "fix/hgb-all-missing-feature",
+      "sha": "72d6daa0d7cbb1ab68a7003f4b838619ca41835f",
+      "created_at": "2026-10-23T14:03:09Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "scikit-learn/scikit-learn",
+      "run_url": "https://github.com/scikit-learn/scikit-learn/actions/runs/39966340569",
+      "run_id": 39966340569,
+      "workflow": "PR Size Labeler",
+      "branch": "fix/hgb-all-missing-feature",
+      "sha": "72d6daa0d7cbb1ab68a7003f4b838619ca41835f",
+      "created_at": "2026-10-23T14:03:09Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request_target"
+    },
+    {
+      "repo": "scikit-learn/scikit-learn",
+      "run_url": "https://github.com/scikit-learn/scikit-learn/actions/runs/39966340834",
+      "run_id": 39966340834,
+      "workflow": "Linter",
+      "branch": "fix/hgb-all-missing-feature",
+      "sha": "72d6daa0d7cbb1ab68a7003f4b838619ca41835f",
+      "created_at": "2026-10-23T14:03:09Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "scikit-learn/scikit-learn",
+      "run_url": "https://github.com/scikit-learn/scikit-learn/actions/runs/39760911576",
+      "run_id": 39760911576,
+      "workflow": "Linter",
+      "branch": "kmeans/fast_kmeans_plusplus",
+      "sha": "425429fd480b1624823fccaca799498605f51154",
+      "created_at": "2026-10-22T10:09:02Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "scikit-learn/scikit-learn",
+      "run_url": "https://github.com/scikit-learn/scikit-learn/actions/runs/39760908249",
+      "run_id": 39760908249,
+      "workflow": "PR Size Labeler",
+      "branch": "kmeans/fast_kmeans_plusplus",
+      "sha": "425429fd480b1624823fccaca799498605f51154",
+      "created_at": "2026-10-22T10:09:00Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request_target"
+    },
+    {
+      "repo": "pallets/flask",
+      "run_url": "https://github.com/pallets/flask/actions/runs/24457112421",
+      "run_id": 24457112421,
+      "workflow": "AI Code Review",
+      "branch": "feature/file-manager",
+      "sha": "08354da0b0e62d816c1f8e5cd8e976d92623adc1",
+      "created_at": "2026-04-15T13:25:28Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "pallets/flask",
+      "run_url": "https://github.com/pallets/flask/actions/runs/24455733078",
+      "run_id": 24455733078,
+      "workflow": "AI Code Review",
+      "branch": "demo/payment-service",
+      "sha": "c2f17897857a104a6d4451e5eb76f88f1bb35bca",
+      "created_at": "2026-04-15T12:56:22Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "pallets/flask",
+      "run_url": "https://github.com/pallets/flask/actions/runs/23493114599",
+      "run_id": 23493114599,
+      "workflow": "pre-commit",
+      "branch": "remove-unicode-test",
+      "sha": "89a3fd5f64167202050e615f207ff2f717c5b32a",
+      "created_at": "2026-03-24T13:54:06Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "pallets/flask",
+      "run_url": "https://github.com/pallets/flask/actions/runs/23493114578",
+      "run_id": 23493114578,
+      "workflow": "Tests",
+      "branch": "remove-unicode-test",
+      "sha": "89a3fd5f64167202050e615f207ff2f717c5b32a",
+      "created_at": "2026-03-24T13:54:06Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "pytest-dev/pytest",
+      "run_url": "https://github.com/pytest-dev/pytest/actions/runs/40182449779",
+      "run_id": 40182449779,
+      "workflow": "test",
+      "branch": "fix/subtests-timing-15201",
+      "sha": "826d7d9beb21616d7a3fdeeb5f69082b09986276",
+      "created_at": "2026-10-25T09:52:31Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled",
+        "failure"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "pytest-dev/pytest",
+      "run_url": "https://github.com/pytest-dev/pytest/actions/runs/40182326965",
+      "run_id": 40182326965,
+      "workflow": "test",
+      "branch": "fix/pprint-frozendict-15172",
+      "sha": "451de6284f4166b5573f694e5aea295250fd7612",
+      "created_at": "2026-10-25T09:50:45Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled",
+        "failure"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "pytest-dev/pytest",
+      "run_url": "https://github.com/pytest-dev/pytest/actions/runs/39850798894",
+      "run_id": 39850798894,
+      "workflow": "test",
+      "branch": "codex/fix-newfirst-duplicate-items",
+      "sha": "e26fee328de4ffd303e1d5cee04874e5d900ece5",
+      "created_at": "2026-10-22T20:39:52Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled",
+        "failure"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "pytest-dev/pytest",
+      "run_url": "https://github.com/pytest-dev/pytest/actions/runs/39841179144",
+      "run_id": 39841179144,
+      "workflow": "test",
+      "branch": "feature/expose-fixture-function-definition",
+      "sha": "8f9a0e1f3150616464cb8b5ba74d57ddf1009f9c",
+      "created_at": "2026-10-22T19:33:46Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled",
+        "failure"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "pytest-dev/pytest",
+      "run_url": "https://github.com/pytest-dev/pytest/actions/runs/39838422642",
+      "run_id": 39838422642,
+      "workflow": "test",
+      "branch": "fix-logger-registry-race-15237",
+      "sha": "12027d79a6c849072111d41094ecf9f44b2fcf14",
+      "created_at": "2026-10-22T19:15:02Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled",
+        "failure"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "pytest-dev/pytest",
+      "run_url": "https://github.com/pytest-dev/pytest/actions/runs/39292316504",
+      "run_id": 39292316504,
+      "workflow": "test",
+      "branch": "fix/11980-dict-list-diff",
+      "sha": "d1446bbbd520714bc9944f1ee8a2ba50fd0d640a",
+      "created_at": "2026-10-19T17:13:49Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled",
+        "failure"
+      ],
+      "event": "pull_request"
+    },
+    {
+      "repo": "pydantic/pydantic",
+      "run_url": "https://github.com/pydantic/pydantic/actions/runs/37822934164",
+      "run_id": 37822934164,
+      "workflow": "Publish Documentation",
+      "branch": "main",
+      "sha": "e40a1762024e3ac6ec036a890ce955062f475c80",
+      "created_at": "2026-10-08T18:15:57Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "push"
+    },
+    {
+      "repo": "pydantic/pydantic",
+      "run_url": "https://github.com/pydantic/pydantic/actions/runs/37679497078",
+      "run_id": 37679497078,
+      "workflow": "Publish Documentation",
+      "branch": "main",
+      "sha": "69ed168e9ad465eef4c8d81efb152a93b604daf5",
+      "created_at": "2026-10-07T20:06:18Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "push"
+    },
+    {
+      "repo": "pydantic/pydantic",
+      "run_url": "https://github.com/pydantic/pydantic/actions/runs/37675345713",
+      "run_id": 37675345713,
+      "workflow": "codspeed",
+      "branch": "vp/smart-mode-error",
+      "sha": "25d85dc314a097f0b84fd0ed615455e3373beac6",
+      "created_at": "2026-10-07T19:33:12Z",
+      "conclusion": "cancelled",
+      "attempt": 1,
+      "job_conclusions": [
+        "cancelled"
+      ],
+      "event": "pull_request"
+    }
+  ]
+}

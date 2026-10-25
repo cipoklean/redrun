@@ -112,6 +112,9 @@ def observe_agent(case: Case, settings: Settings, mode: str) -> dict[str, Any]:
             "tokens_out": result.metrics.tokens_out,
             "steps": markovian.steps if markovian else 0,
             "stop_reason": markovian.stop_reason if markovian else None,
+            "models": sorted({step.model for step in markovian.per_step if step.model})
+            if markovian
+            else [],
             "engine": result.metrics.query_engine,
             "evidence_items": len(result.evidence),
             "links": len(result.links),
@@ -245,6 +248,14 @@ def run(
     baseline_model = next(
         (row["baseline"]["model"] for row in rows if row.get("baseline")), None
     )
+    agent_models = sorted(
+        {
+            model
+            for row in rows
+            if row.get("agent")
+            for model in (row["agent"].get("models") or [])
+        }
+    )
     payload: dict[str, Any] = {
         "meta": {
             "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -257,6 +268,7 @@ def run(
             ),
             "baseline_lines": baseline_module.BASELINE_LINES,
             "baseline_model": baseline_model,
+            "agent_models": agent_models,
             "git_sha": _git_sha(),
             "notes": case_set.notes,
         },

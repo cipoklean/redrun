@@ -1,0 +1,175 @@
+# RedRun's evaluation set.
+#
+# The split is drawn once from `seed` with `redrun.eval.cases.choose_holdout` and
+# then frozen here. `tests/test_eval_cases.py` recomputes the draw and fails if the
+# holdout list changes, so a case cannot be moved out of it after its results are
+# known. Re-cut it only by changing the seed deliberately, in its own commit.
+#
+# 15 cases: 12 constructed in cipoklean/redrun-lab (a real green run on the branch,
+# then the breaking commit), 2 public runs that overlap a GitHub Actions incident,
+# and 1 public run with no usable signal. The itemised brief for this phase lists
+# 2 + 2 + 2 + 2 + 2 constructed and 2 + 1 public, which is 13; the two extra come
+# from variants the same brief names but gives no case: a syntax error in a changed
+# module, and a working-directory change.
+#
+# `root_cause_keywords` are words a correct explanation has to contain. They are
+# matched case-insensitively against the returned root cause, all of them required.
+
+seed: 20261025
+notes: 12 constructed cases with real runs in cipoklean/redrun-lab, 2 public runs that line up with a
+  GitHub Actions incident, and 1 public run with no usable signal. The itemised brief sums to 13; the
+  extra two are the syntax-error and working-directory variants it names without a case.
+cases:
+- id: bad_commit_logic
+  url: https://github.com/cipoklean/redrun-lab/actions/runs/40229615670
+  expected_cause: bad_commit
+  root_cause_keywords:
+  - shipping
+  - order_total
+  split: dev
+  constructed: true
+  notes: 'A wrong-value assertion: the test file is unchanged, the source is not.'
+- id: bad_commit_rename
+  url: https://github.com/cipoklean/redrun-lab/actions/runs/40229618647
+  expected_cause: bad_commit
+  root_cause_keywords:
+  - format_total
+  - summary
+  split: holdout
+  constructed: true
+  notes: 'An import error in a changed module: the importer is the unchanged file.'
+- id: bad_commit_syntax
+  url: https://github.com/cipoklean/redrun-lab/actions/runs/40229640647
+  expected_cause: bad_commit
+  root_cause_keywords:
+  - parse
+  - syntax
+  split: dev
+  constructed: true
+  notes: 'A syntax error in a changed module: pytest cannot even import it, and the traceback names the
+    changed file, so the log-to-change join has something to join on.'
+- id: config_env
+  url: https://github.com/cipoklean/redrun-lab/actions/runs/40229637246
+  expected_cause: config_change
+  root_cause_keywords:
+  - env
+  - mode
+  split: holdout
+  constructed: true
+  notes: The var the step reads is renamed, so the reader raises KeyError.
+- id: config_python
+  url: https://github.com/cipoklean/redrun-lab/actions/runs/40229634046
+  expected_cause: config_change
+  root_cause_keywords:
+  - python
+  - '3.9'
+  split: dev
+  constructed: true
+  notes: 'Only the workflow changes: the code needs 3.10 for PEP 604 unions.'
+- id: config_working_directory
+  url: https://github.com/cipoklean/redrun-lab/actions/runs/40229643536
+  expected_cause: config_change
+  root_cause_keywords:
+  - working
+  - requirements
+  split: dev
+  constructed: true
+  notes: Only the workflow changes. The step starts, then pip cannot find the manifest it was pointed
+    at.
+- id: dep_bump_conflict
+  url: https://github.com/cipoklean/redrun-lab/actions/runs/40229612895
+  expected_cause: dependency_bump
+  root_cause_keywords:
+  - httpcore
+  - httpx
+  split: holdout
+  constructed: true
+  notes: httpx 0.27 requires httpcore 1.x, so pinning httpcore 0.16 makes the requirement set unsatisfiable.
+    pip fails before it installs anything.
+- id: dep_bump_unpinned
+  url: https://github.com/cipoklean/redrun-lab/actions/runs/40229610003
+  expected_cause: dependency_bump
+  root_cause_keywords:
+  - packaging
+  - pin
+  split: dev
+  constructed: true
+  notes: The pin is loosened, so pip installs the newest packaging, which no longer exports LegacyVersion.
+    A removed API arriving through an unpinned floor.
+- id: flaky_coin
+  url: https://github.com/cipoklean/redrun-lab/actions/runs/40229984837
+  expected_cause: flaky_test
+  root_cause_keywords:
+  - index
+  - random
+  split: dev
+  constructed: true
+  notes: 'Same SHA has to fail once and then pass on rerun: that is the flake signal. The failing run
+    and the passing run are two runs of the same sha. Failed run https://github.com/cipoklean/redrun-lab/actions/runs/40229984837,
+    passing run on the same sha https://github.com/cipoklean/redrun-lab/actions/runs/40230006936 (workflow_dispatch).'
+- id: flaky_timing
+  url: https://github.com/cipoklean/redrun-lab/actions/runs/40230034828
+  expected_cause: flaky_test
+  root_cause_keywords:
+  - cache
+  - sleep
+  split: holdout
+  constructed: true
+  notes: 'A clock-dependent pause against a 50ms budget: the test is the clock''s hostage. The failing
+    run and the passing run are two runs of the same sha. Failed run https://github.com/cipoklean/redrun-lab/actions/runs/40230034828,
+    passing run on the same sha https://github.com/cipoklean/redrun-lab/actions/runs/40230100084 (workflow_dispatch).'
+- id: infra_outage_django_connection_reset
+  url: https://github.com/django/django/actions/runs/39651790910
+  expected_cause: infra_outage
+  root_cause_keywords:
+  - connection
+  - reset
+  split: holdout
+  constructed: false
+  notes: 'Chosen for the 2026-10-21 critical incident ''Delays for Pull Requests and Webhook deliveries''
+    (14:52-19:22Z), inside which this run failed at 18:26Z. The tests died on `ConnectionResetError(104,
+    ''Connection reset by peer'')`, and ''Linters'' on the same sha (3e2fa64) succeeded. Weaker than the
+    pandas case: a reset inside a test process could be the test''s own remote call, so this one is a
+    network failure during an incident rather than a proven runner fault.'
+- id: infra_outage_pandas_action_download
+  url: https://github.com/pandas-dev/pandas/actions/runs/32042902095
+  expected_cause: infra_outage
+  root_cause_keywords:
+  - download
+  - github
+  split: dev
+  constructed: false
+  notes: Chosen for the 2026-08-17 critical incident 'Incident with GitHub.com' (13:40-21:15Z), inside
+    which this run failed at 15:38Z. Its log says `##[error]Failed to download archive 'https://codeload.github.com/prefix-dev/setup-pixi/zip/...'
+    after 3 attempts`, so the runner could not fetch an action from GitHub's own archive host. Three other
+    workflows on the same sha (4444662) succeeded, so the commit is not what broke.
+- id: secret_invalid
+  url: https://github.com/cipoklean/redrun-lab/actions/runs/40229631099
+  expected_cause: expired_or_missing_secret
+  root_cause_keywords:
+  - '401'
+  - token
+  split: dev
+  constructed: true
+  notes: LAB_TOKEN is set to a deliberately invalid value, so the API answers 401.
+- id: secret_missing
+  url: https://github.com/cipoklean/redrun-lab/actions/runs/40229628003
+  expected_cause: expired_or_missing_secret
+  root_cause_keywords:
+  - secret
+  - token
+  split: dev
+  constructed: true
+  notes: secrets.LAB_MISSING_TOKEN does not exist, so the step refuses to publish.
+- id: unknown_django_cancelled
+  url: https://github.com/django/django/actions/runs/40183021230
+  expected_cause: unknown
+  root_cause_keywords:
+  - cancel
+  - cause
+  split: dev
+  constructed: false
+  notes: 'A cancelled run with nothing to read: its only job was cancelled, the whole log is 253 lines
+    that end at ''Cleaning up orphan processes'', and none of the collector''s error patterns match a
+    line of it. The workflow had seven earlier successful runs on the same branch, so a green baseline
+    exists and the comparison still yields no signal. `unknown` is the correct answer here.'

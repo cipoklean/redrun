@@ -37,8 +37,16 @@ def _wants_html(request: Request) -> bool:
 
 
 def _sample_meta(samples_dir: Path) -> list[dict[str, Any]]:
+    """The sample cards the investigate screen shows.
+
+    The evaluation's own recordings live in `eval_*` directories. They are real and
+    replayable, and `python -m redrun investigate --sample eval_<id>` still works,
+    but they belong to the eval screen rather than padding out this one.
+    """
     items: list[dict[str, Any]] = []
     for meta in sorted(samples_dir.glob("*/meta.json")):
+        if meta.parent.name.startswith("eval_"):
+            continue
         try:
             payload = json.loads(meta.read_text(encoding="utf-8"))
         except (OSError, ValueError):

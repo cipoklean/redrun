@@ -37,11 +37,13 @@ def _tick(flag: bool | None) -> str:
 
 def meta_block(payload: dict[str, Any]) -> str:
     meta = payload["meta"]
+    models = ", ".join(f"`{name}`" for name in (meta.get("agent_models") or [])) or "unknown"
     lines = [
         f"- run: `{meta['timestamp']}`",
         f"- mode: `{meta['mode']}` · split: `{meta['split']}` · seed: `{meta['seed']}`",
         f"- cases: {meta['case_count']} from `{meta['cases_path']}`",
-        f"- agent: Markovian investigator → skeptic → citation guard → computed confidence",
+        f"- agent: Markovian investigator → skeptic → citation guard → computed confidence, "
+        f"on {models}",
         f"- baseline: one `{meta.get('baseline_model') or 'fast lane'}` call on the last "
         f"{meta['baseline_lines']} redacted log lines",
         f"- git: `{meta.get('git_sha') or 'unknown'}`",
