@@ -314,6 +314,17 @@ def _verdict_from(proposal: ProposedVerdict) -> Verdict:
     )
 
 
+def _extend_evidence(prepared: Prepared, items: list[Evidence]) -> None:
+    """Add the evidence a check produced, once.
+
+    A check runs more than once per case (the revision re-checks, and a refutation
+    can lead to a confirm pass), so the same same-sha or incident evidence arrives
+    repeatedly. Adding it twice would list one run as two.
+    """
+    known = {item.id for item in prepared.evidence}
+    prepared.evidence.extend(item for item in items if item.id not in known)
+
+
 def _unknown(reason: str) -> Verdict:
     return Verdict(
         cause=Cause.UNKNOWN,
@@ -405,7 +416,7 @@ def _investigate_prepared(
             judge=judge,
         )
         report = skeptic.check(verdict)
-        prepared.evidence.extend(skeptic.last_outage_evidence)
+        _extend_evidence(prepared, skeptic.last_outage_evidence + skeptic.last_same_sha_evidence)
 
         if report.final_status == "failed":
             failed = [
@@ -432,14 +443,44 @@ def _investigate_prepared(
                 verdict = _verdict_from(revision.verdict)
             report = skeptic.check(verdict, revisions=1)
             report.final_status = "revised" if report.final_status == "passed" else "failed"
-            prepared.evidence.extend(skeptic.last_outage_evidence)
+            _extend_evidence(prepared, skeptic.last_outage_evidence + skeptic.last_same_sha_evidence)
 
         if report.final_status == "failed":
             still_failing = [check.check for check in report.checks if check.status == "fail"]
-            verdict = _unknown(
-                "the skeptic rejected every proposed cause after one revision "
-                f"({', '.join(still_failing)})"
-            )
+            # The checks can refute the proposal and still have named the answer. A
+            # refutation is only the end of the story if nothing follows from it, so
+            # each cause the evidence itself supports gets a full check of its own.
+            _extend_evidence(prepared, skeptic.last_same_sha_evidence)
+            for cause, detail, cited in skeptic.candidates_from_evidence(report):
+                candidate = Verdict(
+                    cause=cause,
+                    root_cause=detail,
+                    confidence=0.0,
+                    confidence_breakdown=[],
+                    next_step=(
+                        "Re-run the job. If it fails again on the same commit, treat it as a "
+                        "real break rather than a flake."
+                        if cause is Cause.FLAKY_TEST
+                        else "Compare the environment change against the failing step, then "
+                        "fix or revert it and re-run."
+                    ),
+                    cited_evidence_ids=cited,
+                )
+                confirmed = skeptic.check(candidate, revisions=report.revisions)
+                tracer.emit(
+                    "skeptic",
+                    "check",
+                    f"skeptic: the evidence supports {cause.value}",
+                    {"candidate": cause.value, "confirmed": confirmed.final_status},
+                )
+                if confirmed.final_status == "passed":
+                    verdict, report = candidate, confirmed
+                    break
+            if report.final_status == "failed":
+                verdict = _unknown(
+                    "the skeptic rejected every proposed cause after one revision "
+                    f"({', '.join(still_failing)})"
+                )
 
         citation = guard(verdict, {item.id for item in prepared.evidence})
         if not citation.ok:

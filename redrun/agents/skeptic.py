@@ -6,6 +6,7 @@ investigator back for exactly one revision.
 """
 
 import json
+import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -34,6 +35,35 @@ LIVE_LOG_FETCHES = 3
 SENSITIVE_TO_SHA = (Cause.BAD_COMMIT,)
 # Causes that a passing-elsewhere finding actually supports.
 SUPPORTED_BY_SHA = (Cause.FLAKY_TEST, Cause.INFRA_OUTAGE)
+
+# Files that change how a job runs rather than what it runs. Nothing a failing log
+# prints can name one of these, so demanding a log-to-file link for them is
+# demanding something that cannot exist: a workflow that pins the interpreter or an
+# env var breaks the job without a single source line moving.
+ENVIRONMENT_FILES = re.compile(
+    r"(^|/)(\.github/workflows/[^/]+|requirements[^/]*\.txt|pyproject\.toml|setup\.py|"
+    r"setup\.cfg|uv\.lock|poetry\.lock|Pipfile|Pipfile\.lock|tox\.ini|Makefile|Dockerfile|"
+    r"\.python-version|runtime\.txt)$"
+)
+# Log patterns that mean a test ran and failed, as opposed to the runner falling over.
+TEST_FAILURE_PATTERNS = frozenset({"pytest_failure", "traceback", "python_error"})
+
+
+def _admits_newer_release(old: str | None, new: str | None) -> bool:
+    """Was a pin loosened enough that the next resolve can pass the old version?
+
+    `21.3` -> `>=21` is the case that matters: nothing new was published in the
+    window, yet the very next install can pick up a release the green run never
+    saw. A range with an upper bound is not that: `<22` cannot reach 24.
+    """
+    if not old or not new:
+        return False
+    if not re.match(r"^\d", old.strip()):
+        return False  # the green run was not pinned to a concrete version
+    spec = new.strip()
+    if "<" in spec:
+        return False
+    return spec.startswith((">=", ">", "^", "~", "=")) or bool(re.match(r"^\d", spec))
 
 
 def _parse(value: str | None) -> datetime | None:
@@ -75,6 +105,8 @@ class Skeptic:
         self.statuspage = statuspage
         self.judge = judge
         self.last_outage_evidence: list[Evidence] = []
+        self.last_same_sha_runs: list[dict] = []
+        self.last_same_sha_evidence: list[Evidence] = []
 
     # ------------------------------------------------------------------ sources
 
@@ -163,6 +195,35 @@ class Skeptic:
         failed_id = self.runs.failed_run.run_id
         others = [run for run in self._same_sha_runs() if int(run.get("run_id", 0)) != failed_id]
         successes = [run for run in others if run.get("conclusion") == "success"]
+        self.last_same_sha_runs = others
+
+        # A success here is evidence in its own right, so it goes into the run's
+        # evidence list under the id a citation would use. Without that the only
+        # way to cite it is to mention a bare number in prose, which the citation
+        # guard cannot check.
+        self.last_same_sha_evidence = [
+            Evidence(
+                id=f"ev_run_{run.get('run_id')}",
+                kind="run",
+                source_url=(
+                    f"https://github.com/{self.runs.owner}/{self.runs.repo}"
+                    f"/actions/runs/{run.get('run_id')}"
+                ),
+                title=f"Same commit succeeded: {run.get('workflow') or 'the same workflow'} "
+                f"#{run.get('run_id')}",
+                excerpt=redact(
+                    f"head_sha {self.runs.failed_run.head_sha} concluded success in this run"
+                ),
+                metadata={
+                    "run_id": run.get("run_id"),
+                    "head_sha": self.runs.failed_run.head_sha,
+                    "conclusion": "success",
+                    "workflow": run.get("workflow", ""),
+                    "same_sha": True,
+                },
+            )
+            for run in successes
+        ]
 
         if verdict.cause in SENSITIVE_TO_SHA:
             if successes:
@@ -254,11 +315,75 @@ class Skeptic:
                 ),
                 evidence_ids=[linked[0].log_evidence_id or "", linked[0].change_evidence_id or ""],
             )
+        by_shape = self._overlap_by_shape(verdict, cited)
+        if by_shape is not None:
+            detail, ids = by_shape
+            return CheckResult(
+                check="error_change_overlap", status="pass", detail=detail, evidence_ids=ids
+            )
         return CheckResult(
             check="error_change_overlap",
             status="fail",
             detail="the cited log error is not linked to any cited change",
         )
+
+    def _overlap_by_shape(
+        self, verdict: Verdict, cited: set[str]
+    ) -> tuple[str, list[str]] | None:
+        """Shapes where no log-to-file link can exist, yet the pairing is real.
+
+        A link is a filename in the log meeting a filename in the diff. Two ordinary
+        ways for a change and a failure to belong together never produce one:
+
+        * a test failed and this commit changed source. The error names the test
+          file, which did not change, so there is nothing to match.
+        * the commit changed only how the job runs (a workflow, a lock file, the
+          pinned interpreter) and no source at all. No log line can name those.
+        """
+        files = self.changes.files
+        if not files:
+            return None
+        environment = [item for item in files if ENVIRONMENT_FILES.search(item.filename)]
+        sources = [item for item in files if not ENVIRONMENT_FILES.search(item.filename)]
+
+        cited_logs = [
+            item.id
+            for item in self.evidence
+            if item.id in cited and item.kind == "log" and not item.metadata.get("tail")
+        ]
+        patterns = {
+            str(name)
+            for item in self.evidence
+            if item.id in cited and item.kind == "log"
+            for name in (item.metadata.get("patterns") or [])
+        }
+        test_failure = bool(patterns & TEST_FAILURE_PATTERNS)
+
+        if verdict.cause is Cause.BAD_COMMIT and test_failure and sources:
+            file_evidence = self._file_evidence_ids({item.filename for item in sources})
+            if cited_logs and file_evidence:
+                return (
+                    f"the cited log is a test failure and this commit changed "
+                    f"{sources[0].filename}, so the test ran the changed code",
+                    [cited_logs[0], *file_evidence],
+                )
+
+        if verdict.cause in (Cause.CONFIG_CHANGE, Cause.DEPENDENCY_BUMP) and not sources and environment:
+            file_evidence = self._file_evidence_ids({item.filename for item in environment})
+            if file_evidence:
+                return (
+                    f"this commit changed only how the job runs ({environment[0].filename}), "
+                    "so a failure in that job overlaps it",
+                    file_evidence,
+                )
+        return None
+
+    def _file_evidence_ids(self, filenames: set[str]) -> list[str]:
+        return [
+            item.id
+            for item in self.evidence
+            if item.kind == "file" and str(item.metadata.get("filename")) in filenames
+        ]
 
     def _outage_overlap(self, verdict: Verdict) -> CheckResult:
         run_time = self.runs.failed_run.created_at
@@ -335,6 +460,23 @@ class Skeptic:
                 evidence_ids=[record.evidence_id],
             )
         record = cited_deps[0]
+        loosened = [
+            item
+            for item in cited_deps
+            if _admits_newer_release(item.old_version, item.new_version)
+        ]
+        if loosened:
+            loosened_record = loosened[0]
+            return CheckResult(
+                check="dependency_timing",
+                status="pass",
+                detail=(
+                    f"this commit loosened the pin {loosened_record.package} "
+                    f"{loosened_record.old_version} -> {loosened_record.new_version}, so the "
+                    "next resolve can pick a release newer than the green run had"
+                ),
+                evidence_ids=[loosened_record.evidence_id],
+            )
         return CheckResult(
             check="dependency_timing",
             status="fail",
@@ -395,6 +537,98 @@ class Skeptic:
                 {"revision": revisions, "decisive_failed": [item.check for item in failed_decisive]},
             )
         return report
+
+    def candidates_from_evidence(
+        self, report: SkepticReport
+    ) -> list[tuple[Cause, str, list[str]]]:
+        """Causes the evidence itself names, once a proposal has been refuted.
+
+        A check can do more than say no, and the pipeline should not stop at `unknown`
+        when the checks have already described what happened. Two readings, each with
+        its own conditions, both about a failure that looks like a test failure:
+
+        * the same commit failed here and passed elsewhere in the same workflow, with
+          no incident overlapping. That is the flake signature.
+        * only how the job runs changed (a workflow, a lock file, the interpreter) and
+          no source line moved, with no same-commit success and no incident. The code
+          under test was identical to the green run, so the environment is what moved.
+
+        A cancellation is deliberately neither of these: no test failed, so there is
+        nothing to call flaky.
+        """
+        failed = {item.check for item in report.checks if item.status == "fail"}
+        incident = any(
+            item.check == "outage_overlap" and item.status == "fail" for item in report.checks
+        )
+        if incident or not self._log_looks_like_test_failure():
+            return []
+
+        workflow = self.runs.failed_run.workflow_name
+        successes = [
+            run
+            for run in self.last_same_sha_runs
+            if run.get("conclusion") == "success"
+            and (not run.get("workflow") or run.get("workflow") == workflow)
+        ]
+        out: list[tuple[Cause, str, list[str]]] = []
+        if "same_sha_elsewhere" in failed and successes:
+            run = successes[0]
+            evidence_id = f"ev_run_{run.get('run_id')}"
+            tests = self._failing_test_ids()
+            where = f", and the test that failed is {tests[0]}" if tests else ""
+            out.append(
+                (
+                    Cause.FLAKY_TEST,
+                    f"the same commit {self.runs.failed_run.head_sha[:7]} failed here and "
+                    f"succeeded in {run.get('workflow') or 'the same workflow'} run "
+                    f"{run.get('run_id')}{where}, with no incident overlapping the run, which is "
+                    f"the flake signature ({evidence_id})",
+                    [evidence_id],
+                )
+            )
+
+        files = self.changes.files
+        environment = [item for item in files if ENVIRONMENT_FILES.search(item.filename)]
+        sources = [item for item in files if not ENVIRONMENT_FILES.search(item.filename)]
+        if environment and not sources and not successes:
+            file_evidence = self._file_evidence_ids({item.filename for item in environment})
+            if file_evidence:
+                changed = ", ".join(self._changed_lines(file_evidence))
+                what = f" ({changed})" if changed else ""
+                out.append(
+                    (
+                        Cause.CONFIG_CHANGE,
+                        f"the only thing this commit changed is how the job runs "
+                        f"({environment[0].filename}){what} and no source line moved, so the "
+                        "code under test is the code that passed before it",
+                        file_evidence,
+                    )
+                )
+        return out
+
+    def _changed_lines(self, evidence_ids: list[str], limit: int = 4) -> list[str]:
+        """The +/- lines of cited file evidence, so the reason names what changed."""
+        out: list[str] = []
+        for item in self.evidence:
+            if item.id not in evidence_ids or item.kind != "file":
+                continue
+            for line in str(item.excerpt).splitlines():
+                stripped = line.strip()
+                if stripped.startswith(("+++", "---")) or not stripped.startswith(("+", "-")):
+                    continue
+                out.append(stripped)
+                if len(out) >= limit:
+                    return out
+        return out
+
+    def _log_looks_like_test_failure(self) -> bool:
+        """Did a test run and fail, rather than the job being cancelled or never starting?"""
+        for item in self.evidence:
+            if item.kind != "log" or item.metadata.get("tail"):
+                continue
+            if set(item.metadata.get("patterns") or []) & TEST_FAILURE_PATTERNS:
+                return True
+        return False
 
     def critique_text(self, failed: list[CheckResult]) -> str:
         """The decision is already made; the judge lane may only reword it."""
