@@ -67,6 +67,16 @@ def write_baseline_pending(directory: Path, reason: str) -> Path:
     return path
 
 
+def clear_llm_pending(directory: Path) -> None:
+    """Drop a previous 'model half missing' marker once the model half exists.
+
+    A re-recording writes real steps next to a stale marker otherwise, and the
+    marker is the thing a reader trusts when they ask whether a case is complete.
+    """
+    marker = Path(directory) / "llm" / "pending.json"
+    marker.unlink(missing_ok=True)
+
+
 def _run_payload(runs) -> dict[str, Any]:
     workflow = {
         "id": 0,

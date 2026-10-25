@@ -26,6 +26,7 @@ from redrun.eval import runner as eval_runner
 from redrun.pipeline import _triage_cause, investigate, prepare, run_overlap
 from redrun.recording import (
     RecordingLLM,
+    clear_llm_pending,
     write_baseline_pending,
     write_llm_pending,
     write_sample,
@@ -296,6 +297,8 @@ def record_sample(url: str, name: str, base: Settings, *, with_baseline: bool = 
         )
         if llm_pending:
             write_llm_pending(path, llm_pending, captured=len(llm.steps))
+        else:
+            clear_llm_pending(path)
         if with_baseline:
             try:
                 payload = baseline_module.record(
