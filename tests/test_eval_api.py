@@ -34,11 +34,21 @@ PAYLOAD = {
 
 @pytest.fixture()
 def client(tmp_path: Path) -> TestClient:
+    """A client whose frontend is built in the test, not on the developer's disk.
+
+    The first version of these tests pointed at the repository's `frontend/dist` and
+    passed locally because a build happened to be sitting there. In a clean clone
+    the shell route correctly answers 404 and the test failed for the wrong reason.
+    """
+    dist = tmp_path / "dist"
+    dist.mkdir()
+    (dist / "index.html").write_text("<!doctype html><title>RedRun</title>", encoding="utf-8")
     settings = Settings(
         sample_mode=True,
         samples_dir=SAMPLES,
         logs_dir=tmp_path / "logs",
         data_dir=tmp_path / "data",
+        frontend_dir=dist,
     )
     return TestClient(create_app(settings))
 
@@ -81,10 +91,12 @@ def test_eval_rejects_a_corrupt_result_file(
 def test_a_browser_asking_for_eval_gets_the_app_shell(client: TestClient) -> None:
     response = client.get("/eval", headers={"accept": "text/html"})
     assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/html")
+    assert "<!doctype html>" in response.text
 
 
 def test_the_two_answers_to_one_url_vary_on_accept(client: TestClient) -> None:
-    """One URL, two shapes, so the JSON answer must declare that it did.
+    """One URL, two shapes, so each answer must declare that it did.
 
     Without `Vary: Accept`, a browser that loaded /eval as a document caches the
     shell and hands it to the page's own fetch, which then tries to parse HTML as
@@ -96,6 +108,6 @@ def test_the_two_answers_to_one_url_vary_on_accept(client: TestClient) -> None:
     assert as_json.headers["vary"].lower() == "accept"
 
     as_html = client.get("/eval", headers={"accept": "text/html"})
-    if as_html.status_code == 200:  # 404 when the frontend has not been built
-        assert as_html.headers["content-type"].startswith("text/html")
-        assert as_html.headers["vary"].lower() == "accept"
+    assert as_html.status_code == 200
+    assert as_html.headers["content-type"].startswith("text/html")
+    assert as_html.headers["vary"].lower() == "accept"
