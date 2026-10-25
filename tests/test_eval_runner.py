@@ -167,6 +167,28 @@ def test_an_unrecorded_llm_is_reported_as_pending_not_scored(workspace: Settings
     assert "pending (rules_pending_llm)" in (tmp_path / "RESULTS.md").read_text(encoding="utf-8")
 
 
+def test_the_report_names_the_provider_behind_each_system(workspace: Settings, tmp_path: Path):
+    """A Nightshift recording and a direct one are different evidence, so say which."""
+    payload = runner.run(
+        _case_set(),
+        split="all",
+        mode="replay",
+        settings=workspace,
+        with_baseline=True,
+        out_dir=tmp_path / "results",
+        markdown_path=tmp_path / "RESULTS.md",
+    )
+    markdown = (tmp_path / "RESULTS.md").read_text(encoding="utf-8")
+
+    assert "agent provider" in markdown
+    assert "baseline provider" in markdown
+    assert "recordings served by" in markdown
+    # The copied samples predate the recorder keeping the provider, so the report says
+    # that rather than naming one.
+    assert "not recorded" in markdown
+    assert payload["summaries"]["all"]["agent"]["providers"] == []
+
+
 def test_a_missing_case_file_is_an_error_not_an_empty_run(tmp_path: Path):
     from redrun.eval import cases as cases_module
 

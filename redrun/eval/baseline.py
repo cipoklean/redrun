@@ -176,6 +176,9 @@ def observation(payload: dict[str, Any] | None) -> dict[str, Any] | None:
         "root_cause": str(reply.get("root_cause") or ""),
         "next_step": str(reply.get("next_step") or ""),
         "model": str(payload.get("model") or ""),
+        # Which provider the call went through, so the report can separate a Nightshift
+        # recording from one made against a provider directly.
+        "provider": str(payload.get("provider") or ""),
         "latency_ms": int(usage.get("latency_ms") or 0),
         "tokens_in": int(usage.get("prompt_tokens") or 0),
         "tokens_out": int(usage.get("completion_tokens") or 0),

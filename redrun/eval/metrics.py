@@ -87,6 +87,7 @@ def summarise(observations: list[dict[str, Any]], *, system: str) -> dict[str, A
     answered_correct = [row for row in answered if row["category_ok"]]
 
     citations = [row["citation_ok"] for row in observations if row.get("citation_ok") is not None]
+    providers = sorted({row["provider"] for row in observations if row.get("provider")})
     confusion: dict[str, dict[str, int]] = {}
     for row in observations:
         expected = row["expected_cause"]
@@ -106,6 +107,9 @@ def summarise(observations: list[dict[str, Any]], *, system: str) -> dict[str, A
         "answered_precision": (
             round(len(answered_correct) / len(answered), 4) if answered else None
         ),
+        # Which providers served this system's recordings, or empty when the samples
+        # predate the recorder keeping it.
+        "providers": providers,
         "citation_evaluated": len(citations),
         "citation_pass": sum(1 for item in citations if item) if citations else None,
         "citation_pass_rate": (

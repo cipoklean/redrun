@@ -20,6 +20,7 @@ from redrun.collectors.base import CollectorError
 from redrun.config import ROOT, Settings
 from redrun.core.models import Verdict
 from redrun.core.rules import rule_verdict
+from redrun.adapters.llm import UNRECORDED
 from redrun.eval import baseline as baseline_module
 from redrun.eval import metrics, report
 from redrun.eval.cases import Case, CaseSet
@@ -140,6 +141,18 @@ def observe_agent(case: Case, settings: Settings, mode: str) -> dict[str, Any]:
             "models": sorted({step.model for step in markovian.per_step if step.model})
             if markovian
             else [],
+            # Who served the steps, as the recording saw it. A sample recorded before
+            # this was kept says `unrecorded` rather than naming a provider.
+            "provider": ", ".join(
+                sorted(
+                    {
+                        step.provider
+                        for step in (markovian.per_step if markovian else [])
+                        if step.provider and step.provider != UNRECORDED
+                    }
+                )
+            )
+            or None,
             "engine": result.metrics.query_engine,
             "evidence_items": len(result.evidence),
             "links": len(result.links),

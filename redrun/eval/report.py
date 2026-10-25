@@ -35,6 +35,16 @@ def _tick(flag: bool | None) -> str:
     return "yes" if flag else "no"
 
 
+def _providers(entry: dict[str, Any]) -> str:
+    """Who served the recordings this system's numbers come from."""
+    names = entry.get("providers") or []
+    if not names:
+        return "not recorded"
+    if len(names) == 1:
+        return names[0]
+    return "mixed: " + ", ".join(names)
+
+
 def meta_block(payload: dict[str, Any]) -> str:
     meta = payload["meta"]
     every = meta.get("agent_models") or []
@@ -77,20 +87,30 @@ def meta_block(payload: dict[str, Any]) -> str:
         )
     if meta.get("notes"):
         lines.append(f"- {meta['notes']}")
+    overall = payload.get("summaries", {}).get("all") or {}
+    if overall:
+        lines.append(
+            "- recordings served by: agent "
+            f"`{_providers(overall.get('agent') or {})}` · baseline "
+            f"`{_providers(overall.get('baseline') or {})}`. A recording made through "
+            "Nightshift and one made against a provider directly are different evidence, "
+            "so the column says which is which."
+        )
     return "\n".join(lines)
 
 
 def totals_table(payload: dict[str, Any]) -> str:
     rows = [
         "| split | cases | agent cause | agent keywords | agent citations | guard "
-        "interventions | baseline cause | baseline keywords |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- |",
+        "interventions | baseline cause | baseline keywords | agent provider | "
+        "baseline provider |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for name, summary in payload["summaries"].items():
         agent = summary["agent"]
         baseline = summary["baseline"]
         rows.append(
-            "| {split} | {cases} | {ac} ({ap}) | {ak} ({akp}) | {acite} | {guard} | {bc} ({bp}) | {bk} ({bkp}) |".format(
+            "| {split} | {cases} | {ac} ({ap}) | {ak} ({akp}) | {acite} | {guard} | {bc} ({bp}) | {bk} ({bkp}) | {aprov} | {bprov} |".format(
                 split=name,
                 cases=agent["cases"],
                 ac=_counts(agent["cause_hits"], agent["cases"]),
@@ -107,6 +127,8 @@ def totals_table(payload: dict[str, Any]) -> str:
                 bp=_pct(baseline["cause_accuracy"]),
                 bk=_counts(baseline["keyword_hits"], baseline["cases"]),
                 bkp=_pct(baseline["keyword_accuracy"]),
+                aprov=_providers(agent),
+                bprov=_providers(baseline),
             )
         )
     return "\n".join(rows)
