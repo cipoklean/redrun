@@ -1,0 +1,1199 @@
+{
+  "meta": {
+    "timestamp": "2026-10-25T22:54:13Z",
+    "mode": "replay",
+    "split": "all",
+    "seed": 20261025,
+    "case_count": 15,
+    "cases_path": "/home/ubuntu/redrun/eval/cases.yaml",
+    "baseline_lines": 300,
+    "baseline_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "agent_models": [
+      "sample/deep",
+      "sample/fast"
+    ],
+    "agent_lane_labels": [
+      "sample/deep",
+      "sample/fast"
+    ],
+    "agent_replayed": true,
+    "baseline_replayed": true,
+    "git_sha": "c210cd7",
+    "notes": "12 constructed cases with real runs in cipoklean/redrun-lab, 2 public runs that line up with a GitHub Actions incident, and 1 public run with no usable signal. The itemised brief sums to 13; the extra two are the syntax-error and working-directory variants it names without a case."
+  },
+  "rows": [
+    {
+      "id": "bad_commit_logic",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229615670",
+      "expected_cause": "bad_commit",
+      "root_cause_keywords": [
+        "shipping",
+        "order_total"
+      ],
+      "split": "dev",
+      "constructed": true,
+      "notes": "A wrong-value assertion: the test file is unchanged, the source is not.",
+      "sample": "eval_bad_commit_logic",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "bad_commit",
+        "root_cause": "Inverted free shipping comparison operator in commit 440440a leading to pricing discrepancies.",
+        "next_step": "Revert or fix the inverted comparison in lab/pricing.py.",
+        "confidence": 0.55,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 90180,
+        "replay_ms": 88,
+        "tokens_in": 9149,
+        "tokens_out": 11677,
+        "steps": 5,
+        "stop_reason": "cap",
+        "models": [
+          "sample/deep",
+          "sample/fast"
+        ],
+        "engine": "zetaris_replay",
+        "evidence_items": 6,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "order_total"
+        ]
+      },
+      "diagnostic": {},
+      "trace_id": "5266ecdda6ce",
+      "seconds": 0.09,
+      "baseline": {
+        "cause": "bad_commit",
+        "root_cause": "The job checked out branch 'case/bad-commit-logic' which contains an `order_total` function with flawed shipping calculation logic, resulting in three pytest assertions failing due to mismatched Decimal values.",
+        "next_step": "Review the commit diff on case/bad-commit-logic or revert to the previous green run to identify and fix the calculation error.",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "latency_ms": 29780,
+        "tokens_in": 10829,
+        "tokens_out": 4663,
+        "recorded_at": "2026-10-25T20:27:47",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "bad_commit_rename",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229618647",
+      "expected_cause": "bad_commit",
+      "root_cause_keywords": [
+        "format_total",
+        "summary"
+      ],
+      "split": "holdout",
+      "constructed": true,
+      "notes": "An import error in a changed module: the importer is the unchanged file.",
+      "sample": "eval_bad_commit_rename",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "bad_commit",
+        "root_cause": "Commit 2650b9 renamed format_total at its definition, causing the import in lab/summary.py to be missing, leading to test failure",
+        "next_step": "Inspect commit 2650b9 and the lab/summary.py changes to confirm import path and fix the missing import",
+        "confidence": 0.525,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 91631,
+        "replay_ms": 73,
+        "tokens_in": 5533,
+        "tokens_out": 11916,
+        "steps": 5,
+        "stop_reason": "cap",
+        "models": [
+          "sample/deep",
+          "sample/fast"
+        ],
+        "engine": "zetaris_replay",
+        "evidence_items": 6,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "diagnostic": {},
+      "trace_id": "64df7852b9cc",
+      "seconds": 0.07,
+      "baseline": {
+        "cause": "bad_commit",
+        "root_cause": "The checked-out commit case/bad-commit-rename modified lab/summary.py, removing the format_total function that test_dashboard.py depends on, resulting in an ImportError during test collection.",
+        "next_step": "Examine lab/summary.py in the committed code and restore or rename the format_total function to resolve the import failure.",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "latency_ms": 29518,
+        "tokens_in": 9418,
+        "tokens_out": 3381,
+        "recorded_at": "2026-10-25T20:36:02",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "bad_commit_syntax",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229640647",
+      "expected_cause": "bad_commit",
+      "root_cause_keywords": [
+        "parse",
+        "syntax"
+      ],
+      "split": "dev",
+      "constructed": true,
+      "notes": "A syntax error in a changed module: pytest cannot even import it, and the traceback names the changed file, so the log-to-change join has something to join on.",
+      "sample": "eval_bad_commit_syntax",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "bad_commit",
+        "root_cause": "Commit e3a3792 removed the colon from the loop header in lab/parse.py, introducing a SyntaxError that prevented test collection.",
+        "next_step": "Revert the problematic commit or fix the syntax error in lab/parse.py.",
+        "confidence": 0.75,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 46840,
+        "replay_ms": 70,
+        "tokens_in": 3815,
+        "tokens_out": 4393,
+        "steps": 3,
+        "stop_reason": "rule",
+        "models": [
+          "sample/deep",
+          "sample/fast"
+        ],
+        "engine": "zetaris_replay",
+        "evidence_items": 6,
+        "links": 1,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "diagnostic": {},
+      "trace_id": "38306af327a0",
+      "seconds": 0.07,
+      "baseline": {
+        "cause": "bad_commit",
+        "root_cause": "The job checked out commit e3a379295bfc98a1a535adb1087f12bcebc335ab on branch case/bad-commit-syntax, which introduced a syntax error in lab/parse.py line 7, causing pytest collection to fail.",
+        "next_step": "Revert the syntax error in lab/parse.py or checkout a known-good commit before re-running the test suite.",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "latency_ms": 26456,
+        "tokens_in": 9929,
+        "tokens_out": 2354,
+        "recorded_at": "2026-10-25T20:37:19",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "config_env",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229637246",
+      "expected_cause": "config_change",
+      "root_cause_keywords": [
+        "env",
+        "mode"
+      ],
+      "split": "holdout",
+      "constructed": true,
+      "notes": "The var the step reads is renamed, so the reader raises KeyError.",
+      "sample": "eval_config_env",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "config_change",
+        "root_cause": "The CI workflow config was changed to rename the LAB_APP_MODE environment variable, causing tests that still expect the old name to fail.",
+        "next_step": "Search for remaining references to LAB_APP_MODE in the codebase and update or restore the variable name.",
+        "confidence": 0.525,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 97691,
+        "replay_ms": 73,
+        "tokens_in": 5262,
+        "tokens_out": 13327,
+        "steps": 5,
+        "stop_reason": "cap",
+        "models": [
+          "sample/deep",
+          "sample/fast"
+        ],
+        "engine": "zetaris_replay",
+        "evidence_items": 6,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "diagnostic": {},
+      "trace_id": "e32705595e28",
+      "seconds": 0.07,
+      "baseline": {
+        "cause": "unknown",
+        "root_cause": "The test test_app_mode_is_known in tests/test_mode.py calls app_mode() which reads os.environ['LAB_APP_MODE'], but the environment variable is not set in the GitHub Actions job, resulting in a KeyError.",
+        "next_step": "Add LAB_APP_MODE as an environment variable or secret in the workflow configuration to provide the required value.",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "latency_ms": 13967,
+        "tokens_in": 9854,
+        "tokens_out": 1984,
+        "recorded_at": "2026-10-25T20:39:15",
+        "category_ok": false,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "config_python",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229634046",
+      "expected_cause": "config_change",
+      "root_cause_keywords": [
+        "python",
+        "3.9"
+      ],
+      "split": "dev",
+      "constructed": true,
+      "notes": "Only the workflow changes: the code needs 3.10 for PEP 604 unions.",
+      "sample": "eval_config_python",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "config_change",
+        "root_cause": "the only thing this commit changed is how the job runs (.github/workflows/ci.yml) (- uses: actions/checkout@v4, - uses: actions/setup-python@v5, -          python-version: '3.11', +          python-version: '3.9') and no source line moved, so the code under test is the code that passed before it",
+        "next_step": "Compare the environment change against the failing step, then fix or revert it and re-run.",
+        "confidence": 0.2667,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 132809,
+        "replay_ms": 87,
+        "tokens_in": 6001,
+        "tokens_out": 14444,
+        "steps": 6,
+        "stop_reason": "cap",
+        "models": [
+          "sample/deep",
+          "sample/fast"
+        ],
+        "engine": "zetaris_replay",
+        "evidence_items": 6,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "diagnostic": {},
+      "trace_id": "fb03ff1046bc",
+      "seconds": 0.09,
+      "baseline": {
+        "cause": "unknown",
+        "root_cause": "The test collection failed with TypeError: unsupported operand type(s) for |: 'type' and 'NoneType' in lab/reporting.py:9, which uses Python 3.10+ union type syntax on a Python 3.9 runtime; the log does not provide enough context to map this to one of the specified causes without repository details.",
+        "next_step": "Review the repository's Python version configuration and update lab/reporting.py to use compatible type annotations or adjust the runner's Python version.",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "latency_ms": 34158,
+        "tokens_in": 10496,
+        "tokens_out": 4204,
+        "recorded_at": "2026-10-25T20:41:54",
+        "category_ok": false,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "config_working_directory",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229643536",
+      "expected_cause": "config_change",
+      "root_cause_keywords": [
+        "working",
+        "requirements"
+      ],
+      "split": "dev",
+      "constructed": true,
+      "notes": "Only the workflow changes. The step starts, then pip cannot find the manifest it was pointed at.",
+      "sample": "eval_config_working_directory",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "config_change",
+        "root_cause": "The CI workflow was changed to set working-directory to lab/, causing pip install to look for requirements.txt in that directory, which is missing, leading to the failure.",
+        "next_step": "Verify that requirements.txt exists in the lab/ directory and either add it or adjust/revert the working-directory setting.",
+        "confidence": 0.5,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 103494,
+        "replay_ms": 65,
+        "tokens_in": 2908,
+        "tokens_out": 9434,
+        "steps": 5,
+        "stop_reason": "cap",
+        "models": [
+          "sample/deep",
+          "sample/fast"
+        ],
+        "engine": "zetaris_replay",
+        "evidence_items": 5,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "diagnostic": {},
+      "trace_id": "2f4e923c978a",
+      "seconds": 0.07,
+      "baseline": {
+        "cause": "unknown",
+        "root_cause": "The pipeline failed during pip install because requirements.txt was not present in the checked-out repository at commit bffa5a7bf0f90342375150216bfa2eddd14863c0.",
+        "next_step": "Locate or restore requirements.txt in the repository and verify the pip install step references the correct path.",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "latency_ms": 21103,
+        "tokens_in": 7430,
+        "tokens_out": 3018,
+        "recorded_at": "2026-10-25T20:44:02",
+        "category_ok": false,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "working"
+        ]
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "dep_bump_conflict",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229612895",
+      "expected_cause": "dependency_bump",
+      "root_cause_keywords": [
+        "httpcore",
+        "httpx"
+      ],
+      "split": "holdout",
+      "constructed": true,
+      "notes": "httpx 0.27 requires httpcore 1.x, so pinning httpcore 0.16 makes the requirement set unsatisfiable. pip fails before it installs anything.",
+      "sample": "eval_dep_bump_conflict",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "dependency_bump",
+        "root_cause": "Pinning httpcore to a version incompatible with httpx (httpcore 0.16.0) introduced by commit dbd92b",
+        "next_step": "Adjust dependency constraints or revert the httpcore pin to resolve incompatibility",
+        "confidence": 0.55,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 128525,
+        "replay_ms": 79,
+        "tokens_in": 6054,
+        "tokens_out": 12252,
+        "steps": 5,
+        "stop_reason": "rule",
+        "models": [
+          "sample/deep",
+          "sample/fast"
+        ],
+        "engine": "zetaris_replay",
+        "evidence_items": 7,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "diagnostic": {},
+      "trace_id": "7c298720af5c",
+      "seconds": 0.08,
+      "baseline": {
+        "cause": "dependency_bump",
+        "root_cause": "The requirements.txt pins incompatible versions of httpcore==0.16.0 and httpx==0.27.0, which have conflicting dependencies, likely due to a recent dependency version bump without corresponding pin updates.",
+        "next_step": "Update the requirements.txt to use compatible version pins or adjust the httpx/httpcore versions to resolve the dependency conflict.",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "latency_ms": 33916,
+        "tokens_in": 8861,
+        "tokens_out": 3078,
+        "recorded_at": "2026-10-25T21:21:10",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "dep_bump_unpinned",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229610003",
+      "expected_cause": "dependency_bump",
+      "root_cause_keywords": [
+        "packaging",
+        "pin"
+      ],
+      "split": "dev",
+      "constructed": true,
+      "notes": "The pin is loosened, so pip installs the newest packaging, which no longer exports LegacyVersion. A removed API arriving through an unpinned floor.",
+      "sample": "eval_dep_bump_unpinned",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "dependency_bump",
+        "root_cause": "incompatible dependency introduced by relaxing packaging constraint from ==21.3 to >=21",
+        "next_step": "pin packaging version or revert the requirements.txt change",
+        "confidence": 0.525,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 143002,
+        "replay_ms": 75,
+        "tokens_in": 5550,
+        "tokens_out": 14310,
+        "steps": 5,
+        "stop_reason": "cap",
+        "models": [
+          "sample/deep",
+          "sample/fast"
+        ],
+        "engine": "zetaris_replay",
+        "evidence_items": 7,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "pin"
+        ]
+      },
+      "diagnostic": {},
+      "trace_id": "2214b89537be",
+      "seconds": 0.08,
+      "baseline": {
+        "cause": "dependency_bump",
+        "root_cause": "The test imports LegacyVersion from packaging.version, which was removed in packaging >= 24; the runner installed packaging 26.3, causing an ImportError during test collection.",
+        "next_step": "Pin packaging to a compatible version (e.g., <24) or replace the import with a supported alternative.",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "latency_ms": 25345,
+        "tokens_in": 9437,
+        "tokens_out": 3391,
+        "recorded_at": "2026-10-25T20:48:59",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "pin"
+        ]
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "flaky_coin",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229984837",
+      "expected_cause": "flaky_test",
+      "root_cause_keywords": [
+        "index",
+        "random"
+      ],
+      "split": "dev",
+      "constructed": true,
+      "notes": "Same SHA has to fail once and then pass on rerun: that is the flake signal. The failing run and the passing run are two runs of the same sha. Failed run https://github.com/cipoklean/redrun-lab/actions/runs/40229984837, passing run on the same sha https://github.com/cipoklean/redrun-lab/actions/runs/40230006936 (workflow_dispatch).",
+      "sample": "eval_flaky_coin",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "flaky_test",
+        "root_cause": "the same commit d40f2b3 failed here and succeeded in ci run 40230006936, and the test that failed is tests/test_index.py::test_index_covers_every_row, with no incident overlapping the run, which is the flake signature (ev_run_40230006936)",
+        "next_step": "Re-run the job. If it fails again on the same commit, treat it as a real break rather than a flake.",
+        "confidence": 0.1417,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 237613,
+        "replay_ms": 93,
+        "tokens_in": 6859,
+        "tokens_out": 23885,
+        "steps": 6,
+        "stop_reason": "cap",
+        "models": [
+          "sample/deep",
+          "sample/fast"
+        ],
+        "engine": "zetaris_replay",
+        "evidence_items": 7,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "random"
+        ]
+      },
+      "diagnostic": {},
+      "trace_id": "d39fe13257c5",
+      "seconds": 0.09,
+      "baseline": {
+        "cause": "unknown",
+        "root_cause": "The log shows a test assertion failure in test_index_covers_every_row but does not provide definitive evidence linking the failure to any of the specified causes without access to the repository, diff, or previous run history.",
+        "next_step": "Obtain the repository state, previous green run, and build_index module code to determine the actual root cause.",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "latency_ms": 23467,
+        "tokens_in": 9298,
+        "tokens_out": 3772,
+        "recorded_at": "2026-10-25T21:08:53",
+        "category_ok": false,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "random"
+        ]
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "flaky_timing",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40230034828",
+      "expected_cause": "flaky_test",
+      "root_cause_keywords": [
+        "cache",
+        "sleep"
+      ],
+      "split": "holdout",
+      "constructed": true,
+      "notes": "A clock-dependent pause against a 50ms budget: the test is the clock's hostage. The failing run and the passing run are two runs of the same sha. Failed run https://github.com/cipoklean/redrun-lab/actions/runs/40230034828, passing run on the same sha https://github.com/cipoklean/redrun-lab/actions/runs/40230100084 (workflow_dispatch).",
+      "sample": "eval_flaky_timing",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "flaky_test",
+        "root_cause": "the same commit bf98274 failed here and succeeded in ci run 40230100084, and the test that failed is tests/test_cache.py::test_warm_is_quick, with no incident overlapping the run, which is the flake signature (ev_run_40230100084)",
+        "next_step": "Re-run the job. If it fails again on the same commit, treat it as a real break rather than a flake.",
+        "confidence": 0.3167,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 139548,
+        "replay_ms": 85,
+        "tokens_in": 6682,
+        "tokens_out": 14698,
+        "steps": 6,
+        "stop_reason": "cap",
+        "models": [
+          "sample/deep",
+          "sample/fast"
+        ],
+        "engine": "zetaris_replay",
+        "evidence_items": 7,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "sleep"
+        ]
+      },
+      "diagnostic": {},
+      "trace_id": "0a5c155d33fb",
+      "seconds": 0.09,
+      "baseline": {
+        "cause": "unknown",
+        "root_cause": "The log shows a test assertion failure due to cache warm timing (0.079s exceeding the 0.05s threshold), but without repository context, previous green runs, or diff information, the root cause category cannot be definitively determined from the log alone.",
+        "next_step": "Obtain the previous green run, repository diff, or additional test history to identify the actual cause.",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "latency_ms": 24775,
+        "tokens_in": 9408,
+        "tokens_out": 2981,
+        "recorded_at": "2026-10-25T20:52:44",
+        "category_ok": false,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "sleep"
+        ]
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "infra_outage_django_connection_reset",
+      "url": "https://github.com/django/django/actions/runs/39651790910",
+      "expected_cause": "infra_outage",
+      "root_cause_keywords": [
+        "connection",
+        "reset"
+      ],
+      "split": "holdout",
+      "constructed": false,
+      "notes": "Chosen for the 2026-10-21 critical incident 'Delays for Pull Requests and Webhook deliveries', id nms1dpzmh9d9, 14:52:49-19:22:52Z. This run started 18:20:14Z and its jobs completed as failures at 18:27:33Z and 18:29:15Z, inside that window. The tests died on `ConnectionResetError(104, 'Connection reset by peer')`, and 'Linters' on the same sha (3e2fa64) succeeded. Weaker than the pandas case: a reset inside a test process could be the test's own remote call, so this one is a network failure during an incident rather than a proven runner fault.",
+      "sample": "eval_infra_outage_django_connection_reset",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "unknown",
+        "root_cause": "the skeptic rejected every proposed cause after one revision (error_change_overlap, outage_overlap)",
+        "next_step": "Collect more evidence, or have a human review the run before acting.",
+        "confidence": 0.0083,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 93340,
+        "replay_ms": 2812,
+        "tokens_in": 18692,
+        "tokens_out": 11299,
+        "steps": 5,
+        "stop_reason": "rule",
+        "models": [
+          "sample/deep",
+          "sample/fast"
+        ],
+        "engine": "zetaris_replay",
+        "evidence_items": 56,
+        "links": 0,
+        "skeptic": "failed",
+        "category_ok": false,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "connection",
+          "reset"
+        ]
+      },
+      "diagnostic": {},
+      "trace_id": "972ac198b967",
+      "seconds": 2.82,
+      "baseline": {
+        "cause": "unknown",
+        "root_cause": "The log contains test failures (an xgettext encoding/path error with a non-ASCII filename and multiple admin UI assertion mismatches) but lacks repository diff, prior green run data, or infrastructure context to definitively attribute the failure to a specific cause.",
+        "next_step": "Reproduce the failures locally, inspect recent commits, and verify test environment and i18n configuration.",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "latency_ms": 12687,
+        "tokens_in": 40328,
+        "tokens_out": 1571,
+        "recorded_at": "2026-10-25T21:10:48",
+        "category_ok": false,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "connection",
+          "reset"
+        ]
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "infra_outage_pandas_action_download",
+      "url": "https://github.com/pandas-dev/pandas/actions/runs/32042902095",
+      "expected_cause": "infra_outage",
+      "root_cause_keywords": [
+        "download",
+        "github"
+      ],
+      "split": "dev",
+      "constructed": false,
+      "notes": "Chosen for the 2026-08-17 critical incident 'Incident with GitHub.com', id zkxwbgr0cnmx, 13:40:03-21:15:46Z. This run started 15:37:51Z and its jobs completed as failures at 15:39:34Z and 15:40:01Z, inside that window. Its log says `##[error]Failed to download archive 'https://codeload.github.com/prefix-dev/setup-pixi/zip/...' after 3 attempts`, with `##[error]Response status code does not indicate success: 429 (Too Many Requests)` from codeload, so the runner could not fetch an action from GitHub's own archive host while GitHub was degraded. Three other workflows on the same sha (4444662) succeeded, so the commit is not what broke.",
+      "sample": "eval_infra_outage_pandas_action_download",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "unknown",
+        "root_cause": "the skeptic rejected every proposed cause after one revision (outage_overlap)",
+        "next_step": "Collect more evidence, or have a human review the run before acting.",
+        "confidence": 0.05,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 154603,
+        "replay_ms": 193,
+        "tokens_in": 4204,
+        "tokens_out": 17673,
+        "steps": 4,
+        "stop_reason": "error",
+        "models": [
+          "sample/deep",
+          "sample/fast"
+        ],
+        "engine": "zetaris_replay",
+        "evidence_items": 12,
+        "links": 0,
+        "skeptic": "failed",
+        "category_ok": false,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "download",
+          "github"
+        ]
+      },
+      "diagnostic": {},
+      "trace_id": "4db7d82b5c28",
+      "seconds": 0.2,
+      "baseline": {
+        "cause": "unknown",
+        "root_cause": "The log ends with HTTP 429 (Too Many Requests) and 503 (Service Unavailable) errors when downloading the 'fast_float' submodule from GitHub, but without repository diff, previous green run data, or knowledge of recent changes, the exact cause cannot be definitively classified.",
+        "next_step": "Retry the workflow after a pause to accommodate transient GitHub rate limits, and inspect the 'fast_float' submodule/dependency configuration if failures persist.",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "latency_ms": 15400,
+        "tokens_in": 13298,
+        "tokens_out": 2167,
+        "recorded_at": "2026-10-25T21:12:56",
+        "category_ok": false,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "secret_invalid",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229631099",
+      "expected_cause": "expired_or_missing_secret",
+      "root_cause_keywords": [
+        "401",
+        "token"
+      ],
+      "split": "dev",
+      "constructed": true,
+      "notes": "LAB_TOKEN is set to a deliberately invalid value, so the API answers 401.",
+      "sample": "eval_secret_invalid",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "expired_or_missing_secret",
+        "root_cause": "LAB_TOKEN secret is expired or missing, causing the CI workflow validation to fail.",
+        "next_step": "Renew or reconfigure the LAB_TOKEN secret in the repository settings and re\u2011run the CI pipeline.",
+        "confidence": 0.7125,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 94895,
+        "replay_ms": 77,
+        "tokens_in": 5904,
+        "tokens_out": 10157,
+        "steps": 5,
+        "stop_reason": "cap",
+        "models": [
+          "sample/deep",
+          "sample/fast"
+        ],
+        "engine": "zetaris_replay",
+        "evidence_items": 6,
+        "links": 1,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "401"
+        ]
+      },
+      "diagnostic": {},
+      "trace_id": "926bf5a2c9c8",
+      "seconds": 0.08,
+      "baseline": {
+        "cause": "expired_or_missing_secret",
+        "root_cause": "The workflow step performed a curl to the GitHub API with an Authorization header that returned HTTP 401, indicating the authentication token (LAB_TOKEN or similar) is missing, expired, or invalid.",
+        "next_step": "Check and refresh the LAB_TOKEN or relevant secret in the GitHub Actions workflow settings, ensuring it has proper permissions and is not expired.",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "latency_ms": 30080,
+        "tokens_in": 9479,
+        "tokens_out": 3230,
+        "recorded_at": "2026-10-25T20:54:53",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "secret_missing",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229628003",
+      "expected_cause": "expired_or_missing_secret",
+      "root_cause_keywords": [
+        "secret",
+        "token"
+      ],
+      "split": "dev",
+      "constructed": true,
+      "notes": "secrets.LAB_MISSING_TOKEN does not exist, so the step refuses to publish.",
+      "sample": "eval_secret_missing",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "expired_or_missing_secret",
+        "root_cause": "LAB_TOKEN secret is not configured in the CI environment, causing the publish step to fail",
+        "next_step": "Add the LAB_TOKEN secret to the CI environment",
+        "confidence": 0.6208,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 125154,
+        "replay_ms": 68,
+        "tokens_in": 6481,
+        "tokens_out": 12429,
+        "steps": 5,
+        "stop_reason": "cap",
+        "models": [
+          "sample/deep",
+          "sample/fast"
+        ],
+        "engine": "zetaris_replay",
+        "evidence_items": 6,
+        "links": 1,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "diagnostic": {},
+      "trace_id": "50585709af69",
+      "seconds": 0.07,
+      "baseline": {
+        "cause": "expired_or_missing_secret",
+        "root_cause": "The required LAB_TOKEN secret was not set or was empty in the runner environment, causing the workflow script to exit early.",
+        "next_step": "Verify and restore the LAB_TOKEN secret in the GitHub Actions workflow configuration, then re-run the job.",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "latency_ms": 12903,
+        "tokens_in": 9592,
+        "tokens_out": 1217,
+        "recorded_at": "2026-10-25T20:57:14",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "unknown_django_cancelled",
+      "url": "https://github.com/django/django/actions/runs/40183021230",
+      "expected_cause": "unknown",
+      "root_cause_keywords": [
+        "cancel",
+        "cause"
+      ],
+      "split": "dev",
+      "constructed": false,
+      "notes": "A cancelled run with nothing to read: its only job was cancelled, the whole log is 253 lines that end at 'Cleaning up orphan processes', and none of the collector's error patterns match a line of it. The workflow had seven earlier successful runs on the same branch, so a green baseline exists and the comparison still yields no signal. `unknown` is the correct answer here.",
+      "sample": "eval_unknown_django_cancelled",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "unknown",
+        "root_cause": "the skeptic rejected every proposed cause after one revision (same_sha_elsewhere)",
+        "next_step": "Collect more evidence, or have a human review the run before acting.",
+        "confidence": 0.1167,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 103890,
+        "replay_ms": 75,
+        "tokens_in": 2659,
+        "tokens_out": 8242,
+        "steps": 6,
+        "stop_reason": "cap",
+        "models": [
+          "sample/deep",
+          "sample/fast"
+        ],
+        "engine": "zetaris_replay",
+        "evidence_items": 12,
+        "links": 0,
+        "skeptic": "failed",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "cancel"
+        ]
+      },
+      "diagnostic": {},
+      "trace_id": "8f9bacec1a4e",
+      "seconds": 0.08,
+      "baseline": {
+        "cause": "unknown",
+        "root_cause": "The log excerpt ends after 'Post job cleanup' with no error messages, exit codes, or failure indicators visible; the PR quality check script ran but was skipped for an established contributor, and no diagnostic output is present.",
+        "next_step": "Obtain the full job log or workflow run summary to locate the failure point and error details.",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "latency_ms": 22230,
+        "tokens_in": 10984,
+        "tokens_out": 1332,
+        "recorded_at": "2026-10-25T21:14:37",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "cancel",
+          "cause"
+        ]
+      },
+      "baseline_reason": ""
+    }
+  ],
+  "summaries": {
+    "dev": {
+      "agent": {
+        "system": "agent",
+        "cases": 10,
+        "cause_hits": 9,
+        "cause_accuracy": 0.9,
+        "keyword_hits": 4,
+        "keyword_accuracy": 0.4,
+        "answered": 8,
+        "answered_correct": 8,
+        "answered_precision": 1.0,
+        "citation_evaluated": 10,
+        "citation_pass": 10,
+        "citation_pass_rate": 1.0,
+        "guard_interventions": 0,
+        "latency_p50_ms": 103890.0,
+        "latency_p95_ms": 237613.0,
+        "tokens_in": 53530,
+        "tokens_out": 126644,
+        "calibration": {
+          "correct": 0.4648,
+          "wrong": 0.05,
+          "correct_cases": 9,
+          "wrong_cases": 1
+        },
+        "confusion": {
+          "bad_commit": {
+            "bad_commit": 2
+          },
+          "config_change": {
+            "config_change": 2
+          },
+          "dependency_bump": {
+            "dependency_bump": 1
+          },
+          "flaky_test": {
+            "flaky_test": 1
+          },
+          "infra_outage": {
+            "unknown": 1
+          },
+          "expired_or_missing_secret": {
+            "expired_or_missing_secret": 2
+          },
+          "unknown": {
+            "unknown": 1
+          }
+        }
+      },
+      "baseline": {
+        "system": "baseline",
+        "cases": 10,
+        "cause_hits": 6,
+        "cause_accuracy": 0.6,
+        "keyword_hits": 6,
+        "keyword_accuracy": 0.6,
+        "answered": 5,
+        "answered_correct": 5,
+        "answered_precision": 1.0,
+        "citation_evaluated": 0,
+        "citation_pass": null,
+        "citation_pass_rate": null,
+        "guard_interventions": 0,
+        "latency_p50_ms": 23467.0,
+        "latency_p95_ms": 34158.0,
+        "tokens_in": 100772,
+        "tokens_out": 29348,
+        "calibration": {
+          "correct": null,
+          "wrong": null,
+          "correct_cases": 0,
+          "wrong_cases": 0
+        },
+        "confusion": {
+          "bad_commit": {
+            "bad_commit": 2
+          },
+          "config_change": {
+            "unknown": 2
+          },
+          "dependency_bump": {
+            "dependency_bump": 1
+          },
+          "flaky_test": {
+            "unknown": 1
+          },
+          "infra_outage": {
+            "unknown": 1
+          },
+          "expired_or_missing_secret": {
+            "expired_or_missing_secret": 2
+          },
+          "unknown": {
+            "unknown": 1
+          }
+        }
+      }
+    },
+    "holdout": {
+      "agent": {
+        "system": "agent",
+        "cases": 5,
+        "cause_hits": 4,
+        "cause_accuracy": 0.8,
+        "keyword_hits": 3,
+        "keyword_accuracy": 0.6,
+        "answered": 4,
+        "answered_correct": 4,
+        "answered_precision": 1.0,
+        "citation_evaluated": 5,
+        "citation_pass": 5,
+        "citation_pass_rate": 1.0,
+        "guard_interventions": 0,
+        "latency_p50_ms": 97691.0,
+        "latency_p95_ms": 139548.0,
+        "tokens_in": 42223,
+        "tokens_out": 63492,
+        "calibration": {
+          "correct": 0.4792,
+          "wrong": 0.0083,
+          "correct_cases": 4,
+          "wrong_cases": 1
+        },
+        "confusion": {
+          "bad_commit": {
+            "bad_commit": 1
+          },
+          "config_change": {
+            "config_change": 1
+          },
+          "dependency_bump": {
+            "dependency_bump": 1
+          },
+          "flaky_test": {
+            "flaky_test": 1
+          },
+          "infra_outage": {
+            "unknown": 1
+          }
+        }
+      },
+      "baseline": {
+        "system": "baseline",
+        "cases": 5,
+        "cause_hits": 2,
+        "cause_accuracy": 0.4,
+        "keyword_hits": 3,
+        "keyword_accuracy": 0.6,
+        "answered": 2,
+        "answered_correct": 2,
+        "answered_precision": 1.0,
+        "citation_evaluated": 0,
+        "citation_pass": null,
+        "citation_pass_rate": null,
+        "guard_interventions": 0,
+        "latency_p50_ms": 24775.0,
+        "latency_p95_ms": 33916.0,
+        "tokens_in": 77869,
+        "tokens_out": 12995,
+        "calibration": {
+          "correct": null,
+          "wrong": null,
+          "correct_cases": 0,
+          "wrong_cases": 0
+        },
+        "confusion": {
+          "bad_commit": {
+            "bad_commit": 1
+          },
+          "config_change": {
+            "unknown": 1
+          },
+          "dependency_bump": {
+            "dependency_bump": 1
+          },
+          "flaky_test": {
+            "unknown": 1
+          },
+          "infra_outage": {
+            "unknown": 1
+          }
+        }
+      }
+    },
+    "all": {
+      "agent": {
+        "system": "agent",
+        "cases": 15,
+        "cause_hits": 13,
+        "cause_accuracy": 0.8667,
+        "keyword_hits": 7,
+        "keyword_accuracy": 0.4667,
+        "answered": 12,
+        "answered_correct": 12,
+        "answered_precision": 1.0,
+        "citation_evaluated": 15,
+        "citation_pass": 15,
+        "citation_pass_rate": 1.0,
+        "guard_interventions": 0,
+        "latency_p50_ms": 103890.0,
+        "latency_p95_ms": 237613.0,
+        "tokens_in": 95753,
+        "tokens_out": 190136,
+        "calibration": {
+          "correct": 0.4692,
+          "wrong": 0.0292,
+          "correct_cases": 13,
+          "wrong_cases": 2
+        },
+        "confusion": {
+          "bad_commit": {
+            "bad_commit": 3
+          },
+          "config_change": {
+            "config_change": 3
+          },
+          "dependency_bump": {
+            "dependency_bump": 2
+          },
+          "flaky_test": {
+            "flaky_test": 2
+          },
+          "infra_outage": {
+            "unknown": 2
+          },
+          "expired_or_missing_secret": {
+            "expired_or_missing_secret": 2
+          },
+          "unknown": {
+            "unknown": 1
+          }
+        }
+      },
+      "baseline": {
+        "system": "baseline",
+        "cases": 15,
+        "cause_hits": 8,
+        "cause_accuracy": 0.5333,
+        "keyword_hits": 9,
+        "keyword_accuracy": 0.6,
+        "answered": 7,
+        "answered_correct": 7,
+        "answered_precision": 1.0,
+        "citation_evaluated": 0,
+        "citation_pass": null,
+        "citation_pass_rate": null,
+        "guard_interventions": 0,
+        "latency_p50_ms": 24775.0,
+        "latency_p95_ms": 34158.0,
+        "tokens_in": 178641,
+        "tokens_out": 42343,
+        "calibration": {
+          "correct": null,
+          "wrong": null,
+          "correct_cases": 0,
+          "wrong_cases": 0
+        },
+        "confusion": {
+          "bad_commit": {
+            "bad_commit": 3
+          },
+          "config_change": {
+            "unknown": 3
+          },
+          "dependency_bump": {
+            "dependency_bump": 2
+          },
+          "flaky_test": {
+            "unknown": 2
+          },
+          "infra_outage": {
+            "unknown": 2
+          },
+          "expired_or_missing_secret": {
+            "expired_or_missing_secret": 2
+          },
+          "unknown": {
+            "unknown": 1
+          }
+        }
+      }
+    }
+  },
+  "pending": [],
+  "baseline_pending": []
+}
