@@ -21,39 +21,12 @@ TABLE_PATHS = {name: Path(f"/tmp/t/{name}.parquet") for name in
                ("runs", "changes", "log_errors", "dependencies")}
 
 
-def _real_tables(tmp_path: Path) -> dict[str, Path]:
-    """Real Parquet files, so the load fallback exercises the actual read path."""
-    import duckdb
-
-    from redrun.core.tables import SCHEMAS, TABLE_NAMES
-
-    connection = duckdb.connect()
-    paths: dict[str, Path] = {}
-    try:
-        for name in TABLE_NAMES:
-            columns = SCHEMAS[name]
-            connection.execute(
-                f"CREATE TABLE {name} ({', '.join(f'{col} {kind}' for col, kind in columns)})"
-            )
-            if name == "runs":
-                connection.execute(
-                    "INSERT INTO runs VALUES "
-                    "(1, 'failed', 'abc', '2026-01-01T00:00:00+00:00', 'failure', 'ubuntu', NULL)"
-                )
-            path = tmp_path / f"{name}.parquet"
-            connection.execute(f"COPY {name} TO '{path}' (FORMAT PARQUET)")
-            paths[name] = path
-    finally:
-        connection.close()
-    return paths
-
-
 def token_settings(**overrides) -> Settings:
-    base = dict(
-        sample_mode=False,
-        zetaris_url="http://localhost:8888/api/v1.0",
-        zetaris_token="tok-123",
-    )
+    base = {
+        "sample_mode": False,
+        "zetaris_url": "http://localhost:8888/api/v1.0",
+        "zetaris_token": "tok-123",
+    }
     base.update(overrides)
     return Settings(**base)
 
@@ -184,28 +157,132 @@ def test_missing_ui_token_is_reported_not_guessed() -> None:
         engine.query("SELECT 1")
 
 
-def test_register_sources_prefers_in_place_and_raises_when_unconfirmed() -> None:
-    engine = ZetarisEngine(token_settings(), transport=httpx.MockTransport(lambda r: httpx.Response(200, json={})))
-    with pytest.raises(NotConfigured) as excinfo:
-        engine.register_sources("t1", TABLE_PATHS, method="in_place")
-    assert "datasource" in str(excinfo.value).lower()
-
-
-def test_register_sources_falls_back_to_loading_rows_into_tables(tmp_path: Path) -> None:
+def _recorder(responses: list[httpx.Response] | None = None):
+    """A transport that records requests and replays a queued response per call."""
     seen: list[httpx.Request] = []
+    queue = list(responses or [])
 
     def handler(request: httpx.Request) -> httpx.Response:
         seen.append(request)
+        if queue:
+            return queue.pop(0)
         return httpx.Response(200, json={"data": []})
 
-    engine = ZetarisEngine(token_settings(), transport=httpx.MockTransport(handler))
-    method = engine.register_sources("t1", _real_tables(tmp_path))
+    return seen, httpx.MockTransport(handler)
 
-    assert method == "loaded_table"
-    statements = [json.loads(r.content)["sql"] for r in seen]
+
+def _statements(seen: list[httpx.Request]) -> list[str]:
+    return [json.loads(request.content)["sql"] for request in seen]
+
+
+def test_register_sources_is_in_place_and_creates_one_database_per_trace() -> None:
+    seen, transport = _recorder()
+    engine = ZetarisEngine(
+        token_settings(zetaris_data_root="/mnt/shared/redrun"), transport=transport
+    )
+
+    method = engine.register_sources("a1b2c3d4e5f6", TABLE_PATHS)
+
+    assert method == "in_place"
+    assert engine.method == "in_place"
+    assert engine.catalog == "redrun_a1b2c3d4e5f6"
+    statements = _statements(seen)
+    assert statements[0] == (
+        "CREATE LIGHTNING DATABASE redrun_a1b2c3d4e5f6 DESCRIBE BY 'RedRun evidence'"
+    )
+    assert statements[1] == (
+        "CREATE LIGHTNING FILESTORE TABLE runs FROM redrun_a1b2c3d4e5f6 "
+        'FORMAT PARQUET OPTIONS (path "/mnt/shared/redrun/a1b2c3d4e5f6/runs.parquet")'
+    )
+    assert len(statements) == 5, "one database plus four tables"
     for table in ("runs", "changes", "log_errors", "dependencies"):
-        assert any(f"CREATE TABLE IF NOT EXISTS {table}" in s for s in statements), table
-    assert any(s.startswith("INSERT INTO runs VALUES") for s in statements)
+        assert any(f"FILESTORE TABLE {table} FROM redrun_a1b2c3d4e5f6" in s for s in statements), table
+
+
+def test_the_database_name_is_sanitised_to_lowercase_underscores() -> None:
+    engine = ZetarisEngine(token_settings(), transport=_recorder()[1])
+    engine.register_sources("A1- b2/C3", TABLE_PATHS)
+    assert engine.catalog == "redrun_a1__b2_c3"
+
+
+def test_only_the_tables_that_exist_are_registered() -> None:
+    seen, transport = _recorder()
+    engine = ZetarisEngine(token_settings(), transport=transport)
+    engine.register_sources("t1", {"runs": Path("/tmp/runs.parquet")})
+    statements = _statements(seen)
+    assert len(statements) == 2
+    assert "FILESTORE TABLE runs" in statements[1]
+
+
+def test_an_already_existing_database_and_table_are_tolerated() -> None:
+    seen, transport = _recorder(
+        [httpx.Response(400, text="Database already exists: redrun_t1")]
+    )
+    engine = ZetarisEngine(token_settings(), transport=transport)
+
+    method = engine.register_sources("t1", TABLE_PATHS)
+
+    assert method == "in_place"
+    statements = _statements(seen)
+    assert len(statements) == 5, "a tolerated error must not stop the run"
+    assert engine.catalog == "redrun_t1"
+
+
+def test_an_unrelated_ddl_error_still_fails() -> None:
+    _seen, transport = _recorder(
+        [httpx.Response(400, text="LightningDdlParseException: no viable alternative")]
+    )
+    engine = ZetarisEngine(token_settings(), transport=transport)
+    with pytest.raises(QueryFailed):
+        engine.register_sources("t1", TABLE_PATHS)
+
+
+def test_queries_qualify_to_the_per_trace_database() -> None:
+    seen, transport = _recorder()
+    engine = ZetarisEngine(token_settings(), transport=transport)
+    engine.register_sources("t1", TABLE_PATHS)
+    seen.clear()
+
+    engine.query("SELECT * FROM runs")
+
+    assert _statements(seen) == ["SELECT * FROM redrun_t1.runs"]
+
+
+def test_login_org_id_reaches_the_proxy_header() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == PATH_UI_LOGIN:
+            return httpx.Response(
+                200, json={"idToken": "aaa.bbb.ccc", "refreshToken": "r", "orgId": "org-42"}
+            )
+        assert request.headers["X-Org-ID"] == "org-42", request.headers
+        return httpx.Response(200, json={"data": [["1"]]})
+
+    engine = ZetarisEngine(ui_settings(), transport=httpx.MockTransport(handler))
+    result = engine.query("SELECT 1")
+
+    assert engine._ui_org == "org-42"
+    assert result.row_count == 1
+
+
+def test_the_configured_org_is_used_when_login_omits_it() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == PATH_UI_LOGIN:
+            return httpx.Response(200, json={"idToken": "aaa.bbb.ccc"})
+        assert request.headers["X-Org-ID"] == "7"
+        return httpx.Response(200, json={"data": []})
+
+    engine = ZetarisEngine(
+        ui_settings().__class__(
+            sample_mode=False,
+            zetaris_url="http://localhost:3000",
+            zetaris_user="david",
+            zetaris_password="hunter2",
+            zetaris_org="7",
+        ),
+        transport=httpx.MockTransport(handler),
+    )
+    engine.query("SELECT 1")
+    assert engine._ui_org is None, "no orgId in the login body must not invent one"
 
 
 def test_catalog_qualifies_known_table_names_only() -> None:
@@ -239,3 +316,66 @@ def test_unreachable_engine_raises_query_failed_not_httpx() -> None:
     engine = ZetarisEngine(token_settings(), transport=httpx.MockTransport(refuse))
     with pytest.raises(QueryFailed):
         engine.query("SELECT 1")
+
+
+def test_run_overlap_registers_in_place_then_queries_the_trace_database(tmp_path: Path) -> None:
+    """The whole path, against a stub that speaks the proxy shape."""
+    from redrun.pipeline import prepare, run_overlap
+
+    settings = Settings(
+        sample_mode=True,
+        samples_dir=Path(__file__).resolve().parents[1] / "samples",
+        logs_dir=tmp_path / "logs",
+        data_dir=tmp_path / "data",
+        zetaris_url="http://localhost:3000",
+        zetaris_user="u",
+        zetaris_password="p",
+        zetaris_data_root="/mnt/redrun",
+    )
+    prepared = prepare(None, "dependency_bump", settings)
+    seen: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == PATH_UI_LOGIN:
+            return httpx.Response(200, json={"idToken": "aaa.bbb.ccc", "orgId": "9"})
+        seen.append(request)
+        sql = json.loads(request.content)["sql"]
+        if sql.lower().startswith("create lightning"):
+            return httpx.Response(200, json={"data": []})
+        return httpx.Response(
+            200,
+            json={
+                "data": [
+                    ["dependency_match", "ev_log_001", "ev_dep_fastapi", 0.85, "fastapi 0.116.0"]
+                ]
+            },
+        )
+
+    engine = ZetarisEngine(settings, transport=httpx.MockTransport(handler))
+    links, label, skipped = run_overlap(prepared, settings, "zetaris", engine=engine)
+
+    database = f"redrun_{prepared.trace_id}"
+    assert label == "zetaris"
+    assert engine.method == "in_place"
+    assert engine.catalog == database
+    assert [link.link_type for link in links] == ["dependency_match"]
+    assert skipped == 0
+
+    statements = [json.loads(request.content)["sql"] for request in seen]
+    assert statements[0] == (
+        f"CREATE LIGHTNING DATABASE {database} DESCRIBE BY 'RedRun evidence'"
+    )
+    assert any(
+        statement.startswith(f"CREATE LIGHTNING FILESTORE TABLE runs FROM {database}")
+        for statement in statements
+    )
+    overlap = statements[-1]
+    for table in ("runs", "changes", "log_errors", "dependencies"):
+        assert f"{database}.{table}" in overlap, table
+
+    events = [
+        json.loads(line) for line in prepared.tracer.path.read_text().splitlines() if line.strip()
+    ]
+    result = [event for event in events if event["agent"] == "zetaris" and event["type"] == "result"]
+    assert result[-1]["data"]["method"] == "in_place"
+    assert result[-1]["data"]["database"] == database

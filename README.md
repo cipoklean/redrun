@@ -52,20 +52,51 @@ mistaken for a live query.
 ## Zetaris
 
 ```bash
-cp .env.example .env    # fill ZETARIS_URL + ZETARIS_TOKEN, or ZETARIS_USER/ZETARIS_PASSWORD
+cp .env.example .env    # fill ZETARIS_URL + ZETARIS_TOKEN, or ZETARIS_USER/ZETARIS_PASSWORD,
+                        # plus ZETARIS_DATA_ROOT for in-place registration
 python -m redrun zetaris-check --sample dependency_bump
 ```
 
-`zetaris-check` prints the status, runs `SELECT 1`, loads the four tables, runs
-`overlap.sql`, and points at the trace. With no credentials it prints `offline`
-and exits 1 rather than reporting a query it did not run.
+`zetaris-check` prints the status, runs `SELECT 1`, registers this trace's files,
+runs `overlap.sql` through Zetaris and prints the row counts. With no credentials
+it prints `offline` and exits 1 rather than reporting a query it did not run.
+
+### The setup that works, verified on local Zetaris 2.4.x
+
+- UI login `POST /api/auth/login` returns `idToken`, `refreshToken` and `orgId`.
+  Every `/api/proxy` call needs `X-Org-ID`; without it the call fails with HTTP
+  400 "Invalid value for: header X-Org-ID (missing)". The adapter keeps the
+  `orgId` from the login response and sends it, falling back to
+  `ZETARIS_ORG_ID` only when the login body has none.
+- Lightning rejects plain `CREATE TABLE`
+  (`LightningDdlParseException: no viable alternative at input 'create table'`),
+  so nothing is loaded row by row. The old INSERT loader is gone.
+- Local file tables must live under Zetaris's own file root,
+  `ZETARIS_LOCAL_FILE_SYTEM_ROOT_PATH=/home/zetaris/customer-data/shared`
+  (that spelling is Zetaris's). Any other path returns "Invalid file path to
+  access".
+- `data/` is bind mounted read only into the Zetaris driver and api at
+  `/home/zetaris/customer-data/shared/redrun`. Point `ZETARIS_DATA_ROOT` at that
+  mount target.
+
+Per trace, `register_sources` creates one database and registers the four
+Parquet files as FILESTORE tables:
+
+```sql
+CREATE LIGHTNING DATABASE redrun_<trace> DESCRIBE BY 'RedRun evidence'
+CREATE LIGHTNING FILESTORE TABLE runs FROM redrun_<trace>
+  FORMAT PARQUET OPTIONS (path "/home/zetaris/customer-data/shared/redrun/<trace>/runs.parquet")
+SELECT * FROM redrun_<trace>.runs LIMIT 5
+```
+
+`overlap.sql` is then qualified with that per trace database instead of
+`ZETARIS_CATALOG`, and the trace records `method=in_place` with the database
+name. Re-registering a trace is normal, so an "already exists" answer is
+tolerated; any other DDL error still fails the run.
 
 Every endpoint the adapter uses is in one constants block in
 `adapters/zetaris.py`, each line naming the first-party file it was confirmed
-against. There is one TODO there: no confirmed Zetaris endpoint registers a
-local Parquet file as a datasource, so in-place registration raises
-`NotConfigured` and the adapter loads rows into tables through the confirmed
-SQL-run endpoint instead (method `loaded_table`, recorded in the trace).
+against.
 
 ## Quickstart (no credentials, no network)
 

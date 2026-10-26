@@ -2,9 +2,9 @@
 
 import time
 import uuid
+from collections.abc import Sequence
 from dataclasses import dataclass, replace
 from pathlib import Path
-from typing import Sequence
 
 from redrun.adapters.base import EngineError, QueryEngine
 from redrun.adapters.duckdb_engine import DuckDBEngine
@@ -13,7 +13,6 @@ from redrun.adapters.llm import LLMClient
 from redrun.adapters.replay_engine import ReplayEngine
 from redrun.adapters.zetaris import ZetarisEngine
 from redrun.agents.investigator import (
-    Carryover,
     MarkovianInvestigator,
     ProposedVerdict,
 )
@@ -31,8 +30,6 @@ from redrun.core.models import (
     MarkovianMetrics,
     Metrics,
     RunResult,
-    RunInfo,
-    SkepticReport,
     Verdict,
 )
 from redrun.core.rules import rule_verdict  # noqa: F401 - kept for the rules-only path
@@ -226,6 +223,7 @@ def run_overlap(
         {
             "engine": label,
             "method": method,
+            "database": getattr(engine, "catalog", "") or None,
             "rows": result.row_count,
             "links": len(links),
             "skipped": skipped,

@@ -19,7 +19,6 @@ from redrun.collectors.base import CollectorError
 from redrun.config import Settings, load_settings
 from redrun.core.models import RunResult, Verdict
 from redrun.core.rules import rule_verdict
-from redrun.core.taxonomy import Cause
 from redrun.eval import baseline as baseline_module
 from redrun.eval import cases as cases_module
 from redrun.eval import nightshift
@@ -125,13 +124,16 @@ def _human(result: RunResult) -> str:
 
 
 def _zetaris_check(sample: str, base: Settings) -> int:
+    # Selecting a sample is a request to run offline, whatever SAMPLE_MODE says.
+    if sample:
+        base = replace(base, sample_mode=True)
     prepared = prepare(None, sample, base)
     engine = ZetarisEngine(base)
     status = engine.status()
 
     print(f"zetaris status : {status}")
     print(f"zetaris url    : {base.zetaris_url or '(unset)'}")
-    print(f"catalog        : {base.zetaris_catalog or '(none)'}")
+    print(f"data root      : {base.zetaris_data_root}")
     print(f"sample         : {sample}  tables at {base.data_dir / prepared.trace_id}")
     print(f"trace          : {prepared.tracer.path}")
 
@@ -144,13 +146,19 @@ def _zetaris_check(sample: str, base: Settings) -> int:
 
     try:
         one = engine.query("SELECT 1")
-        print(f"SELECT 1       : {one.rows} ({one.latency_ms}ms)")
+        print(f"SELECT 1       : {one.row_count} row(s) in {one.latency_ms}ms")
         links, label, skipped = run_overlap(prepared, base, "zetaris", engine=engine)
     except EngineError as exc:
         print(f"zetaris query failed: {exc}")
         return 2
 
-    print(f"overlap.sql    : engine={label} links={len(links)} skipped={skipped}")
+    print(f"registration   : method={engine.method} database={engine.catalog}")
+    for statement in engine.ddl:
+        print(f"  ddl          : {statement}")
+    print(
+        f"overlap.sql    : engine={label} rows={engine.last_row_count} "
+        f"links={len(links)} skipped={skipped}"
+    )
     for link in links[:5]:
         print(f"  {link.link_type:<24} {link.score_hint:.2f}  {link.detail[:90]}")
     return 0

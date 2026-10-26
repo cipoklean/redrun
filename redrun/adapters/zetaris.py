@@ -12,12 +12,10 @@ import uuid
 from pathlib import Path
 from typing import Any
 
-import duckdb
 import httpx
 
 from redrun.adapters.base import NotConfigured, QueryFailed, QueryResult
 from redrun.config import Settings
-from redrun.core.tables import SCHEMAS
 
 # --- Confirmed endpoints -----------------------------------------------------
 # Source: github.com/zetaris/getting-started/blob/main/scripts/zetaris_sql.py
@@ -39,26 +37,37 @@ PATH_UI_LOGIN = "/api/auth/login"
 PATH_UI_RUN = "/api/proxy/sql-editor/sqls/run-query"
 PATH_UI_DATABASES = "/api/proxy/lightning-database/databases"
 
-# TODO(registration): no confirmed endpoint creates a datasource or points Zetaris at
-# a local Parquet path, so in-place registration cannot be implemented honestly. Until
-# one is confirmed, register_sources(method="in_place") raises NotConfigured and the
-# default path loads the four tables through PATH_RUN instead.
+# In-place registration (verified live against local Zetaris 2.4.x):
+#   UI login POST /api/auth/login returns idToken, refreshToken and orgId.
+#   Every /api/proxy call needs X-Org-ID; without it the call fails 400
+#   "Invalid value for: header X-Org-ID (missing)".
+#   Lightning rejects plain CREATE TABLE
+#   (LightningDdlParseException: no viable alternative at input 'create table'),
+#   so rows are never loaded through INSERT. A per trace Lightning database is
+#   created and the four Parquet files are registered as FILESTORE tables:
+#     CREATE LIGHTNING DATABASE redrun_<trace> DESCRIBE BY 'RedRun evidence'
+#     CREATE LIGHTNING FILESTORE TABLE runs FROM redrun_<trace>
+#       FORMAT PARQUET OPTIONS (path "<ZETARIS_DATA_ROOT>/<trace>/runs.parquet")
+#   The files must live under the driver's local file root, which is what
+#   ZETARIS_DATA_ROOT points at (/home/zetaris/customer-data/shared/redrun).
 REQUEST_TIMEOUT = 600.0  # zetaris_sql.py uses timeout=600 for the REST channel
 UI_DEFAULT = "http://localhost:3000"
+DATA_ROOT_DEFAULT = "/home/zetaris/customer-data/shared/redrun"
+DATABASE_PREFIX = "redrun_"
 
 LINK_COLUMNS = ("link_type", "log_evidence_id", "change_evidence_id", "score_hint", "detail")
 TABLES = ("runs", "changes", "log_errors", "dependencies")
-INSERT_BATCH = 50
+ALREADY_EXISTS = re.compile(r"already[\s_]+exists", re.IGNORECASE)
 
 
-def _sql_literal(value: Any) -> str:
-    if value is None:
-        return "NULL"
-    if isinstance(value, bool):
-        return "TRUE" if value else "FALSE"
-    if isinstance(value, (int, float)):
-        return str(value)
-    return "'" + str(value).replace("'", "''") + "'"
+def database_name(trace_id: str) -> str:
+    """One Lightning database per trace, restricted to [a-z0-9_]."""
+    safe = re.sub(r"[^a-z0-9_]", "_", trace_id.lower()).strip("_")
+    return f"{DATABASE_PREFIX}{safe or 'trace'}"
+
+
+def _single_quoted(value: str) -> str:
+    return "'" + value.replace("'", "''") + "'"
 
 
 class ZetarisEngine:
@@ -69,8 +78,14 @@ class ZetarisEngine:
         self._transport = transport
         self._client: httpx.Client | None = None
         self._ui_token: str | None = None
+        # orgId from the login response; the proxy rejects calls without X-Org-ID.
+        self._ui_org: str | None = None
+        # Per trace database set by register_sources, so queries qualify to it.
+        self.catalog = ""
         self.method = ""
         self.limit = 1000
+        self.last_row_count: int | None = None
+        self.ddl: list[str] = []
 
     # ------------------------------------------------------------------ setup
 
@@ -109,6 +124,8 @@ class ZetarisEngine:
             }
         return {
             "Authorization": f"Bearer {self._ui_token or ''}",
+            # The proxy rejects a call without this header, so never send an empty one.
+            "X-Org-ID": self._ui_org or self.settings.zetaris_org,
             "X-Request-ID": str(uuid.uuid4()),
             "Content-Type": "application/json",
         }
@@ -132,6 +149,9 @@ class ZetarisEngine:
         except ValueError as exc:
             raise NotConfigured("Zetaris login returned a non-JSON body") from exc
         if isinstance(payload, dict):
+            org = payload.get("orgId") or payload.get("org_id") or payload.get("organizationId")
+            if isinstance(org, (str, int)) and str(org).strip():
+                self._ui_org = str(org).strip()
             for key in ("idToken", "token", "accessToken"):
                 value = payload.get(key)
                 if isinstance(value, str) and value:
@@ -168,8 +188,12 @@ class ZetarisEngine:
     # ------------------------------------------------------------------ query
 
     def _qualify(self, sql: str) -> str:
-        """Prefix the four table names with ZETARIS_CATALOG, leaving literals alone."""
-        catalog = (self.settings.zetaris_catalog or "").strip()
+        """Prefix the four table names with the catalog, leaving literals alone.
+
+        The catalog is the per trace database when sources were registered,
+        otherwise whatever ZETARIS_CATALOG names.
+        """
+        catalog = (self.catalog or self.settings.zetaris_catalog or "").strip()
         if not catalog:
             return sql
         parts = re.split(r"('(?:[^']|'')*')", sql)
@@ -250,6 +274,7 @@ class ZetarisEngine:
             raise QueryFailed(f"zetaris returned non-JSON from {path}") from exc
 
         rows = self._rows(payload)
+        self.last_row_count = len(rows)
         return QueryResult(
             rows=rows,
             row_count=len(rows),
@@ -262,43 +287,44 @@ class ZetarisEngine:
     def register_sources(
         self, trace_id: str, table_paths: dict[str, Path], method: str = "auto"
     ) -> str:
+        """Point Zetaris at this trace's Parquet files as Lightning FILESTORE tables.
+
+        One database per trace, so two investigations never share a table name.
+        `method` stays in the signature for callers, but only in_place exists:
+        Lightning rejects the plain CREATE TABLE an INSERT based loader needs.
+        """
         if not self.configured:
             raise NotConfigured("Zetaris is not configured; cannot register sources.")
-        if method == "in_place":
+        if method not in ("auto", "in_place"):
             raise NotConfigured(
-                "No confirmed Zetaris endpoint creates a datasource, so in-place Parquet "
-                "registration is not implemented. See TODO(registration) in adapters/zetaris.py."
+                f"unknown registration method {method!r}; only in_place is supported"
             )
-        self._load_tables(table_paths)
-        self.method = "loaded_table"
+
+        database = database_name(trace_id)
+        self.catalog = database
+        self.ddl = []
+        self._run_sql(
+            f"CREATE LIGHTNING DATABASE {database} "
+            f"DESCRIBE BY {_single_quoted('RedRun evidence')}",
+            tolerate_exists=True,
+        )
+
+        root = (self.settings.zetaris_data_root or DATA_ROOT_DEFAULT).rstrip("/")
+        for table in TABLES:
+            if table not in table_paths:
+                continue
+            remote = f"{root}/{trace_id}/{table}.parquet"
+            self._run_sql(
+                f"CREATE LIGHTNING FILESTORE TABLE {table} FROM {database} "
+                f"FORMAT PARQUET OPTIONS (path {json.dumps(remote)})",
+                tolerate_exists=True,
+            )
+
+        self.method = "in_place"
         return self.method
 
-    def _load_tables(self, table_paths: dict[str, Path]) -> None:
-        """Fallback: read the Parquet files locally and insert the rows through SQL."""
-        connection = duckdb.connect()
-        try:
-            for table in TABLES:
-                path = table_paths.get(table)
-                if path is None:
-                    continue
-                columns = SCHEMAS[table]
-                qualified = self._qualify(table)
-                ddl = ", ".join(f"{name} {kind}" for name, kind in columns)
-                self._run_sql(f"CREATE TABLE IF NOT EXISTS {qualified} ({ddl})")
-
-                rows = connection.execute(
-                    f"SELECT * FROM read_parquet('{str(path).replace(chr(39), chr(39) * 2)}')"
-                ).fetchall()
-                for start in range(0, len(rows), INSERT_BATCH):
-                    chunk = rows[start : start + INSERT_BATCH]
-                    values = ", ".join(
-                        "(" + ", ".join(_sql_literal(value) for value in row) + ")" for row in chunk
-                    )
-                    self._run_sql(f"INSERT INTO {qualified} VALUES {values}")
-        finally:
-            connection.close()
-
-    def _run_sql(self, statement: str) -> None:
+    def _run_sql(self, statement: str, *, tolerate_exists: bool = False) -> None:
+        self.ddl.append(statement)
         if self.rest_mode:
             body: dict[str, Any] = {
                 "queryId": str(uuid.uuid4()),
@@ -314,6 +340,9 @@ class ZetarisEngine:
             path = PATH_UI_RUN
         response = self._post(path, body)
         if response.status_code >= 400:
+            # Re-registering a trace is normal, so an existing object is not a failure.
+            if tolerate_exists and ALREADY_EXISTS.search(response.text):
+                return
             raise QueryFailed(
                 f"zetaris {path}: HTTP {response.status_code} {response.text[:200]}"
             )

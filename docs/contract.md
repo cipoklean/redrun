@@ -73,6 +73,11 @@ ties a log error to a change.
 ran. `duckdb_fallback` means the configured engine failed and is reported in the
 trace as an error event.
 
+The Zetaris result event also carries `method` and `database`. `method` is
+`in_place` when the trace's Parquet files were registered as Lightning FILESTORE
+tables, and `database` is the per trace database that `overlap.sql` was
+qualified with, so a trace shows what was actually read and from where.
+
 ## SkepticReport
 
 | field | type | notes |

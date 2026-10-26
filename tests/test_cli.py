@@ -81,12 +81,18 @@ def test_human_output_shows_links_and_engine(capsys: pytest.CaptureFixture[str])
     assert "dependency_match" in out
 
 
-def test_zetaris_check_without_credentials_exits_nonzero(
+def test_zetaris_check_forces_sample_mode_even_when_the_env_says_live(
     capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    for name in ("ZETARIS_URL", "ZETARIS_TOKEN", "ZETARIS_USER", "ZETARIS_PASSWORD"):
+    """A sample name is a request to run offline, whatever SAMPLE_MODE says."""
+    monkeypatch.setenv("SAMPLE_MODE", "false")
+    for name in ("ZETARIS_URL", "ZETARIS_TOKEN"):
         monkeypatch.delenv(name, raising=False)
-    assert main(["zetaris-check"]) == 1
+
+    assert main(["zetaris-check", "--sample", "dependency_bump"]) == 1
+
     out = capsys.readouterr().out
+    assert "dependency_bump" in out
+    assert "data root" in out
     assert "offline" in out
     assert "refusing" in out.lower()

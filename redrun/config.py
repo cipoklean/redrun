@@ -35,6 +35,7 @@ class Settings:
     zetaris_token: str = ""
     zetaris_catalog: str = ""
     zetaris_org: str = "1"
+    zetaris_data_root: str = "/home/zetaris/customer-data/shared/redrun"
     investigator_chunk_tokens: int = 3000
     investigator_max_steps: int = 6
     investigator_carryover_tokens: int = 800
@@ -66,6 +67,11 @@ def load_settings() -> Settings:
         zetaris_token=os.getenv("ZETARIS_TOKEN") or "",
         zetaris_catalog=(os.getenv("ZETARIS_CATALOG") or "").strip(),
         zetaris_org=(os.getenv("ZETARIS_ORG_ID") or "1").strip(),
+        # The driver's local file root; anything outside it is rejected as an
+        # invalid file path. Comma separated when Zetaris runs on another host.
+        zetaris_data_root=(
+            os.getenv("ZETARIS_DATA_ROOT") or "/home/zetaris/customer-data/shared/redrun"
+        ).strip(),
         investigator_chunk_tokens=int(os.getenv("INVESTIGATOR_CHUNK_TOKENS") or 3000),
         investigator_max_steps=int(os.getenv("INVESTIGATOR_MAX_STEPS") or 6),
         investigator_carryover_tokens=int(os.getenv("INVESTIGATOR_CARRYOVER_TOKENS") or 800),
