@@ -123,7 +123,7 @@ Every number here was recorded live: both lanes served by Nemotron through Meter
 | Verdicts with valid citations | 15/15 | not asked to cite |
 | Mean confidence, right vs wrong | 0.49 vs 0.27 | no score |
 
-This is a close race, and it should read as one. The baseline is strong: it never named a wrong cause, but it gave up on three cases, including a misconfigured env var and a GitHub outage that the agent got from evidence outside the log. RedRun's edge is coverage, the held-out cases, and an answer that cites its evidence and carries a confidence that drops when it's unsure. Its one miss is `dep_bump_unpinned`: a loosened pin let a breaking release in, and it called that `config_change` instead of `dependency_bump`, at a low 0.27.
+This is a close race, and it should read as one. The baseline is strong: it never named a wrong cause, but it answered `unknown` on two cases the agent solved from evidence outside the log, a misconfigured env var and a GitHub outage. RedRun's edge is coverage, the held-out cases, and an answer that cites its evidence and carries a confidence that drops when it's unsure. Its one miss is `dep_bump_unpinned`: a loosened pin let a breaking release in, and it called that `config_change` instead of `dependency_bump`, at a low 0.27.
 
 An earlier run had the baseline at 11/15. The field test below found that the log tail both systems read was mostly post-job cleanup. Fixing that helped the baseline as much as the agent, so these are the fair numbers.
 
