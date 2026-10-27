@@ -251,3 +251,19 @@ def test_evidence_ids_in_verdict_are_validated_against_the_run(tmp_path: Path) -
     result = investigator.run(triage_cause=Cause.DEPENDENCY_BUMP)
     assert result.verdict is not None
     assert result.verdict.cited_evidence_ids == []
+
+
+def test_reasoning_prose_around_the_json_object_still_parses() -> None:
+    text = (
+        "We are at the synthesis step. The commit {changed} requirements.txt.\n\n"
+        '{"carryover": {"hypotheses": [], "open_questions": [], "ruled_out": []}, '
+        '"verdict": {"cause": "config_change", "root_cause": "python pinned to 3.9", '
+        '"next_step": "pin 3.11 again", "cited_evidence_ids": []}}'
+    )
+    data = MarkovianInvestigator._extract_json(text)
+    assert data["verdict"]["cause"] == "config_change"
+
+
+def test_prose_with_no_json_object_is_still_invalid() -> None:
+    with pytest.raises(ValueError):
+        MarkovianInvestigator._extract_json("I could not decide, see {the logs}.")

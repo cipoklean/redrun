@@ -167,8 +167,36 @@ class MarkovianInvestigator:
 
     # ------------------------------------------------------------------ stepping
 
+    @staticmethod
+    def _extract_json(text: str) -> object:
+        """The reply's JSON object, even when a reasoning model writes prose around it.
+
+        Nemotron Ultra on the deep lane thinks aloud before it answers, so a reply can be
+        several paragraphs followed by the object. A whole-text parse wins when it works;
+        otherwise the last object that carries a verdict or carryover is the answer.
+        """
+        try:
+            return json.loads(text)
+        except ValueError:
+            pass
+        decoder = json.JSONDecoder()
+        found: object | None = None
+        index = text.find("{")
+        while index != -1:
+            try:
+                candidate, end = decoder.raw_decode(text, index)
+            except ValueError:
+                index = text.find("{", index + 1)
+                continue
+            if isinstance(candidate, dict) and ("verdict" in candidate or "carryover" in candidate):
+                found = candidate
+            index = text.find("{", end)
+        if found is None:
+            raise ValueError("no JSON object with a verdict or carryover in the reply")
+        return found
+
     def _parse(self, text: str) -> tuple[StepReply, bool]:
-        data = json.loads(text)
+        data = self._extract_json(text)
         stripped = False
         if isinstance(data, dict):
             if "confidence" in data:
@@ -333,7 +361,11 @@ class MarkovianInvestigator:
             self._carryover_max = max(
                 self._carryover_max, estimate_tokens(carryover.model_dump_json())
             )
-            if verdict is not None:
+            # A later chunk that only says "not enough here" must not erase a concrete
+            # verdict an earlier chunk reached.
+            if verdict is not None and (
+                proposed is None or verdict.cause.value != "unknown" or proposed.cause.value == "unknown"
+            ):
                 proposed = verdict
             if not ok:
                 return self._finish(records, carryover, proposed, "error")
