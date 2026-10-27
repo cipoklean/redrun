@@ -86,8 +86,11 @@ def test_zetaris_check_forces_sample_mode_even_when_the_env_says_live(
 ) -> None:
     """A sample name is a request to run offline, whatever SAMPLE_MODE says."""
     monkeypatch.setenv("SAMPLE_MODE", "false")
-    for name in ("ZETARIS_URL", "ZETARIS_TOKEN"):
-        monkeypatch.delenv(name, raising=False)
+    # Set, not delete: config loads .env with override=False, so a deleted
+    # variable comes back from a developer's .env and the test would reach a
+    # live Zetaris. Port 9 (discard) is never a Zetaris.
+    monkeypatch.setenv("ZETARIS_URL", "http://127.0.0.1:9")
+    monkeypatch.setenv("ZETARIS_TOKEN", "")
 
     assert main(["zetaris-check", "--sample", "dependency_bump"]) == 1
 

@@ -1,0 +1,14 @@
+zetaris status : online
+zetaris url    : http://localhost:3000
+data root      : /home/zetaris/customer-data/shared/redrun
+sample         : dependency_bump  tables at /workspaces/redrun/data/17f50513e80c
+trace          : /workspaces/redrun/logs/17f50513e80c.jsonl
+SELECT 1       : 1 row(s) in 109ms
+registration   : method=in_place database=redrun_17f50513e80c
+  ddl          : CREATE LIGHTNING DATABASE redrun_17f50513e80c DESCRIBE BY 'RedRun evidence'
+  ddl          : CREATE LIGHTNING FILESTORE TABLE runs FROM redrun_17f50513e80c FORMAT PARQUET OPTIONS (path "/home/zetaris/customer-data/shared/redrun/17f50513e80c/runs.parquet")
+  ddl          : CREATE LIGHTNING FILESTORE TABLE changes FROM redrun_17f50513e80c FORMAT PARQUET OPTIONS (path "/home/zetaris/customer-data/shared/redrun/17f50513e80c/changes.parquet")
+  ddl          : CREATE LIGHTNING FILESTORE TABLE log_errors FROM redrun_17f50513e80c FORMAT PARQUET OPTIONS (path "/home/zetaris/customer-data/shared/redrun/17f50513e80c/log_errors.parquet")
+  ddl          : CREATE LIGHTNING FILESTORE TABLE dependencies FROM redrun_17f50513e80c FORMAT PARQUET OPTIONS (path "/home/zetaris/customer-data/shared/redrun/17f50513e80c/dependencies.parquet")
+overlap.sql    : engine=zetaris rows=1 links=1 skipped=0
+  dependency_match         0.85  log error names package fastapi which changed >=0.110 -> 0.116.0 and that release landed b
