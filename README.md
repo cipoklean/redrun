@@ -1,116 +1,257 @@
 # RedRun
 
-Why did this GitHub Actions run fail? RedRun answers with a cause category, a
-root-cause explanation, cited evidence, a confidence score it can justify, and
-one next step.
+**A red CI run, explained like a senior engineer would explain it.**
 
-Built for the Open Agent Hackathon 2026, Track 2 (The Agent That Can Explain Why).
+You push a commit, GitHub Actions goes red, and you get 4,000 lines of log. Was it your change? A dependency that shipped a new release overnight? A secret that expired? A flaky test? GitHub having a bad day?
 
-## What works right now
+RedRun answers that question for you. Give it a failed run and it comes back with:
 
-- Deterministic collectors: the failed run, the last green run of the same
-  workflow on the same branch, the commit/file diff between them, error windows
-  from the failed job logs, and PyPI release timing for changed dependencies.
-- Secret redaction before anything is stored, traced, cached or sent to a model.
-- Four evidence tables per run (`data/<trace_id>/`, Parquet and CSV): `runs`,
-  `changes`, `log_errors`, `dependencies`.
-- **One cross-source SQL query** (`redrun/queries/overlap.sql`) joins them into
-  ranked links: a log error to a dependency released between the runs, to a
-  changed file, to a workflow change, or a run-level config difference.
-- That query runs on **Zetaris** when configured, on **DuckDB** otherwise, and on
-  recorded results in sample mode. `metrics.query_engine` always says which.
-- A **Markovian investigator** that reads the evidence in ordered chunks: each
-  LLM call sees one chunk plus a capped carryover state, never the whole run.
-  `metrics.markovian` reports steps, stop reason, tokens in, the token cost of a
-  single all-evidence prompt, and `tokens_saved`.
-- A **skeptic** that runs six tool checks on the proposed verdict
-  (same-SHA-elsewhere, test history, error/change overlap, GitHub incidents,
-  dependency timing, citation validity). A decisive failure sends one critique
-  back to the investigator for exactly one revision; a second failure ends in
-  `unknown` with the reason.
-- A **citation guard**: a verdict may only cite evidence ids that exist in that
-  run, and a non-`unknown` cause must cite at least one.
-- **Computed confidence** from named signals in `confidence_breakdown`; the model
-  never emits a score, and any it returns is stripped and logged.
-- **Live events**: every stage writes to the JSONL trace and to an SSE stream.
-- **An evaluation set of 15 real cases**, scored against a plain-model baseline,
-  replayed offline: `python -m redrun eval --split all --mode replay --baseline`.
-- CLI and API, four offline sample cases, and a recorder for new ones.
+- **the cause**, from a fixed list (bad commit, dependency bump, config change, expired or missing secret, flaky test, infrastructure outage, or an honest `unknown`)
+- **the reason**, in plain words
+- **the evidence**, every claim linked to a real log line, diff or release record
+- **a confidence score it can justify**, built from named signals, never guessed by the model
+- **one next step** you can actually take
 
-## The evidence engines
+Built solo for the **Open Agent Hackathon 2026, Track 2: The Agent That Can Explain Why**.
 
-| situation | engine | `metrics.query_engine` |
+![RedRun verdict screen](docs/screenshots/03-verdict.png)
+
+---
+
+## Why this is hard (and why one big prompt isn't enough)
+
+The answer to "why did it fail?" almost never sits in the log alone. It sits in the *overlap* between sources: the log names `fastapi`, the diff loosened the `fastapi` pin, and PyPI shows a new `fastapi` release landed between the last green run and this red one. Each fact is boring on its own. Together, they're the explanation.
+
+So RedRun doesn't paste a log into a model and hope. It collects the evidence first, joins it with one cross-source query, lets an investigator reason over it in small pieces, and then has a skeptic try to knock the answer down before you ever see it.
+
+## How it works
+
+```mermaid
+flowchart LR
+    A[Failed run URL] --> B[Collectors<br/>failed run, last green run,<br/>diff, logs, PyPI timing]
+    B --> R[Redaction]
+    R --> C[(Evidence tables<br/>runs, changes,<br/>log_errors, dependencies)]
+    C --> Z[Zetaris<br/>overlap.sql across sources]
+    Z --> I[Markovian investigator<br/>Nemotron via Nightshift]
+    I --> S[Skeptic<br/>six tool checks]
+    S -- one critique, one revision --> I
+    S --> G[Citation guard +<br/>computed confidence]
+    G --> V[Verdict]
+```
+
+1. **Collect.** Deterministic collectors pull the failed run, the last green run of the same workflow on the same branch, the commit and file diff between them, error windows from the failed job logs, and PyPI release dates for any dependency that changed.
+2. **Redact.** Secrets are stripped before anything is stored, traced, cached or sent to a model.
+3. **Store as evidence.** Everything lands in four tables per run (`runs`, `changes`, `log_errors`, `dependencies`), written as Parquet under `data/<trace_id>/`.
+4. **Join across sources.** One SQL query, [`redrun/queries/overlap.sql`](redrun/queries/overlap.sql), links a log error to a dependency released between the runs, to a changed file, to a workflow change, or to a runner difference. It runs on **Zetaris**.
+5. **Investigate in chunks.** The **Markovian investigator** reads the evidence in ordered chunks. Each model call sees one chunk plus a small carried-over state, never the whole run, so long logs don't blow up the context.
+6. **Push back.** The **skeptic** runs six checks on the proposed verdict: did the same commit pass elsewhere, what's this test's history, does the error actually overlap the change, was there a GitHub incident, does the dependency timing line up, are the citations real. A decisive failure sends one critique back for exactly one revision. Fail twice and the answer becomes `unknown`, with the reason.
+7. **Guard the output.** A verdict may only cite evidence ids that exist in this run, and any cause other than `unknown` must cite at least one. Confidence is computed from named signals in `confidence_breakdown`. If the model tries to hand back its own score, it's stripped and logged.
+
+Every stage writes to a JSONL trace in `logs/` and to a live event stream, so you can watch the agents work.
+
+## Sponsor technology, and what each one actually does here
+
+### Meterless: Nightshift is the AI provider, and Markovian is the reasoning engine
+
+- **Nightshift is RedRun's primary (and default) provider.** RedRun talks to the Nightshift runtime's OpenAI-compatible endpoint at `127.0.0.1:8088/v1` with the runtime token. The NVIDIA key lives inside Nightshift's Providers tab, never in this repo.
+- **Two Nemotron lanes, both served through Nightshift:**
+  - fast lane: `nvidia/nemotron-3.5-bolt-e4b`
+  - deep lane: `nvidia/nemotron-3-ultra-550b-a55b`
+- **Markovian Agent Engine.** The investigator follows Meterless's Markovian pattern: bounded context per step, a capped carryover state between steps, and engine reporting. `metrics.markovian` records steps, stop reason, tokens in, what a single all-evidence prompt would have cost, and `tokens_saved`.
+- `python -m redrun meterless-check` proves the runtime is live: it lists the models, sends one real completion, prints the model that actually answered, and masks the token. It never falls back silently.
+
+Live check, 27 Oct 2026 ([full output](docs/evidence/meterless-check-live.txt)):
+
+```text
+provider     : meterless
+base url     : http://127.0.0.1:8088/v1
+status       : online
+models       : 86 from GET /v1/models
+chat HTTP    : 200
+chat model   : nvidia/nemotron-3.5-bolt-e4b
+chat latency : 1907 ms
+```
+
+### Zetaris: the evidence layer, queried in place
+
+- RedRun doesn't copy rows into Zetaris. For each run it creates a Lightning database and registers the four Parquet files **in place** as FILESTORE tables, then runs `overlap.sql` against them.
+- Zetaris is where the cross-source join happens: logs, diffs and package releases are separate sources, and the overlap query is what turns them into ranked links.
+- `metrics.query_engine` always tells you the truth: `zetaris` for a live query, `zetaris_replay` for a recorded one, `duckdb` or `duckdb_fallback` when Zetaris isn't configured. A recording is never passed off as a live query.
+
+Live check, 27 Oct 2026 ([full output](docs/evidence/zetaris-check-live.txt)):
+
+```text
+zetaris status : online
+SELECT 1       : 1 row(s) in 109ms
+registration   : method=in_place database=redrun_17f50513e80c
+overlap.sql    : engine=zetaris rows=1 links=1 skipped=0
+  dependency_match  0.85  log error names package fastapi which changed >=0.110 -> 0.116.0
+                          and that release landed between the green and failed runs
+```
+
+### NVIDIA: Nemotron does all the reasoning
+
+Every model call RedRun makes, investigator, revision and baseline alike, is answered by an NVIDIA Nemotron model, routed through Nightshift.
+
+### Cursor
+
+Cursor became optional for this event and no Cursor credits were issued, so RedRun was built with other AI coding tools.
+
+---
+
+## Does it actually work? The evaluation
+
+Fifteen real GitHub Actions failures, each with a known cause:
+
+- **12 built on purpose** in [cipoklean/redrun-lab](https://github.com/cipoklean/redrun-lab), a tiny package where each branch has a green run followed by a real breaking commit: a loosened pin, a resolver conflict, a logic bug, a rename, a syntax error, two flaky tests, a missing secret, an invalid token, a Python version change, an env var and a working directory.
+- **2 public runs** that line up with a GitHub Actions incident and later passed on the same commit.
+- **1 public run** with no usable signal, where `unknown` is the right answer.
+
+The dev/holdout split was drawn from a fixed seed before anything ran, and a test recomputes the draw, so the holdout can't quietly move.
+
+RedRun is compared against a fair baseline: one plain Nemotron call on the same fast lane, given the last 300 redacted log lines and the same list of causes. No collectors, no evidence tables, no cross-source query, no skeptic.
+
+Every number here was recorded live: both lanes served by Nemotron through Meterless Nightshift, with the evidence tables registered and queried in Zetaris.
+
+| | RedRun agent | Plain model baseline |
 | --- | --- | --- |
-| `SAMPLE_MODE=true` and a sample selected | recorded result replayed | `zetaris_replay` |
-| `ZETARIS_ENABLED=true` with credentials | Zetaris, DuckDB on error | `zetaris` or `duckdb_fallback` |
-| anything else, or `--engine duckdb` | local DuckDB over the Parquet files | `duckdb` |
-| `--engine zetaris` | Zetaris, no fallback: errors surface | `zetaris` |
+| Right cause (all 15) | **14/15 (93.3%)** | 13/15 (86.7%) |
+| Right cause, held-out 5 | **5/5** | 3/5 |
+| Named a cause instead of `unknown` | **14/15** | 12/15 |
+| Right when it named a cause | 13/14 | **12/12** |
+| Explanation hits every root-cause keyword | 8/15 | 8/15 |
+| Verdicts with valid citations | 15/15 | not asked to cite |
+| Mean confidence, right vs wrong | 0.49 vs 0.27 | no score |
 
-Replay is labelled `zetaris_replay`, never `zetaris`, so a recording is never
-mistaken for a live query.
+This is a close race, and it should read as one. The baseline is strong: it never named a wrong cause, but it gave up on three cases, including a misconfigured env var and a GitHub outage that the agent got from evidence outside the log. RedRun's edge is coverage, the held-out cases, and an answer that cites its evidence and carries a confidence that drops when it's unsure. Its one miss is `dep_bump_unpinned`: a loosened pin let a breaking release in, and it called that `config_change` instead of `dependency_bump`, at a low 0.27.
 
-## Zetaris
+An earlier run had the baseline at 11/15. The field test below found that the log tail both systems read was mostly post-job cleanup. Fixing that helped the baseline as much as the agent, so these are the fair numbers.
 
-```bash
-cp .env.example .env    # fill ZETARIS_URL + ZETARIS_TOKEN, or ZETARIS_USER/ZETARIS_PASSWORD,
-                        # plus ZETARIS_DATA_ROOT for in-place registration
-python -m redrun zetaris-check --sample dependency_bump
-```
+The cost is real: a median of about 56 seconds of model time per investigation against about 5 seconds for the baseline, because RedRun reasons in several Markovian steps and has a skeptic check every claim. The full report covers calibration, latency, tokens and a confusion matrix, per split: [`eval/RESULTS.md`](eval/RESULTS.md).
 
-`zetaris-check` prints the status, runs `SELECT 1`, registers this trace's files,
-runs `overlap.sql` through Zetaris and prints the row counts. With no credentials
-it prints `offline` and exits 1 rather than reporting a query it did not run.
+### Field test: four failures it had never seen
 
-### The setup that works, verified on local Zetaris 2.4.x
+To check that the eval isn't the whole story, RedRun was pointed at four real failed runs from my own repositories, none of them in the eval or the samples, each with a known outcome.
 
-- UI login `POST /api/auth/login` returns `idToken`, `refreshToken` and `orgId`.
-  Every `/api/proxy` call needs `X-Org-ID`; without it the call fails with HTTP
-  400 "Invalid value for: header X-Org-ID (missing)". The adapter keeps the
-  `orgId` from the login response and sends it, falling back to
-  `ZETARIS_ORG_ID` only when the login body has none.
-- Lightning rejects plain `CREATE TABLE`
-  (`LightningDdlParseException: no viable alternative at input 'create table'`),
-  so nothing is loaded row by row. The old INSERT loader is gone.
-- Local file tables must live under Zetaris's own file root,
-  `ZETARIS_LOCAL_FILE_SYTEM_ROOT_PATH=/home/zetaris/customer-data/shared`
-  (that spelling is Zetaris's). Any other path returns "Invalid file path to
-  access".
-- `data/` is bind mounted read only into the Zetaris driver and api at
-  `/home/zetaris/customer-data/shared/redrun`. Point `ZETARIS_DATA_ROOT` at that
-  mount target.
+| Run | What actually happened | RedRun's verdict |
+| --- | --- | --- |
+| sweepr, a Rust CLI | `mod tui` landed before `ratatui` was added to `Cargo.toml` | `bad_commit` (0.70): names the missing `ratatui` dependency |
+| ugbo | a new test imported the package, and CI ran bare `pytest` | `bad_commit` (0.75): right commit, but the explanation never names the import error |
+| chog-mischief | a scheduled keep-awake ping timed out against an external endpoint; the same commit passed before | `infra_outage` (0.36): an upstream service, no code change |
+| closebook | one of 1,006 tests hit a sqlite error right after a commit touching that code; the next run passed | `bad_commit` (0.55): defensible at failure time, but probably a flake |
 
-Per trace, `register_sources` creates one database and registers the four
-Parquet files as FILESTORE tables:
+The first pass went worse: one of four right, two `unknown`s, and a wrong explanation. The logs showed why, and the fixes are general, not tuned to these runs: colour codes hid Rust's compiler errors from the extractor, a URL in an echoed step script was read as a timeout, the log tail was all post-job cleanup, a workflow's first run had no diff to look at, and an outage only counted if GitHub itself had an incident. After the fixes, three of four are right, the eval was re-recorded live, and closebook is still an honest judgment call.
 
-```sql
-CREATE LIGHTNING DATABASE redrun_<trace> DESCRIBE BY 'RedRun evidence'
-CREATE LIGHTNING FILESTORE TABLE runs FROM redrun_<trace>
-  FORMAT PARQUET OPTIONS (path "/home/zetaris/customer-data/shared/redrun/<trace>/runs.parquet")
-SELECT * FROM redrun_<trace>.runs LIMIT 5
-```
-
-`overlap.sql` is then qualified with that per trace database instead of
-`ZETARIS_CATALOG`, and the trace records `method=in_place` with the database
-name. Re-registering a trace is normal, so an "already exists" answer is
-tolerated; any other DDL error still fails the run.
-
-Every endpoint the adapter uses is in one constants block in
-`adapters/zetaris.py`, each line naming the first-party file it was confirmed
-against.
-
-## Quickstart (no credentials, no network)
+Run it yourself, offline, in seconds:
 
 ```bash
-uv venv --python 3.11 .venv
-uv pip install --python .venv/bin/python -e ".[dev]"
+python -m redrun eval --split all --mode replay --baseline
+```
+
+---
+
+## Try it in two minutes (no keys, no network)
+
+Needs Python 3.11+.
+
+```bash
+git clone https://github.com/cipoklean/redrun && cd redrun
+python -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
 
 pytest
 SAMPLE_MODE=true python -m redrun investigate --sample dependency_bump
 SAMPLE_MODE=true python -m redrun investigate --sample bad_commit --json
 ```
 
-Sample cases: `dependency_bump`, `bad_commit`, `expired_or_missing_secret`.
-Each one writes `logs/<trace_id>.jsonl`.
+Sample cases: `dependency_bump`, `bad_commit`, `expired_or_missing_secret`, `flaky_test`. Each run writes its full trace to `logs/<trace_id>.jsonl`.
+
+## Run it for real
+
+### 1. Configure
+
+```bash
+cp .env.example .env
+```
+
+| Variable | What it's for |
+| --- | --- |
+| `GITHUB_TOKEN` | Reading runs, logs and diffs |
+| `LLM_PROVIDER` | `meterless` (default) or `nvidia` |
+| `METERLESS_BASE_URL` | `http://127.0.0.1:8088/v1` |
+| `METERLESS_RUNTIME_TOKEN` | From Nightshift, Setup > Providers |
+| `METERLESS_FAST_MODEL` | `nvidia/nemotron-3.5-bolt-e4b` |
+| `METERLESS_DEEP_MODEL` | `nvidia/nemotron-3-ultra-550b-a55b` |
+| `ZETARIS_ENABLED`, `ZETARIS_URL`, `ZETARIS_USER`, `ZETARIS_PASSWORD` | Your Zetaris instance |
+| `ZETARIS_DATA_ROOT` | Where Zetaris sees RedRun's `data/` folder |
+
+Never commit `.env`. Only `.env.example`, with placeholders, is in the repo.
+
+### 2. Check both sponsors are live
+
+```bash
+python -m redrun meterless-check
+python -m redrun zetaris-check --sample dependency_bump
+```
+
+Each one exits non-zero and says `offline` or `unauthorized` instead of pretending.
+
+### 3. Investigate a run
+
+```bash
+SAMPLE_MODE=false python -m redrun investigate https://github.com/owner/repo/actions/runs/123456
+SAMPLE_MODE=false python -m redrun investigate owner/repo   # latest failed run on the default branch
+```
+
+### Running Zetaris in a Codespace with Nightshift on your laptop
+
+This is how RedRun was actually run during the hackathon: Zetaris needs more memory than an 8 GB laptop has, and Nightshift is a desktop app.
+
+1. Start Zetaris in a GitHub Codespace (4-core / 16 GB) and bind-mount RedRun's `data/` into it at `/home/zetaris/customer-data/shared/redrun` (read only).
+2. Keep Nightshift running on your laptop.
+3. From the laptop, open a reverse tunnel so the Codespace can reach Nightshift:
+
+   ```powershell
+   gh codespace ssh -- -R 8088:127.0.0.1:8088
+   ```
+
+4. In that window, `127.0.0.1:8088` now reaches Nightshift. Run `meterless-check`, then investigate.
+
+<details>
+<summary>Zetaris setup notes (Lightning 2.4.x)</summary>
+
+- `POST /api/auth/login` returns `idToken`, `refreshToken` and `orgId`. Every `/api/proxy` call needs an `X-Org-ID` header, and the adapter sends the one from the login response.
+- Lightning rejects plain `CREATE TABLE`, so RedRun never loads rows one by one.
+- Local file tables must live under Zetaris's file root, `/home/zetaris/customer-data/shared`.
+- Lightning rejects a query that starts with `WITH`, so `overlap.sql` is one flat `SELECT` with derived tables, and uses `CAST(... AS STRING)` rather than `VARCHAR`.
+- Per run, RedRun issues:
+
+  ```sql
+  CREATE LIGHTNING DATABASE redrun_<trace> DESCRIBE BY 'RedRun evidence'
+  CREATE LIGHTNING FILESTORE TABLE runs FROM redrun_<trace>
+    FORMAT PARQUET OPTIONS (path "/home/zetaris/customer-data/shared/redrun/<trace>/runs.parquet")
+  ```
+
+  and the same for `changes`, `log_errors` and `dependencies`. Re-registering a run is fine; any other DDL error fails loudly.
+
+</details>
+
+## The interface
+
+React, Vite, TypeScript and Tailwind, served by FastAPI from the same container.
+
+- **`/`**: paste a run URL or `owner/repo`, see the provider status, or pick a sample.
+- **`/run/<trace_id>`**: watch the investigation live. The pipeline lights up stage by stage, each investigator step shows its lane, model, tokens and carryover, skeptic checks appear as pass, fail or n/a, and a critique is drawn as an arrow back to the investigator. When it finishes, the page becomes the verdict: cause, root cause with clickable evidence chips, next step, the confidence gauge and its breakdown, evidence grouped by kind, and a timeline from the last green run to the red one.
+- **`/eval`**: the evaluation, agent beside baseline, per split and per case.
+
+```bash
+cd frontend
+npm install
+npm run build     # FastAPI then serves frontend/dist at /
+npm run dev       # hot reload on :5173, API proxied to :8001
+```
+
+If vite complains about a missing esbuild binary, run `npm rebuild esbuild`.
 
 ## API
 
@@ -119,160 +260,74 @@ SAMPLE_MODE=true uvicorn redrun.api.app:app --port 8000
 
 curl -s localhost:8000/health
 curl -s localhost:8000/provider/status
-curl -s -X POST localhost:8000/run \
-  -H 'content-type: application/json' \
+curl -s -X POST localhost:8000/run -H 'content-type: application/json' \
   -d '{"sample":"expired_or_missing_secret"}'
 
-# the same run, as it happens
-curl -sN -X POST localhost:8000/run/stream \
-  -H 'content-type: application/json' -d '{"sample":"flaky_test"}'
+# watch a run as it happens
+curl -sN -X POST localhost:8000/run/stream -H 'content-type: application/json' \
+  -d '{"sample":"flaky_test"}'
 
-# replay a finished run's trace
+# replay a finished run's events
 curl -sN localhost:8000/run/<trace_id>/events
 ```
-
-## Live mode
-
-```bash
-cp .env.example .env      # then fill GITHUB_TOKEN
-SAMPLE_MODE=false python -m redrun investigate https://github.com/owner/repo/actions/runs/123456
-SAMPLE_MODE=false python -m redrun investigate owner/repo    # latest failed run on the default branch
-```
-
-The LLM provider is chosen by `LLM_PROVIDER`: `meterless` (default) or `nvidia`.
-`GET /provider/status` reports `online`, `unauthorized` or `offline` without
-throwing.
-
-Qualify the runtime itself, then record a new sample from a real run:
-
-```bash
-python -m redrun meterless-check            # GET /v1/models + one pinned completion
-python -m redrun record-sample <run-url> --name my_case
-```
-
-`meterless-check` masks the token, prints the model the runtime actually
-returned, and exits 1 naming `offline` or `unauthorized` separately. It never
-falls back silently: if a different provider serves the completion, it says so.
-`record-sample` writes a redacted sample directory (collector outputs, the
-Zetaris result with `recorded_from`, the skeptic inputs and every LLM step) so
-`SAMPLE_MODE=true` can replay it with no network.
 
 ## Docker
 
 ```bash
 cp .env.example .env
 docker compose up --build
-curl -s -X POST localhost:8000/run -H 'content-type: application/json' -d '{"sample":"bad_commit"}'
 ```
 
-Traces land in `./logs`. Inside the container the Meterless runtime is reached at
-`http://host.docker.internal:8088/v1`; compose sets that for you.
+Traces land in `./logs`. Inside the container, Nightshift is reached at `http://host.docker.internal:8088/v1`, and compose sets that for you.
 
-## The evaluation
-
-`eval/cases.yaml` is the set: 15 cases, each with the run URL, the cause it was
-built to have, and two to four words a correct explanation has to contain. Twelve
-are constructed in [cipoklean/redrun-lab](https://github.com/cipoklean/redrun-lab),
-a tiny package whose branches each carry a green run followed by a real breaking
-commit: a loosened pin, a resolver conflict, a logic bug, a rename, a syntax error,
-two flakes, a missing secret, an invalid token, a Python version, an env var and a
-working directory. Two are public runs that line up with a GitHub Actions incident
-and later passed on the same sha; one is a public run with no usable signal, where
-`unknown` is the right answer.
-
-The split was drawn from the seed in the file before anything was run, and
-`tests/test_eval_cases.py` recomputes that draw, so the holdout cannot move after
-its results are known.
-
-`redrun/eval/baseline.py` is the comparison: one plain call on the same fast lane,
-given only the last 300 redacted log lines and the cause taxonomy. No collectors,
-no evidence tables, no cross-source query, no skeptic, no citations.
+## Recording new cases
 
 ```bash
-python -m redrun eval --split all --mode replay --baseline
+python -m redrun record-sample <run-url> --name my_case
+SAMPLE_MODE=false python eval/lab/record_eval.py --force --nightshift   # re-record all 15
 ```
 
-Replay reads the recorded samples under `samples/eval_*`, so it needs no network
-and no credentials. It writes `eval/results/<timestamp>.json` and `eval/RESULTS.md`
-(both generated; do not edit the report by hand) with category accuracy, root-cause
-keyword matches, citation validity, calibration, latency percentiles, tokens and a
-confusion matrix, for dev, holdout and all, agent beside baseline. A case whose
-model steps were never recorded is listed as pending and scored on nothing.
-
-Files under `eval/lab/` are how the case set was built and can be re-run:
-`build_lab.py` creates the runs in redrun-lab, `validate_lab.py` proves each
-breaking commit really fails before anything is pushed, `find_public_cases.py`
-searches incidents and public runs, `record_eval.py` records every case, and
-`make_cases.py` writes `eval/cases.yaml` from the recorded run ids.
-
-### Re-recording the set through Nightshift
-
-The samples in this repo were recorded against the provider directly. To re-record
-all fifteen through Meterless/Nightshift, with both lanes pinned to Nemotron:
-
-```bash
-LLM_PROVIDER=meterless METERLESS_RUNTIME_TOKEN=... SAMPLE_MODE=false \
-  python eval/lab/record_eval.py --force --nightshift
-```
-
-`--nightshift` refuses to run unless `LLM_PROVIDER` is `meterless`, because a
-recording that asks for Nightshift and quietly uses a direct provider has worse
-provenance than no recording. It probes the deep lane first; if that lane does not
-answer, both lanes run on `nvidia/nemotron-3.5-lightning-30b-a3b` and the
-substitution is written into every affected sample as `llm/plan.json` and
-`meta.json:recording`, with the reason. Each recorded step stores the provider, the
-model the runtime reports in its response, and the `meterless-app` /
-`meterless-scope` headers it used. The token is never written anywhere.
-
-Afterwards `python -m redrun eval --split all --mode replay --baseline` picks up the
-new samples, and the report's `agent provider` and `baseline provider` columns show
-which recordings came from which provider, so a Nightshift recording is never
-confused with a direct one.
-
-## The interface
-
-The UI is React, Vite, TypeScript and Tailwind, with shadcn style components
-vendored under `frontend/src/components/ui`. FastAPI serves the built app at `/`,
-so one container is still the whole product.
-
-```bash
-cd frontend
-npm install
-npm run types     # regenerate src/types/contract from docs/schemas
-npm run build     # writes frontend/dist
-npm run dev       # hot reload on 5173, API proxied to 127.0.0.1:8001
-```
-
-If vite exits with a missing esbuild binary, npm skipped its postinstall script.
-`npm rebuild esbuild` fixes it.
-
-Three screens. `/` takes a run URL or an `owner/repo` pair, shows the provider
-strip and the sample cards. `/eval` reads the newest results file and shows the
-totals per split with the baseline beside the agent, then one row per case.
-`/run/<trace_id>` streams the investigation live:
-the vertical pipeline lights up stage by stage, every investigator step shows
-its lane, model, tokens and carryover, the skeptic checks appear as pass, fail
-or n/a chips, and a critique handoff is drawn as an arrow back to the
-investigator. When the run finishes the same page becomes the verdict: cause
-badge, root cause with clickable `ev_` chips, next step, the confidence gauge
-with its full breakdown, evidence cards grouped by kind, a change timeline from
-the last green run to the failed one, and a raw event log.
-
-`src/types/contract/` is generated from `docs/schemas`, and `npm run
-check:types` fails when the two drift.
+A recording keeps the redacted collector outputs, the Zetaris result, the skeptic's inputs and every model step, so `SAMPLE_MODE=true` can replay it with no network. `--nightshift` refuses to run unless the provider is Meterless, and each step stores the model the runtime reports it actually used. The token is never written anywhere.
 
 ## Tests
 
 ```bash
-cd frontend
-npx vitest run          # verdict rendering per sample, ev chip linking, confidence sums
-npx playwright test     # smoke: run a sample, land on a verdict, click a citation
+pytest                                   # backend, including the frozen contract
+cd frontend && npx vitest run            # verdict rendering, evidence links, confidence sums
+cd frontend && npx playwright test       # end to end: run a sample, land on a verdict, click a citation
 ```
 
-Tests are in `frontend/src/test` and `frontend/e2e`. Screenshots of the four
-states live in `docs/screenshots`.
+`docs/contract.md` is the frozen wire format and `docs/schemas/` holds the JSON Schemas. Tests fail if either drifts from the code, and the frontend's types are generated from the same schemas.
 
-## Contract
+## Repository map
 
-`docs/contract.md` is the frozen wire format, `docs/schemas/` holds the exported
-JSON Schemas, and `pytest` fails if either drifts from `redrun/core/models.py`.
+```text
+redrun/
+  collectors/   failed run, last green run, diff, logs, PyPI timing
+  adapters/     GitHub, PyPI, GitHub status, LLM (Nightshift or NVIDIA), Zetaris, DuckDB, replay
+  agents/       investigator (Markovian) and skeptic
+  queries/      overlap.sql, the cross-source join
+  core/         the frozen data models
+  eval/         eval runner, baseline, report, Nightshift lane plan
+  api/          FastAPI app and live event stream
+frontend/       React UI
+samples/        recorded cases for offline replay
+eval/           case set, results, lab scripts
+docs/           contract, schemas, screenshots, live evidence
+logs/           JSONL traces, one per run
+```
+
+## Built during the hackathon
+
+RedRun is new work, written from scratch between 22 and 27 October 2026. Nothing was carried over from an earlier project. It relies only on open-source libraries (FastAPI, DuckDB, pydantic, httpx, React and friends).
+
+## What's next
+
+- Run as a GitHub App that comments the verdict on the failed PR
+- Learn each repo's flaky-test history over time, so "flaky" stops being a guess
+- More sources in the Zetaris join: Dependabot alerts, cloud status pages, self-hosted runner metrics
+- Suggested fix PRs for the easy causes, like a pin that needs tightening
+
+---
+
+Made by [@cipoklean](https://github.com/cipoklean).
