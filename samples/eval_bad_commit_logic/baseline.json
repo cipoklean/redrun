@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-27T12:34:45",
+  "recorded_at": "2026-10-27T13:26:16",
   "lane": "fast",
   "provider": "meterless",
   "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
-    "cause": "flaky_test",
-    "root_cause": "The tests in tests/test_pricing.py are failing due to incorrect expected values in assertions, indicating a bug in the application logic rather than an environment issue.",
-    "next_step": "Review the pricing logic in the application code against the expected values in the failing tests."
+    "cause": "bad_commit",
+    "root_cause": "The commit introduced logic changes in pricing calculations, causing multiple assertion errors in tests/test_pricing.py regarding order totals for free shipping, standard shipping, and express shipping.",
+    "next_step": "Review the code changes from commit 440440a98147010aebb5d9b1673d3c214faf4982 and correct the pricing logic to match expected test outcomes."
   },
-  "raw": "{\"cause\": \"flaky_test\", \"root_cause\": \"The tests in tests/test_pricing.py are failing due to incorrect expected values in assertions, indicating a bug in the application logic rather than an environment issue.\", \"next_step\": \"Review the pricing logic in the application code against the expected values in the failing tests.\"}",
+  "raw": "{\"cause\": \"bad_commit\", \"root_cause\": \"The commit introduced logic changes in pricing calculations, causing multiple assertion errors in tests/test_pricing.py regarding order totals for free shipping, standard shipping, and express shipping.\", \"next_step\": \"Review the code changes from commit 440440a98147010aebb5d9b1673d3c214faf4982 and correct the pricing logic to match expected test outcomes.\"}",
   "usage": {
-    "prompt_tokens": 11009,
-    "completion_tokens": 73,
-    "latency_ms": 3181
+    "prompt_tokens": 11058,
+    "completion_tokens": 111,
+    "latency_ms": 4737
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

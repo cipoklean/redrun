@@ -1,14 +1,3 @@
 {
-  "previous_failures": [
-    {
-      "test": "tests/test_cache.py::test_warm_is_quick",
-      "sha": "bf982742e845f26e5167608f499c2575a3cb927e",
-      "run_id": 40230077629
-    },
-    {
-      "test": "tests/test_cache.py::test_warm_is_quick",
-      "sha": "bf982742e845f26e5167608f499c2575a3cb927e",
-      "run_id": 40230056077
-    }
-  ]
+  "previous_failures": []
 }

@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-27T12:36:55",
+  "recorded_at": "2026-10-27T13:29:08",
   "lane": "fast",
   "provider": "meterless",
   "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
-    "cause": "config_change",
-    "root_cause": "The test 'test_app_mode_is_known' expects the environment variable 'LAB_APP_MODE' to be set to 'ci' or 'local', but it is missing, causing a KeyError during execution.",
-    "next_step": "Ensure the 'LAB_APP_MODE' environment variable is explicitly set in the GitHub Actions workflow before running tests."
+    "cause": "unknown",
+    "root_cause": "The test failed with a KeyError: 'LAB_APP_MODE' because the environment variable was not set during the test execution, not due to a specific configuration change or dependency issue visible in the log.",
+    "next_step": "Verify that the 'LAB_APP_MODE' environment variable is correctly set in the CI workflow before running tests."
   },
-  "raw": "{\"cause\": \"config_change\", \"root_cause\": \"The test 'test_app_mode_is_known' expects the environment variable 'LAB_APP_MODE' to be set to 'ci' or 'local', but it is missing, causing a KeyError during execution.\", \"next_step\": \"Ensure the 'LAB_APP_MODE' environment variable is explicitly set in the GitHub Actions workflow before running tests.\"}",
+  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The test failed with a KeyError: 'LAB_APP_MODE' because the environment variable was not set during the test execution, not due to a specific configuration change or dependency issue visible in the log.\", \"next_step\": \"Verify that the 'LAB_APP_MODE' environment variable is correctly set in the CI workflow before running tests.\"}",
   "usage": {
-    "prompt_tokens": 11121,
-    "completion_tokens": 91,
-    "latency_ms": 3642
+    "prompt_tokens": 11358,
+    "completion_tokens": 84,
+    "latency_ms": 6168
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

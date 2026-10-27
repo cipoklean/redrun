@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-27T12:45:04",
+  "recorded_at": "2026-10-27T13:37:59",
   "lane": "fast",
   "provider": "meterless",
   "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
-    "cause": "unknown",
-    "root_cause": "The build failed because the process could not download a required subproject, fast_float, due to repeated HTTP 429 (Too Many Requests) and 503 (Service Unavailable) errors from GitHub.",
-    "next_step": "Check network connectivity or wait before retrying the job to avoid rate limiting on GitHub resources."
+    "cause": "infra_outage",
+    "root_cause": "The build failed because it could not download a required subproject, fast_float, from GitHub due to HTTP 429 (Too Many Requests) and subsequent 503 (Service Unavailable) errors.",
+    "next_step": "Wait and re-run the job, or check GitHub's API rate limits for the runner environment."
   },
-  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The build failed because the process could not download a required subproject, fast_float, due to repeated HTTP 429 (Too Many Requests) and 503 (Service Unavailable) errors from GitHub.\", \"next_step\": \"Check network connectivity or wait before retrying the job to avoid rate limiting on GitHub resources.\"}",
+  "raw": "{\"cause\": \"infra_outage\", \"root_cause\": \"The build failed because it could not download a required subproject, fast_float, from GitHub due to HTTP 429 (Too Many Requests) and subsequent 503 (Service Unavailable) errors.\", \"next_step\": \"Wait and re-run the job, or check GitHub's API rate limits for the runner environment.\"}",
   "usage": {
-    "prompt_tokens": 13691,
-    "completion_tokens": 82,
-    "latency_ms": 3701
+    "prompt_tokens": 13171,
+    "completion_tokens": 87,
+    "latency_ms": 5131
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

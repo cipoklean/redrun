@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-27T12:46:43",
+  "recorded_at": "2026-10-27T13:39:54",
   "lane": "fast",
   "provider": "meterless",
   "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
     "cause": "expired_or_missing_secret",
-    "root_cause": "The script failed because the required secret LAB_TOKEN was empty when the publishing logic was executed.",
-    "next_step": "Verify that the LAB_TOKEN secret is correctly configured in the GitHub repository or environment for this workflow."
+    "root_cause": "The workflow failed because the required secret LAB_TOKEN was not set or was empty in the environment.",
+    "next_step": "Verify that the LAB_TOKEN secret is correctly configured in the GitHub repository or environment settings."
   },
-  "raw": "{\"cause\": \"expired_or_missing_secret\", \"root_cause\": \"The script failed because the required secret LAB_TOKEN was empty when the publishing logic was executed.\", \"next_step\": \"Verify that the LAB_TOKEN secret is correctly configured in the GitHub repository or environment for this workflow.\"}",
+  "raw": "{\"cause\": \"expired_or_missing_secret\", \"root_cause\": \"The workflow failed because the required secret LAB_TOKEN was not set or was empty in the environment.\", \"next_step\": \"Verify that the LAB_TOKEN secret is correctly configured in the GitHub repository or environment settings.\"}",
   "usage": {
-    "prompt_tokens": 9725,
-    "completion_tokens": 65,
-    "latency_ms": 2799
+    "prompt_tokens": 8689,
+    "completion_tokens": 64,
+    "latency_ms": 3021
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

@@ -1,0 +1,1246 @@
+{
+  "meta": {
+    "timestamp": "2026-10-27T13:42:52Z",
+    "mode": "replay",
+    "split": "all",
+    "seed": 20261025,
+    "case_count": 15,
+    "cases_path": "/workspaces/redrun/eval/cases.yaml",
+    "baseline_lines": 300,
+    "baseline_model": "nvidia/nemotron-3.5-bolt-e4b",
+    "agent_models": [
+      "nvidia/nemotron-3-ultra-550b-a55b",
+      "nvidia/nemotron-3.5-bolt-e4b"
+    ],
+    "agent_lane_labels": [],
+    "agent_replayed": true,
+    "baseline_replayed": true,
+    "git_sha": "c9f6287",
+    "notes": "12 constructed cases with real runs in cipoklean/redrun-lab, 2 public runs that line up with a GitHub Actions incident, and 1 public run with no usable signal. The itemised brief sums to 13; the extra two are the syntax-error and working-directory variants it names without a case."
+  },
+  "rows": [
+    {
+      "id": "bad_commit_logic",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229615670",
+      "expected_cause": "bad_commit",
+      "root_cause_keywords": [
+        "shipping",
+        "order_total"
+      ],
+      "split": "dev",
+      "constructed": true,
+      "notes": "A wrong-value assertion: the test file is unchanged, the source is not.",
+      "sample": "eval_bad_commit_logic",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "bad_commit",
+        "root_cause": "The commit 'invert the free shipping comparison' changed the logic in lab/pricing.py, which broke the expected behavior in test_pricing.py, leading to assertion failures.",
+        "next_step": "Revert commit 440440a or correct the free shipping comparison logic and ensure tests pass.",
+        "confidence": 0.55,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 49697,
+        "replay_ms": 69,
+        "tokens_in": 11108,
+        "tokens_out": 1626,
+        "steps": 5,
+        "stop_reason": "cap",
+        "models": [
+          "nvidia/nemotron-3-ultra-550b-a55b",
+          "nvidia/nemotron-3.5-bolt-e4b"
+        ],
+        "provider": "meterless",
+        "engine": "zetaris_replay",
+        "evidence_items": 6,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "order_total"
+        ]
+      },
+      "diagnostic": {},
+      "trace_id": "aaeec8d53587",
+      "seconds": 0.07,
+      "baseline": {
+        "cause": "bad_commit",
+        "root_cause": "The commit introduced logic changes in pricing calculations, causing multiple assertion errors in tests/test_pricing.py regarding order totals for free shipping, standard shipping, and express shipping.",
+        "next_step": "Review the code changes from commit 440440a98147010aebb5d9b1673d3c214faf4982 and correct the pricing logic to match expected test outcomes.",
+        "model": "nvidia/nemotron-3.5-bolt-e4b",
+        "provider": "meterless",
+        "latency_ms": 4737,
+        "tokens_in": 11058,
+        "tokens_out": 111,
+        "recorded_at": "2026-10-27T13:26:16",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "order_total"
+        ]
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "bad_commit_rename",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229618647",
+      "expected_cause": "bad_commit",
+      "root_cause_keywords": [
+        "format_total",
+        "summary"
+      ],
+      "split": "holdout",
+      "constructed": true,
+      "notes": "An import error in a changed module: the importer is the unchanged file.",
+      "sample": "eval_bad_commit_rename",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "bad_commit",
+        "root_cause": "Commit 2650b9f renamed the function format_total to render_total in lab/summary.py but did not update all call sites, leading to an ImportError when dependent code (likely tests) tried to import the old name.",
+        "next_step": "Search the codebase for remaining references to 'format_total' and update them to 'render_total', or revert the commit if the rename was unintended.",
+        "confidence": 0.55,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 41663,
+        "replay_ms": 56,
+        "tokens_in": 16407,
+        "tokens_out": 1651,
+        "steps": 5,
+        "stop_reason": "cap",
+        "models": [
+          "nvidia/nemotron-3-ultra-550b-a55b",
+          "nvidia/nemotron-3.5-bolt-e4b"
+        ],
+        "provider": "meterless",
+        "engine": "zetaris_replay",
+        "evidence_items": 6,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "diagnostic": {},
+      "trace_id": "4e27eb14ad05",
+      "seconds": 0.06,
+      "baseline": {
+        "cause": "bad_commit",
+        "root_cause": "The test failed due to an ImportError because the function 'format_total' could not be imported from 'lab.summary', suggesting a change in the source code broke the dependency.",
+        "next_step": "Review the recent commit (2650b9f6ebd399b453d7194c3d32e58db8ea8626) to ensure 'format_total' is correctly exported from lab/summary.py.",
+        "model": "nvidia/nemotron-3.5-bolt-e4b",
+        "provider": "meterless",
+        "latency_ms": 6512,
+        "tokens_in": 8587,
+        "tokens_out": 117,
+        "recorded_at": "2026-10-27T13:27:09",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "bad_commit_syntax",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229640647",
+      "expected_cause": "bad_commit",
+      "root_cause_keywords": [
+        "parse",
+        "syntax"
+      ],
+      "split": "dev",
+      "constructed": true,
+      "notes": "A syntax error in a changed module: pytest cannot even import it, and the traceback names the changed file, so the log-to-change join has something to join on.",
+      "sample": "eval_bad_commit_syntax",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "bad_commit",
+        "root_cause": "The commit 'drop the colon from the loop header' removed a required colon in a loop statement in lab/parse.py, resulting in a syntax error that caused the test suite to fail.",
+        "next_step": "Restore the missing colon in the loop header in lab/parse.py and verify that the tests pass.",
+        "confidence": 0.75,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 38592,
+        "replay_ms": 59,
+        "tokens_in": 9409,
+        "tokens_out": 1137,
+        "steps": 3,
+        "stop_reason": "rule",
+        "models": [
+          "nvidia/nemotron-3-ultra-550b-a55b",
+          "nvidia/nemotron-3.5-bolt-e4b"
+        ],
+        "provider": "meterless",
+        "engine": "zetaris_replay",
+        "evidence_items": 6,
+        "links": 1,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "diagnostic": {},
+      "trace_id": "5527b4848253",
+      "seconds": 0.06,
+      "baseline": {
+        "cause": "bad_commit",
+        "root_cause": "The test failed due to a Python SyntaxError in lab/parse.py, specifically missing a colon after a for loop.",
+        "next_step": "Review the code changes in the commit e3a379295bfc98a1a535adb1087f12bcebc335ab to correct the syntax error.",
+        "model": "nvidia/nemotron-3.5-bolt-e4b",
+        "provider": "meterless",
+        "latency_ms": 4982,
+        "tokens_in": 9123,
+        "tokens_out": 93,
+        "recorded_at": "2026-10-27T13:27:57",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "config_env",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229637246",
+      "expected_cause": "config_change",
+      "root_cause_keywords": [
+        "env",
+        "mode"
+      ],
+      "split": "holdout",
+      "constructed": true,
+      "notes": "The var the step reads is renamed, so the reader raises KeyError.",
+      "sample": "eval_config_env",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "config_change",
+        "root_cause": "The commit 'rename the env var the reader expects' changed the environment variable name in the CI workflow from LAB_APP_MODE to LAB_RUN_MODE, but the application code or tests still reference the old variable name, leading to a test failure.",
+        "next_step": "Update the application code or tests to use LAB_RUN_MODE, or revert the commit and ensure the variable name matches what the code expects, then verify CI passes.",
+        "confidence": 0.525,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 56330,
+        "replay_ms": 51,
+        "tokens_in": 11910,
+        "tokens_out": 1494,
+        "steps": 5,
+        "stop_reason": "cap",
+        "models": [
+          "nvidia/nemotron-3-ultra-550b-a55b",
+          "nvidia/nemotron-3.5-bolt-e4b"
+        ],
+        "provider": "meterless",
+        "engine": "zetaris_replay",
+        "evidence_items": 6,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "diagnostic": {},
+      "trace_id": "f8e46453b604",
+      "seconds": 0.05,
+      "baseline": {
+        "cause": "unknown",
+        "root_cause": "The test failed with a KeyError: 'LAB_APP_MODE' because the environment variable was not set during the test execution, not due to a specific configuration change or dependency issue visible in the log.",
+        "next_step": "Verify that the 'LAB_APP_MODE' environment variable is correctly set in the CI workflow before running tests.",
+        "model": "nvidia/nemotron-3.5-bolt-e4b",
+        "provider": "meterless",
+        "latency_ms": 6168,
+        "tokens_in": 11358,
+        "tokens_out": 84,
+        "recorded_at": "2026-10-27T13:29:08",
+        "category_ok": false,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "config_python",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229634046",
+      "expected_cause": "config_change",
+      "root_cause_keywords": [
+        "python",
+        "3.9"
+      ],
+      "split": "dev",
+      "constructed": true,
+      "notes": "Only the workflow changes: the code needs 3.10 for PEP 604 unions.",
+      "sample": "eval_config_python",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "config_change",
+        "root_cause": "Commit 7d71e2d changed the CI workflow (.github/workflows/ci.yml) to run on Python 3.9, but the codebase uses the union type operator (`|`) for type annotations (e.g., `float | None`), which is only supported in Python 3.10 and later. Running on Python 3.9 causes a TypeError at lab/reporting.py:9 (`unsupported operand type(s) for |: 'type' and 'NoneType'`), leading to test failures.",
+        "next_step": "Either revert the Python version in the workflow to 3.10 or higher, or update the type annotations to use `typing.Union` / `Optional` for compatibility with Python 3.9, then verify that CI passes.",
+        "confidence": 0.525,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 59210,
+        "replay_ms": 63,
+        "tokens_in": 17965,
+        "tokens_out": 2018,
+        "steps": 5,
+        "stop_reason": "cap",
+        "models": [
+          "nvidia/nemotron-3-ultra-550b-a55b",
+          "nvidia/nemotron-3.5-bolt-e4b"
+        ],
+        "provider": "meterless",
+        "engine": "zetaris_replay",
+        "evidence_items": 6,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "diagnostic": {},
+      "trace_id": "920698587e20",
+      "seconds": 0.06,
+      "baseline": {
+        "cause": "config_change",
+        "root_cause": "The CI environment is running Python 3.9.25, but the code in lab/reporting.py uses the union type syntax (`float | None`) which requires Python 3.10 or newer, causing a TypeError during test collection.",
+        "next_step": "Revert the Python version in the CI configuration to 3.10+ or update the type hint in lab/reporting.py to use `typing.Union` or `Optional`.",
+        "model": "nvidia/nemotron-3.5-bolt-e4b",
+        "provider": "meterless",
+        "latency_ms": 7307,
+        "tokens_in": 12911,
+        "tokens_out": 112,
+        "recorded_at": "2026-10-27T13:30:20",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "config_working_directory",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229643536",
+      "expected_cause": "config_change",
+      "root_cause_keywords": [
+        "working",
+        "requirements"
+      ],
+      "split": "dev",
+      "constructed": true,
+      "notes": "Only the workflow changes. The step starts, then pip cannot find the manifest it was pointed at.",
+      "sample": "eval_config_working_directory",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "config_change",
+        "root_cause": "The CI workflow was changed to run the install step from the 'lab/' directory, but the requirements.txt file is not present in that directory. This caused the dependency installation to either fail or install from a different requirements file, resulting in missing or incorrect dependencies for the tests.",
+        "next_step": "Revert the commit or update the workflow to run the install step from the correct directory (where requirements.txt exists), then verify that CI passes.",
+        "confidence": 0.525,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 47809,
+        "replay_ms": 55,
+        "tokens_in": 9717,
+        "tokens_out": 1463,
+        "steps": 5,
+        "stop_reason": "cap",
+        "models": [
+          "nvidia/nemotron-3-ultra-550b-a55b",
+          "nvidia/nemotron-3.5-bolt-e4b"
+        ],
+        "provider": "meterless",
+        "engine": "zetaris_replay",
+        "evidence_items": 5,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "working"
+        ]
+      },
+      "diagnostic": {},
+      "trace_id": "8d7220746e4e",
+      "seconds": 0.06,
+      "baseline": {
+        "cause": "config_change",
+        "root_cause": "The CI workflow is attempting to install dependencies using 'requirements.txt', but this file is not present in the current working directory during the installation step.",
+        "next_step": "Verify that requirements.txt is present in the directory where the pip install command is executed, or update the workflow to point to the correct file location.",
+        "model": "nvidia/nemotron-3.5-bolt-e4b",
+        "provider": "meterless",
+        "latency_ms": 4232,
+        "tokens_in": 8753,
+        "tokens_out": 82,
+        "recorded_at": "2026-10-27T13:31:17",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "dep_bump_conflict",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229612895",
+      "expected_cause": "dependency_bump",
+      "root_cause_keywords": [
+        "httpcore",
+        "httpx"
+      ],
+      "split": "holdout",
+      "constructed": true,
+      "notes": "httpx 0.27 requires httpcore 1.x, so pinning httpcore 0.16 makes the requirement set unsatisfiable. pip fails before it installs anything.",
+      "sample": "eval_dep_bump_conflict",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "dependency_bump",
+        "root_cause": "The commit 'pin httpcore to a version httpx cannot use' changed requirements.txt to pin httpcore==0.16.0, downgrading from 1.0.7. This version is incompatible with httpx, leading to a dependency resolution error during test execution.",
+        "next_step": "Revert the pin or update httpcore to a version compatible with httpx (e.g., >=1.0.0) and ensure tests pass.",
+        "confidence": 0.55,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 43177,
+        "replay_ms": 64,
+        "tokens_in": 12049,
+        "tokens_out": 941,
+        "steps": 3,
+        "stop_reason": "rule",
+        "models": [
+          "nvidia/nemotron-3-ultra-550b-a55b",
+          "nvidia/nemotron-3.5-bolt-e4b"
+        ],
+        "provider": "meterless",
+        "engine": "zetaris_replay",
+        "evidence_items": 7,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "diagnostic": {},
+      "trace_id": "37e8b058e720",
+      "seconds": 0.07,
+      "baseline": {
+        "cause": "dependency_bump",
+        "root_cause": "The requirements.txt file specifies conflicting package versions, as httpx 0.27.0 requires httpcore==1.* while the file explicitly requests httpcore==0.16.0.",
+        "next_step": "Update the version constraints in requirements.txt to resolve the dependency conflict.",
+        "model": "nvidia/nemotron-3.5-bolt-e4b",
+        "provider": "meterless",
+        "latency_ms": 7075,
+        "tokens_in": 10154,
+        "tokens_out": 77,
+        "recorded_at": "2026-10-27T13:32:13",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "dep_bump_unpinned",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229610003",
+      "expected_cause": "dependency_bump",
+      "root_cause_keywords": [
+        "packaging",
+        "pin"
+      ],
+      "split": "dev",
+      "constructed": true,
+      "notes": "The pin is loosened, so pip installs the newest packaging, which no longer exports LegacyVersion. A removed API arriving through an unpinned floor.",
+      "sample": "eval_dep_bump_unpinned",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "config_change",
+        "root_cause": "the only thing this commit changed is how the job runs (requirements.txt) (-packaging==21.3, +packaging>=21) and no source line moved, so the code under test is the code that passed before it",
+        "next_step": "Compare the environment change against the failing step, then fix or revert it and re-run.",
+        "confidence": 0.2667,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 44227,
+        "replay_ms": 62,
+        "tokens_in": 16776,
+        "tokens_out": 2143,
+        "steps": 5,
+        "stop_reason": "rule",
+        "models": [
+          "nvidia/nemotron-3-ultra-550b-a55b",
+          "nvidia/nemotron-3.5-bolt-e4b"
+        ],
+        "provider": "meterless",
+        "engine": "zetaris_replay",
+        "evidence_items": 7,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": false,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "pin"
+        ]
+      },
+      "diagnostic": {},
+      "trace_id": "4992d136a20c",
+      "seconds": 0.06,
+      "baseline": {
+        "cause": "dependency_bump",
+        "root_cause": "The code is trying to import 'LegacyVersion' from 'packaging.version', but this class is no longer available in the installed version of the packaging library (26.3).",
+        "next_step": "Update the code to use the correct API from the packaging library or downgrade the dependency to a compatible version.",
+        "model": "nvidia/nemotron-3.5-bolt-e4b",
+        "provider": "meterless",
+        "latency_ms": 4133,
+        "tokens_in": 8608,
+        "tokens_out": 81,
+        "recorded_at": "2026-10-27T13:32:55",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "pin"
+        ]
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "flaky_coin",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229984837",
+      "expected_cause": "flaky_test",
+      "root_cause_keywords": [
+        "index",
+        "random"
+      ],
+      "split": "dev",
+      "constructed": true,
+      "notes": "Same SHA has to fail once and then pass on rerun: that is the flake signal. The failing run and the passing run are two runs of the same sha. Failed run https://github.com/cipoklean/redrun-lab/actions/runs/40229984837, passing run on the same sha https://github.com/cipoklean/redrun-lab/actions/runs/40230006936 (workflow_dispatch).",
+      "sample": "eval_flaky_coin",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "flaky_test",
+        "root_cause": "the same commit d40f2b3 failed here and succeeded in ci run 40230006936, and the test that failed is tests/test_index.py::test_index_covers_every_row, with no incident overlapping the run, which is the flake signature (ev_run_40230006936)",
+        "next_step": "Re-run the job. If it fails again on the same commit, treat it as a real break rather than a flake.",
+        "confidence": 0.2917,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 59265,
+        "replay_ms": 63,
+        "tokens_in": 16149,
+        "tokens_out": 1765,
+        "steps": 5,
+        "stop_reason": "rule",
+        "models": [
+          "nvidia/nemotron-3-ultra-550b-a55b",
+          "nvidia/nemotron-3.5-bolt-e4b"
+        ],
+        "provider": "meterless",
+        "engine": "zetaris_replay",
+        "evidence_items": 7,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "random"
+        ]
+      },
+      "diagnostic": {},
+      "trace_id": "044f23ee26b0",
+      "seconds": 0.06,
+      "baseline": {
+        "cause": "flaky_test",
+        "root_cause": "The test test_index_covers_every_row is failing because build_index returns an empty dictionary ({}) instead of a list of length 3, indicating a logic error in the function under test.",
+        "next_step": "Investigate the build_index function logic to ensure it correctly processes the input list and returns the expected structure.",
+        "model": "nvidia/nemotron-3.5-bolt-e4b",
+        "provider": "meterless",
+        "latency_ms": 4292,
+        "tokens_in": 9441,
+        "tokens_out": 87,
+        "recorded_at": "2026-10-27T13:33:46",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "random"
+        ]
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "flaky_timing",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40230034828",
+      "expected_cause": "flaky_test",
+      "root_cause_keywords": [
+        "cache",
+        "sleep"
+      ],
+      "split": "holdout",
+      "constructed": true,
+      "notes": "A clock-dependent pause against a 50ms budget: the test is the clock's hostage. The failing run and the passing run are two runs of the same sha. Failed run https://github.com/cipoklean/redrun-lab/actions/runs/40230034828, passing run on the same sha https://github.com/cipoklean/redrun-lab/actions/runs/40230100084 (workflow_dispatch).",
+      "sample": "eval_flaky_timing",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "flaky_test",
+        "root_cause": "the same commit bf98274 failed here and succeeded in ci run 40230100084, with no incident overlapping the run, which is the flake signature (ev_run_40230100084)",
+        "next_step": "Re-run the job. If it fails again on the same commit, treat it as a real break rather than a flake.",
+        "confidence": 0.2917,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 82375,
+        "replay_ms": 59,
+        "tokens_in": 17747,
+        "tokens_out": 2316,
+        "steps": 6,
+        "stop_reason": "cap",
+        "models": [
+          "nvidia/nemotron-3-ultra-550b-a55b",
+          "nvidia/nemotron-3.5-bolt-e4b"
+        ],
+        "provider": "meterless",
+        "engine": "zetaris_replay",
+        "evidence_items": 7,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "cache",
+          "sleep"
+        ]
+      },
+      "diagnostic": {},
+      "trace_id": "45037039435e",
+      "seconds": 0.06,
+      "baseline": {
+        "cause": "flaky_test",
+        "root_cause": "The test test_warm_is_quick failed because the cache warm operation took 0.079s, exceeding the assertion threshold of 0.05s.",
+        "next_step": "Investigate the performance of the cache warm function to optimize execution time or adjust the test assertion threshold.",
+        "model": "nvidia/nemotron-3.5-bolt-e4b",
+        "provider": "meterless",
+        "latency_ms": 3615,
+        "tokens_in": 9532,
+        "tokens_out": 79,
+        "recorded_at": "2026-10-27T13:34:57",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "sleep"
+        ]
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "infra_outage_django_connection_reset",
+      "url": "https://github.com/django/django/actions/runs/39651790910",
+      "expected_cause": "infra_outage",
+      "root_cause_keywords": [
+        "connection",
+        "reset"
+      ],
+      "split": "holdout",
+      "constructed": false,
+      "notes": "Chosen for the 2026-10-21 critical incident 'Delays for Pull Requests and Webhook deliveries', id nms1dpzmh9d9, 14:52:49-19:22:52Z. This run started 18:20:14Z and its jobs completed as failures at 18:27:33Z and 18:29:15Z, inside that window. The tests died on `ConnectionResetError(104, 'Connection reset by peer')`, and 'Linters' on the same sha (3e2fa64) succeeded. Weaker than the pandas case: a reset inside a test process could be the test's own remote call, so this one is a network failure during an incident rather than a proven runner fault.",
+      "sample": "eval_infra_outage_django_connection_reset",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "infra_outage",
+        "root_cause": "GitHub incident 'Delays for Pull Requests and Webhook deliveries' overlaps the run and the failed job hit a network or download error: future: <Future finished exception=ConnectionResetError(104, 'Connection reset by peer')> (ev_outage_nms1dpzmh9d9, ev_log_023), so the failure came from the platform, not this change",
+        "next_step": "Nothing to fix in the code. Re-run the failed jobs once githubstatus.com shows the incident resolved.",
+        "confidence": 0.3583,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 143989,
+        "replay_ms": 3329,
+        "tokens_in": 32941,
+        "tokens_out": 4431,
+        "steps": 7,
+        "stop_reason": "cap",
+        "models": [
+          "nvidia/nemotron-3-ultra-550b-a55b",
+          "nvidia/nemotron-3.5-bolt-e4b"
+        ],
+        "provider": "meterless",
+        "engine": "zetaris_replay",
+        "evidence_items": 56,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "diagnostic": {},
+      "trace_id": "e54eda03e483",
+      "seconds": 3.33,
+      "baseline": {
+        "cause": "unknown",
+        "root_cause": "The logs show multiple test failures related to i18n (unicode file names) and admin view rendering (CSS classes, object counts), but there is no information about the execution environment (like Python version or dependencies) to pinpoint a single root cause.",
+        "next_step": "Investigate the specific test failures, particularly the i18n error, to determine if it is related to character encoding or environment configuration.",
+        "model": "nvidia/nemotron-3.5-bolt-e4b",
+        "provider": "meterless",
+        "latency_ms": 9757,
+        "tokens_in": 43799,
+        "tokens_out": 99,
+        "recorded_at": "2026-10-27T13:36:46",
+        "category_ok": false,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "connection",
+          "reset"
+        ]
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "infra_outage_pandas_action_download",
+      "url": "https://github.com/pandas-dev/pandas/actions/runs/32042902095",
+      "expected_cause": "infra_outage",
+      "root_cause_keywords": [
+        "download",
+        "github"
+      ],
+      "split": "dev",
+      "constructed": false,
+      "notes": "Chosen for the 2026-08-17 critical incident 'Incident with GitHub.com', id zkxwbgr0cnmx, 13:40:03-21:15:46Z. This run started 15:37:51Z and its jobs completed as failures at 15:39:34Z and 15:40:01Z, inside that window. Its log says `##[error]Failed to download archive 'https://codeload.github.com/prefix-dev/setup-pixi/zip/...' after 3 attempts`, with `##[error]Response status code does not indicate success: 429 (Too Many Requests)` from codeload, so the runner could not fetch an action from GitHub's own archive host while GitHub was degraded. Three other workflows on the same sha (4444662) succeeded, so the commit is not what broke.",
+      "sample": "eval_infra_outage_pandas_action_download",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "infra_outage",
+        "root_cause": "GitHub incident 'Incident with GitHub.com' overlaps the run and the failed job hit a network or download error: ##[warning]Failed to download action 'https://codeload.github.com/prefix-dev/setup-pixi/zip/f00437f565399d418b0acc85936d12c1fb668347'. Error: Response status co (ev_outage_zkxwbgr0cnmx, ev_log_001), so the failure came from the platform, not this change",
+        "next_step": "Nothing to fix in the code. Re-run the failed jobs once githubstatus.com shows the incident resolved.",
+        "confidence": 0.3583,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 69510,
+        "replay_ms": 204,
+        "tokens_in": 28673,
+        "tokens_out": 3279,
+        "steps": 7,
+        "stop_reason": "cap",
+        "models": [
+          "nvidia/nemotron-3-ultra-550b-a55b",
+          "nvidia/nemotron-3.5-bolt-e4b"
+        ],
+        "provider": "meterless",
+        "engine": "zetaris_replay",
+        "evidence_items": 19,
+        "links": 0,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "diagnostic": {},
+      "trace_id": "941687c6f4a8",
+      "seconds": 0.21,
+      "baseline": {
+        "cause": "infra_outage",
+        "root_cause": "The build failed because it could not download a required subproject, fast_float, from GitHub due to HTTP 429 (Too Many Requests) and subsequent 503 (Service Unavailable) errors.",
+        "next_step": "Wait and re-run the job, or check GitHub's API rate limits for the runner environment.",
+        "model": "nvidia/nemotron-3.5-bolt-e4b",
+        "provider": "meterless",
+        "latency_ms": 5131,
+        "tokens_in": 13171,
+        "tokens_out": 87,
+        "recorded_at": "2026-10-27T13:37:59",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "secret_invalid",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229631099",
+      "expected_cause": "expired_or_missing_secret",
+      "root_cause_keywords": [
+        "401",
+        "token"
+      ],
+      "split": "dev",
+      "constructed": true,
+      "notes": "LAB_TOKEN is set to a deliberately invalid value, so the API answers 401.",
+      "sample": "eval_secret_invalid",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "expired_or_missing_secret",
+        "root_cause": "The commit 'send a token that is not valid and check the status code' added a test that expects a secret (likely a valid token) to be present in the CI environment. The accompanying change to .github/workflows/ci.yml (+7 lines) likely introduced a step that uses a secret (e.g., ${{ secrets.GITHUB_TOKEN }} or a custom secret) which is either not configured or has expired. The test fails at line 186 with an 'auth_or_secret' error, indicating the secret is missing or invalid.",
+        "next_step": "Check the CI environment's secret configuration (GitHub repository secrets, organization secrets) for the required token. Ensure the secret referenced in the workflow exists and is valid. Also review the test at line 186 to confirm it handles missing secrets appropriately.",
+        "confidence": 0.7125,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 65527,
+        "replay_ms": 49,
+        "tokens_in": 21325,
+        "tokens_out": 2690,
+        "steps": 5,
+        "stop_reason": "cap",
+        "models": [
+          "nvidia/nemotron-3-ultra-550b-a55b",
+          "nvidia/nemotron-3.5-bolt-e4b"
+        ],
+        "provider": "meterless",
+        "engine": "zetaris_replay",
+        "evidence_items": 6,
+        "links": 1,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "401"
+        ]
+      },
+      "diagnostic": {},
+      "trace_id": "18ee34f3c2c2",
+      "seconds": 0.05,
+      "baseline": {
+        "cause": "expired_or_missing_secret",
+        "root_cause": "The final step failed because the GitHub API returned a 401 Unauthorized error when attempting to check the user via curl, indicating an authentication issue.",
+        "next_step": "Verify that the necessary GitHub secret or token used in the workflow is correctly configured and has not expired.",
+        "model": "nvidia/nemotron-3.5-bolt-e4b",
+        "provider": "meterless",
+        "latency_ms": 3454,
+        "tokens_in": 8639,
+        "tokens_out": 76,
+        "recorded_at": "2026-10-27T13:39:13",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "token"
+        ]
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "secret_missing",
+      "url": "https://github.com/cipoklean/redrun-lab/actions/runs/40229628003",
+      "expected_cause": "expired_or_missing_secret",
+      "root_cause_keywords": [
+        "secret",
+        "token"
+      ],
+      "split": "dev",
+      "constructed": true,
+      "notes": "secrets.LAB_MISSING_TOKEN does not exist, so the step refuses to publish.",
+      "sample": "eval_secret_missing",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "expired_or_missing_secret",
+        "root_cause": "Commit 50f3623 added a step in .github/workflows/ci.yml that requires a repository secret (LAB_TOKEN) which has not been configured, leading to authentication/secret errors at line 190 in the test.",
+        "next_step": "Configure the required secret (LAB_TOKEN) in the repository settings (or GitHub Actions secrets) and re-run the workflow, or modify the workflow to not depend on the missing secret.",
+        "confidence": 0.7125,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 32305,
+        "replay_ms": 54,
+        "tokens_in": 13080,
+        "tokens_out": 1371,
+        "steps": 3,
+        "stop_reason": "rule",
+        "models": [
+          "nvidia/nemotron-3-ultra-550b-a55b",
+          "nvidia/nemotron-3.5-bolt-e4b"
+        ],
+        "provider": "meterless",
+        "engine": "zetaris_replay",
+        "evidence_items": 6,
+        "links": 1,
+        "skeptic": "passed",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "diagnostic": {},
+      "trace_id": "e6ccff3733ab",
+      "seconds": 0.06,
+      "baseline": {
+        "cause": "expired_or_missing_secret",
+        "root_cause": "The workflow failed because the required secret LAB_TOKEN was not set or was empty in the environment.",
+        "next_step": "Verify that the LAB_TOKEN secret is correctly configured in the GitHub repository or environment settings.",
+        "model": "nvidia/nemotron-3.5-bolt-e4b",
+        "provider": "meterless",
+        "latency_ms": 3021,
+        "tokens_in": 8689,
+        "tokens_out": 64,
+        "recorded_at": "2026-10-27T13:39:54",
+        "category_ok": true,
+        "keywords_ok": true,
+        "keywords_missing": []
+      },
+      "baseline_reason": ""
+    },
+    {
+      "id": "unknown_django_cancelled",
+      "url": "https://github.com/django/django/actions/runs/40183021230",
+      "expected_cause": "unknown",
+      "root_cause_keywords": [
+        "cancel",
+        "cause"
+      ],
+      "split": "dev",
+      "constructed": false,
+      "notes": "A cancelled run with nothing to read: its only job was cancelled, the whole log is 253 lines that end at 'Cleaning up orphan processes', and none of the collector's error patterns match a line of it. The workflow had seven earlier successful runs on the same branch, so a green baseline exists and the comparison still yields no signal. `unknown` is the correct answer here.",
+      "sample": "eval_unknown_django_cancelled",
+      "path": "pipeline",
+      "path_reason": "",
+      "agent": {
+        "cause": "unknown",
+        "root_cause": "the skeptic rejected every proposed cause after one revision (error_change_overlap)",
+        "next_step": "Collect more evidence, or have a human review the run before acting.",
+        "confidence": 0.1167,
+        "citation_ok": true,
+        "guard_intervened": false,
+        "latency_ms": 149441,
+        "replay_ms": 52,
+        "tokens_in": 12257,
+        "tokens_out": 1869,
+        "steps": 6,
+        "stop_reason": "cap",
+        "models": [
+          "nvidia/nemotron-3-ultra-550b-a55b",
+          "nvidia/nemotron-3.5-bolt-e4b"
+        ],
+        "provider": "meterless",
+        "engine": "zetaris_replay",
+        "evidence_items": 12,
+        "links": 0,
+        "skeptic": "failed",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "cancel"
+        ]
+      },
+      "diagnostic": {},
+      "trace_id": "e6c84a422264",
+      "seconds": 0.05,
+      "baseline": {
+        "cause": "unknown",
+        "root_cause": "The provided log only shows the setup and execution of the Python script, concluding with a notice that the PR author is an established contributor and skipping all checks, but it does not show the actual failure of the quality check script.",
+        "next_step": "Review the output immediately following the execution of 'python scripts/pr_quality/check_pr.py' to identify the specific error.",
+        "model": "nvidia/nemotron-3.5-bolt-e4b",
+        "provider": "meterless",
+        "latency_ms": 3792,
+        "tokens_in": 11234,
+        "tokens_out": 93,
+        "recorded_at": "2026-10-27T13:41:27",
+        "category_ok": true,
+        "keywords_ok": false,
+        "keywords_missing": [
+          "cancel",
+          "cause"
+        ]
+      },
+      "baseline_reason": ""
+    }
+  ],
+  "summaries": {
+    "dev": {
+      "agent": {
+        "system": "agent",
+        "cases": 10,
+        "cause_hits": 9,
+        "cause_accuracy": 0.9,
+        "keyword_hits": 4,
+        "keyword_accuracy": 0.4,
+        "answered": 9,
+        "answered_correct": 8,
+        "answered_precision": 0.8889,
+        "providers": [
+          "meterless"
+        ],
+        "citation_evaluated": 10,
+        "citation_pass": 10,
+        "citation_pass_rate": 1.0,
+        "guard_interventions": 0,
+        "latency_p50_ms": 49697.0,
+        "latency_p95_ms": 149441.0,
+        "tokens_in": 156459,
+        "tokens_out": 19361,
+        "calibration": {
+          "correct": 0.5046,
+          "wrong": 0.2667,
+          "correct_cases": 9,
+          "wrong_cases": 1
+        },
+        "confusion": {
+          "bad_commit": {
+            "bad_commit": 2
+          },
+          "config_change": {
+            "config_change": 2
+          },
+          "dependency_bump": {
+            "config_change": 1
+          },
+          "flaky_test": {
+            "flaky_test": 1
+          },
+          "infra_outage": {
+            "infra_outage": 1
+          },
+          "expired_or_missing_secret": {
+            "expired_or_missing_secret": 2
+          },
+          "unknown": {
+            "unknown": 1
+          }
+        }
+      },
+      "baseline": {
+        "system": "baseline",
+        "cases": 10,
+        "cause_hits": 10,
+        "cause_accuracy": 1.0,
+        "keyword_hits": 5,
+        "keyword_accuracy": 0.5,
+        "answered": 9,
+        "answered_correct": 9,
+        "answered_precision": 1.0,
+        "providers": [
+          "meterless"
+        ],
+        "citation_evaluated": 0,
+        "citation_pass": null,
+        "citation_pass_rate": null,
+        "guard_interventions": 0,
+        "latency_p50_ms": 4232.0,
+        "latency_p95_ms": 7307.0,
+        "tokens_in": 101627,
+        "tokens_out": 886,
+        "calibration": {
+          "correct": null,
+          "wrong": null,
+          "correct_cases": 0,
+          "wrong_cases": 0
+        },
+        "confusion": {
+          "bad_commit": {
+            "bad_commit": 2
+          },
+          "config_change": {
+            "config_change": 2
+          },
+          "dependency_bump": {
+            "dependency_bump": 1
+          },
+          "flaky_test": {
+            "flaky_test": 1
+          },
+          "infra_outage": {
+            "infra_outage": 1
+          },
+          "expired_or_missing_secret": {
+            "expired_or_missing_secret": 2
+          },
+          "unknown": {
+            "unknown": 1
+          }
+        }
+      }
+    },
+    "holdout": {
+      "agent": {
+        "system": "agent",
+        "cases": 5,
+        "cause_hits": 5,
+        "cause_accuracy": 1.0,
+        "keyword_hits": 4,
+        "keyword_accuracy": 0.8,
+        "answered": 5,
+        "answered_correct": 5,
+        "answered_precision": 1.0,
+        "providers": [
+          "meterless"
+        ],
+        "citation_evaluated": 5,
+        "citation_pass": 5,
+        "citation_pass_rate": 1.0,
+        "guard_interventions": 0,
+        "latency_p50_ms": 56330.0,
+        "latency_p95_ms": 143989.0,
+        "tokens_in": 91054,
+        "tokens_out": 10833,
+        "calibration": {
+          "correct": 0.455,
+          "wrong": null,
+          "correct_cases": 5,
+          "wrong_cases": 0
+        },
+        "confusion": {
+          "bad_commit": {
+            "bad_commit": 1
+          },
+          "config_change": {
+            "config_change": 1
+          },
+          "dependency_bump": {
+            "dependency_bump": 1
+          },
+          "flaky_test": {
+            "flaky_test": 1
+          },
+          "infra_outage": {
+            "infra_outage": 1
+          }
+        }
+      },
+      "baseline": {
+        "system": "baseline",
+        "cases": 5,
+        "cause_hits": 3,
+        "cause_accuracy": 0.6,
+        "keyword_hits": 3,
+        "keyword_accuracy": 0.6,
+        "answered": 3,
+        "answered_correct": 3,
+        "answered_precision": 1.0,
+        "providers": [
+          "meterless"
+        ],
+        "citation_evaluated": 0,
+        "citation_pass": null,
+        "citation_pass_rate": null,
+        "guard_interventions": 0,
+        "latency_p50_ms": 6512.0,
+        "latency_p95_ms": 9757.0,
+        "tokens_in": 83430,
+        "tokens_out": 456,
+        "calibration": {
+          "correct": null,
+          "wrong": null,
+          "correct_cases": 0,
+          "wrong_cases": 0
+        },
+        "confusion": {
+          "bad_commit": {
+            "bad_commit": 1
+          },
+          "config_change": {
+            "unknown": 1
+          },
+          "dependency_bump": {
+            "dependency_bump": 1
+          },
+          "flaky_test": {
+            "flaky_test": 1
+          },
+          "infra_outage": {
+            "unknown": 1
+          }
+        }
+      }
+    },
+    "all": {
+      "agent": {
+        "system": "agent",
+        "cases": 15,
+        "cause_hits": 14,
+        "cause_accuracy": 0.9333,
+        "keyword_hits": 8,
+        "keyword_accuracy": 0.5333,
+        "answered": 14,
+        "answered_correct": 13,
+        "answered_precision": 0.9286,
+        "providers": [
+          "meterless"
+        ],
+        "citation_evaluated": 15,
+        "citation_pass": 15,
+        "citation_pass_rate": 1.0,
+        "guard_interventions": 0,
+        "latency_p50_ms": 56330.0,
+        "latency_p95_ms": 149441.0,
+        "tokens_in": 247513,
+        "tokens_out": 30194,
+        "calibration": {
+          "correct": 0.4869,
+          "wrong": 0.2667,
+          "correct_cases": 14,
+          "wrong_cases": 1
+        },
+        "confusion": {
+          "bad_commit": {
+            "bad_commit": 3
+          },
+          "config_change": {
+            "config_change": 3
+          },
+          "dependency_bump": {
+            "dependency_bump": 1,
+            "config_change": 1
+          },
+          "flaky_test": {
+            "flaky_test": 2
+          },
+          "infra_outage": {
+            "infra_outage": 2
+          },
+          "expired_or_missing_secret": {
+            "expired_or_missing_secret": 2
+          },
+          "unknown": {
+            "unknown": 1
+          }
+        }
+      },
+      "baseline": {
+        "system": "baseline",
+        "cases": 15,
+        "cause_hits": 13,
+        "cause_accuracy": 0.8667,
+        "keyword_hits": 8,
+        "keyword_accuracy": 0.5333,
+        "answered": 12,
+        "answered_correct": 12,
+        "answered_precision": 1.0,
+        "providers": [
+          "meterless"
+        ],
+        "citation_evaluated": 0,
+        "citation_pass": null,
+        "citation_pass_rate": null,
+        "guard_interventions": 0,
+        "latency_p50_ms": 4737.0,
+        "latency_p95_ms": 9757.0,
+        "tokens_in": 185057,
+        "tokens_out": 1342,
+        "calibration": {
+          "correct": null,
+          "wrong": null,
+          "correct_cases": 0,
+          "wrong_cases": 0
+        },
+        "confusion": {
+          "bad_commit": {
+            "bad_commit": 3
+          },
+          "config_change": {
+            "unknown": 1,
+            "config_change": 2
+          },
+          "dependency_bump": {
+            "dependency_bump": 2
+          },
+          "flaky_test": {
+            "flaky_test": 2
+          },
+          "infra_outage": {
+            "unknown": 1,
+            "infra_outage": 1
+          },
+          "expired_or_missing_secret": {
+            "expired_or_missing_secret": 2
+          },
+          "unknown": {
+            "unknown": 1
+          }
+        }
+      }
+    }
+  },
+  "pending": [],
+  "baseline_pending": []
+}

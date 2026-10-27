@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-27T12:46:02",
+  "recorded_at": "2026-10-27T13:39:13",
   "lane": "fast",
   "provider": "meterless",
   "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
     "cause": "expired_or_missing_secret",
-    "root_cause": "The curl command to check the GitHub API returned a 401 Unauthorized status code, indicating an authentication failure.",
-    "next_step": "Verify that the token used in the workflow has the necessary permissions and has not expired."
+    "root_cause": "The final step failed because the GitHub API returned a 401 Unauthorized error when attempting to check the user via curl, indicating an authentication issue.",
+    "next_step": "Verify that the necessary GitHub secret or token used in the workflow is correctly configured and has not expired."
   },
-  "raw": "{\"cause\": \"expired_or_missing_secret\", \"root_cause\": \"The curl command to check the GitHub API returned a 401 Unauthorized status code, indicating an authentication failure.\", \"next_step\": \"Verify that the token used in the workflow has the necessary permissions and has not expired.\"}",
+  "raw": "{\"cause\": \"expired_or_missing_secret\", \"root_cause\": \"The final step failed because the GitHub API returned a 401 Unauthorized error when attempting to check the user via curl, indicating an authentication issue.\", \"next_step\": \"Verify that the necessary GitHub secret or token used in the workflow is correctly configured and has not expired.\"}",
   "usage": {
-    "prompt_tokens": 9633,
-    "completion_tokens": 66,
-    "latency_ms": 2923
+    "prompt_tokens": 8639,
+    "completion_tokens": 76,
+    "latency_ms": 3454
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

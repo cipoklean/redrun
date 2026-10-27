@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-27T12:43:09",
+  "recorded_at": "2026-10-27T13:36:46",
   "lane": "fast",
   "provider": "meterless",
   "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
-    "cause": "flaky_test",
-    "root_cause": "The test suite failed due to multiple assertions failing, including one related to unicode file names and others related to admin view structure, suggesting environment or test instability rather than a single code change error.",
-    "next_step": "Review the specific failing tests (test_unicode_file_name, test_delete_selected_hides_objects_when_limit_zero, test_sidebar_model_name_non_ascii) to determine if they are inherently flaky or require environment setup adjustments."
+    "cause": "unknown",
+    "root_cause": "The logs show multiple test failures related to i18n (unicode file names) and admin view rendering (CSS classes, object counts), but there is no information about the execution environment (like Python version or dependencies) to pinpoint a single root cause.",
+    "next_step": "Investigate the specific test failures, particularly the i18n error, to determine if it is related to character encoding or environment configuration."
   },
-  "raw": "{\"cause\": \"flaky_test\", \"root_cause\": \"The test suite failed due to multiple assertions failing, including one related to unicode file names and others related to admin view structure, suggesting environment or test instability rather than a single code change error.\", \"next_step\": \"Review the specific failing tests (test_unicode_file_name, test_delete_selected_hides_objects_when_limit_zero, test_sidebar_model_name_non_ascii) to determine if they are inherently flaky or require environment setup adjustments.\"}",
+  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The logs show multiple test failures related to i18n (unicode file names) and admin view rendering (CSS classes, object counts), but there is no information about the execution environment (like Python version or dependencies) to pinpoint a single root cause.\", \"next_step\": \"Investigate the specific test failures, particularly the i18n error, to determine if it is related to character encoding or environment configuration.\"}",
   "usage": {
-    "prompt_tokens": 42121,
-    "completion_tokens": 117,
-    "latency_ms": 9172
+    "prompt_tokens": 43799,
+    "completion_tokens": 99,
+    "latency_ms": 9757
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }
