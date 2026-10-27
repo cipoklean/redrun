@@ -46,7 +46,11 @@ ENVIRONMENT_FILES = re.compile(
     r"\.python-version|runtime\.txt)$"
 )
 # Log patterns that mean a test ran and failed, as opposed to the runner falling over.
-TEST_FAILURE_PATTERNS = frozenset({"pytest_failure", "traceback", "python_error"})
+TEST_FAILURE_PATTERNS = frozenset(
+    {"pytest_failure", "traceback", "python_error", "compile_error"}
+)
+# What a job looks like when the far end failed rather than the code.
+UPSTREAM_PATTERNS = frozenset({"infra_env", "timeout"})
 
 
 def _admits_newer_release(old: str | None, new: str | None) -> bool:
@@ -431,6 +435,18 @@ class Skeptic:
                                evidence_ids=[e.id for e in self.last_outage_evidence])
 
         if verdict.cause is Cause.INFRA_OUTAGE:
+            upstream = self._upstream_failure()
+            if upstream is not None:
+                log_id, run_id, _ = upstream
+                return CheckResult(
+                    check="outage_overlap",
+                    status="pass",
+                    detail=(
+                        "no GitHub incident, but a service the job calls failed and the "
+                        "same commit succeeded before, so the outage is upstream"
+                    ),
+                    evidence_ids=[log_id, run_id],
+                )
             return CheckResult(
                 check="outage_overlap",
                 status="fail",
@@ -571,6 +587,20 @@ class Skeptic:
         if incident:
             outage = self._outage_candidate()
             return [outage] if outage is not None else []
+        upstream = self._upstream_failure()
+        if upstream is not None:
+            log_id, run_id, line = upstream
+            quoted = f" ({redact(line[:160])})" if line else ""
+            return [
+                (
+                    Cause.INFRA_OUTAGE,
+                    f"the job failed calling a service outside the repo{quoted} and the same "
+                    f"commit {self.runs.failed_run.head_sha[:7]} succeeded in run "
+                    f"{run_id.removeprefix('ev_run_')}, so nothing in the code changed; the "
+                    f"service was down or slow ({log_id}, {run_id})",
+                    [log_id, run_id],
+                )
+            ]
         if not self._log_looks_like_test_failure():
             return []
 
@@ -681,6 +711,36 @@ class Skeptic:
             f"({', '.join(cited)}), so the failure came from the platform, not this change",
             cited,
         )
+
+    def _upstream_failure(self) -> tuple[str, str, str] | None:
+        """A non-test job (a ping, a deploy, a fetch) failed on a network error or a
+        timeout while the very same commit had succeeded in the same workflow.
+
+        Nothing in the repo moved, no test ran, and the log names the far end failing:
+        that is an outage of something the job depends on, even with no GitHub incident.
+        Returns (log evidence id, same-commit run evidence id, the matched line).
+        """
+        if self.runs.failed_run.conclusion == "cancelled" or self._log_looks_like_test_failure():
+            return None
+        workflow = self.runs.failed_run.workflow_name
+        same_sha = [
+            run
+            for run in self.last_same_sha_runs
+            if run.get("conclusion") == "success"
+            and (not run.get("workflow") or run.get("workflow") == workflow)
+        ]
+        if not same_sha:
+            return None
+        for item in self.evidence:
+            if item.kind != "log" or item.metadata.get("tail"):
+                continue
+            if set(item.metadata.get("patterns") or []) & UPSTREAM_PATTERNS:
+                line = next(
+                    (m.text.strip() for m in self.job_logs.matches if m.evidence_id == item.id),
+                    "",
+                )
+                return item.id, f"ev_run_{same_sha[0].get('run_id')}", line
+        return None
 
     def _log_looks_like_test_failure(self) -> bool:
         """Did a test run and fail, rather than the job being cancelled or never starting?"""

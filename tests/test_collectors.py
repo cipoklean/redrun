@@ -297,3 +297,50 @@ def test_every_evidence_has_a_source_url_and_timestamp(sample: str) -> None:
         assert ev.source_url.startswith("https://github.com/acme/widgets")
         assert ev.id
         assert ev.title
+
+
+def test_coloured_compiler_errors_are_found_and_shown_without_escapes() -> None:
+    lines = [
+        "2026-10-14T23:22:54.1Z ##[group]Run # https://example.com/t-cargo/topic/timeout.20investigation",
+        "2026-10-14T23:22:54.2Z \x1b[36;1mcargo test --locked\x1b[0m",
+        "2026-10-14T23:23:05.1Z \x1b[1m\x1b[91merror[E0432]\x1b[0m\x1b[1m: unresolved import `ratatui`\x1b[0m",
+        "2026-10-14T23:23:05.2Z \x1b[1m\x1b[91merror\x1b[0m: could not compile `sweepr` due to 10 previous errors",
+        "2026-10-14T23:23:05.3Z ##[error]Process completed with exit code 101.",
+    ]
+    hits = logs._hits(lines)
+    assert [name for _, name in hits] == ["compile_error", "compile_error"]
+
+
+def test_the_tail_ends_at_the_failing_step_not_the_post_job_cleanup() -> None:
+    lines = [f"line {i}" for i in range(10)] + ["##[error]Process completed with exit code 1."]
+    lines += ["Post job cleanup.", "git config --unset-all http.extraheader", "Cleaning up orphan processes"]
+    tail = logs._tail(lines)
+    assert tail[-1].startswith("##[error]")
+    assert "Cleaning up orphan processes" not in tail
+
+
+def test_pytest_prefixed_import_errors_are_python_errors() -> None:
+    hits = logs._hits(["E   ModuleNotFoundError: No module named 'ugbo'"])
+    assert hits == [(0, "python_error")]
+
+
+class _FirstRunGitHub(FakeGitHub):
+    def compare(self, owner: str, repo: str, base: str, head: str) -> dict[str, Any]:
+        self.calls.append(("compare", {"base": base, "head": head}))
+        return {
+            "commits": [{"sha": head, "commit": {"message": "add the test workflow"}}],
+            "files": [{"filename": ".github/workflows/test.yml", "status": "added", "patch": "+run: pytest -q"}],
+        }
+
+
+def test_a_first_run_with_no_green_baseline_diffs_the_commit_against_its_parent() -> None:
+    runs = [_run(10, 7, "2026-10-23" + "T12:00:00Z", "failure")]
+    client = _FirstRunGitHub(runs)
+    target = parse_target("acme/widgets")
+    context = CollectContext(settings=settings(), target=target, sample=None)
+    got_runs = github_runs.collect(context, client)
+    assert got_runs.last_green_run is None
+    changes = diff_collector.collect(context, got_runs, client)
+    head = got_runs.failed_run.head_sha
+    assert ("compare", {"base": f"{head}~1", "head": head}) in client.calls
+    assert [item.filename for item in changes.files] == [".github/workflows/test.yml"]

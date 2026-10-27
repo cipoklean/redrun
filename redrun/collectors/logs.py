@@ -6,7 +6,7 @@ from typing import Any
 
 from redrun.collectors.base import CollectContext, CollectorError, GitHubAPI
 from redrun.collectors.github_runs import RunsCollected
-from redrun.core.logtext import strip_timestamp
+from redrun.core.logtext import clean_line, strip_ansi, strip_timestamp
 from redrun.core.models import Evidence
 from redrun.core.redact import redact
 
@@ -32,6 +32,13 @@ PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
             r"|bad credentials|invalid token|authentication required|secret .+ is empty)"
         ),
     ),
+    (
+        "compile_error",
+        re.compile(
+            r"^(?:error(?:\[E\d+\])?: |error TS\d+:|error: could not compile"
+            r"|\S+:\d+:\d+: (?:fatal )?error: )"
+        ),
+    ),
     ("timeout", re.compile(r"(?i)(timed out|timeout|deadline exceeded)")),
     (
         "infra_env",
@@ -41,10 +48,13 @@ PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
             r"|temporary failure in name resolution|could not resolve host|tls handshake"
             r"|failed to download (?:action|archive)|too many requests|bad gateway"
             r"|service unavailable|http error 50[234]|is the internet available"
-            r"|status code does not indicate success)"
+            r"|status code does not indicate success|^\s*50[234]\s*$)"
         ),
     ),
-    ("python_error", re.compile(r"^[A-Za-z_][A-Za-z0-9_.]*(?:Error|Exception)(?::.*)?$")),
+    (
+        "python_error",
+        re.compile(r"^(?:E\s+)?[A-Za-z_][A-Za-z0-9_.]*(?:Error|Exception)(?::.*)?$"),
+    ),
 )
 
 
@@ -68,10 +78,19 @@ def _strip_timestamp(line: str) -> str:
     return _TIMESTAMP.sub("", line)
 
 
+def _is_script_echo(line: str) -> bool:
+    """The runner echoes each step's script before running it, and a comment or a URL
+    in that script ("timeout investigation") is not something the job hit."""
+    body = strip_timestamp(line)
+    return body.startswith(("##[group]Run ", "\x1b[36;1m", "[36;1m"))
+
+
 def _hits(lines: list[str]) -> list[tuple[int, str]]:
     found: list[tuple[int, str]] = []
     for index, line in enumerate(lines):
-        body = strip_timestamp(line)
+        if _is_script_echo(line):
+            continue
+        body = clean_line(line)
         for name, pattern in PATTERNS:
             if pattern.search(body):
                 found.append((index, name))
@@ -96,7 +115,17 @@ def _windows(lines: list[str], context: int = CONTEXT_LINES) -> list[dict[str, A
 
 
 def _tail(lines: list[str]) -> list[str]:
-    return lines[-TAIL_LINES:]
+    """The lines before the job's last error marker, not the post-job cleanup after it.
+
+    A job log ends with checkout's post step and orphan-process cleanup, so the last 300
+    lines of a short failing step can hold nothing but git config calls.
+    """
+    marker = next(
+        (index for index in range(len(lines) - 1, -1, -1) if "##[error]" in lines[index]),
+        None,
+    )
+    end = len(lines) if marker is None else marker + 1
+    return lines[max(0, end - TAIL_LINES) : end]
 
 
 def _job_logs(
@@ -144,7 +173,7 @@ def collect(
                     line=first_hit + 1,
                     pattern=pattern,
                     evidence_id=evidence_id,
-                    text=strip_timestamp(lines[first_hit]).strip(),
+                    text=clean_line(lines[first_hit]).strip(),
                 )
             )
             out.evidence.append(
@@ -156,7 +185,7 @@ def collect(
                         f"{runs.failed_run.run_id}/job/{job_id}"
                     ),
                     title=f"{pattern} at line {first_hit + 1} in {job_name}",
-                    excerpt=redact("\n".join(lines[window["start"] : window["end"]])),
+                    excerpt=redact("\n".join(strip_ansi(line) for line in lines[window["start"] : window["end"]])),
                     timestamp=runs.failed_run.created_at,
                     metadata={
                         "job": job_name,
@@ -177,7 +206,7 @@ def collect(
                     f"{runs.failed_run.run_id}/job/{job_id}?tail=1"
                 ),
                 title=f"Log tail ({len(tail)} lines) of {job_name}",
-                excerpt=redact("\n".join(tail)),
+                excerpt=redact("\n".join(strip_ansi(line) for line in tail)),
                 timestamp=runs.failed_run.created_at,
                 metadata={
                     "job": job_name,

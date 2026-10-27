@@ -53,11 +53,21 @@ def collect(
     ctx: CollectContext, runs: RunsCollected, client: GitHubAPI | None = None
 ) -> DiffCollected:
     if runs.last_green_run is None:
-        # No green baseline means there is no range to compare, and guessing one
-        # would attribute unrelated history to this failure.
-        return DiffCollected()
-
-    if ctx.is_sample:
+        if ctx.is_sample or client is None:
+            # No green baseline means there is no range to compare, and guessing one
+            # would attribute unrelated history to this failure.
+            return DiffCollected()
+        # A workflow's first run has never been green. The commit under test is still
+        # the one thing known to have changed, so its own diff against its parent is
+        # the narrowest honest range; anything older is unrelated history.
+        try:
+            data = client.compare(
+                runs.owner, runs.repo, f"{runs.failed_run.head_sha}~1", runs.failed_run.head_sha
+            )
+        except CollectorError:
+            return DiffCollected()
+        data = {"commits": data.get("commits", [])[-1:], "files": data.get("files", [])}
+    elif ctx.is_sample:
         data = ctx.fixture("diff.json")
     else:
         if client is None:
