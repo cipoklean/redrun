@@ -291,6 +291,14 @@ class Skeptic:
         )
 
     def _error_change_overlap(self, verdict: Verdict) -> CheckResult:
+        if verdict.cause is Cause.INFRA_OUTAGE:
+            # An outage is not caused by a change, so no log-to-change link can exist.
+            # outage_overlap is the check that has to hold for this cause.
+            return CheckResult(
+                check="error_change_overlap",
+                status="n/a",
+                detail="an outage is not caused by a change; outage_overlap decides it",
+            )
         cited = set(verdict.cited_evidence_ids)
         cited_logs = {item for item in cited if item.startswith("ev_log")}
         if not cited_logs:
@@ -560,7 +568,10 @@ class Skeptic:
         incident = any(
             item.check == "outage_overlap" and item.status == "fail" for item in report.checks
         )
-        if incident or not self._log_looks_like_test_failure():
+        if incident:
+            outage = self._outage_candidate()
+            return [outage] if outage is not None else []
+        if not self._log_looks_like_test_failure():
             return []
 
         workflow = self.runs.failed_run.workflow_name
@@ -620,6 +631,56 @@ class Skeptic:
                 if len(out) >= limit:
                     return out
         return out
+
+    def _outage_candidate(self) -> tuple[Cause, str, list[str]] | None:
+        """A GitHub incident overlaps the run and the run itself shows it.
+
+        An incident in the window is not enough on its own: GitHub has one most days.
+        The failure has to carry the outage's fingerprint too, either a network or
+        download error in the failed job's log, or the same commit succeeding in
+        another run. A cancelled run is neither: nothing failed.
+        """
+        if self.runs.failed_run.conclusion == "cancelled" or not self.last_outage_evidence:
+            return None
+        infra_logs = [
+            item.id
+            for item in self.evidence
+            if item.kind == "log"
+            and not item.metadata.get("tail")
+            and "infra_env" in (item.metadata.get("patterns") or [])
+        ]
+        workflow = self.runs.failed_run.workflow_name
+        same_sha = [
+            run
+            for run in self.last_same_sha_runs
+            if run.get("conclusion") == "success"
+            and (not run.get("workflow") or run.get("workflow") == workflow)
+        ]
+        if not infra_logs and not same_sha:
+            return None
+        incident = self.last_outage_evidence[0]
+        cited = [incident.id]
+        if infra_logs:
+            cited.append(infra_logs[0])
+            line = next(
+                (
+                    match.text.strip()
+                    for match in self.job_logs.matches
+                    if match.pattern == "infra_env" and match.evidence_id == infra_logs[0]
+                ),
+                "",
+            )
+            quoted = f": {redact(line[:160])}" if line else ""
+            shown = f"the failed job hit a network or download error{quoted}"
+        else:
+            cited.append(f"ev_run_{same_sha[0].get('run_id')}")
+            shown = "the same commit succeeded in another run"
+        return (
+            Cause.INFRA_OUTAGE,
+            f"GitHub incident '{incident.title}' overlaps the run and {shown} "
+            f"({', '.join(cited)}), so the failure came from the platform, not this change",
+            cited,
+        )
 
     def _log_looks_like_test_failure(self) -> bool:
         """Did a test run and fail, rather than the job being cancelled or never starting?"""

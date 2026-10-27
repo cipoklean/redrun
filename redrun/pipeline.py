@@ -287,6 +287,23 @@ def _triage_cause(links: list[Link], job_logs: logs.LogsCollected) -> Cause:
     return Cause.UNKNOWN
 
 
+def _fallback_next_step(cause: Cause) -> str:
+    if cause is Cause.FLAKY_TEST:
+        return (
+            "Re-run the job. If it fails again on the same commit, treat it as a "
+            "real break rather than a flake."
+        )
+    if cause is Cause.INFRA_OUTAGE:
+        return (
+            "Nothing to fix in the code. Re-run the failed jobs once githubstatus.com "
+            "shows the incident resolved."
+        )
+    return (
+        "Compare the environment change against the failing step, then "
+        "fix or revert it and re-run."
+    )
+
+
 def _merge_markovian(first: MarkovianMetrics, extra: MarkovianMetrics) -> MarkovianMetrics:
     tokens_in = first.tokens_in + extra.tokens_in
     return MarkovianMetrics(
@@ -455,13 +472,7 @@ def _investigate_prepared(
                     root_cause=detail,
                     confidence=0.0,
                     confidence_breakdown=[],
-                    next_step=(
-                        "Re-run the job. If it fails again on the same commit, treat it as a "
-                        "real break rather than a flake."
-                        if cause is Cause.FLAKY_TEST
-                        else "Compare the environment change against the failing step, then "
-                        "fix or revert it and re-run."
-                    ),
+                    next_step=_fallback_next_step(cause),
                     cited_evidence_ids=cited,
                 )
                 confirmed = skeptic.check(candidate, revisions=report.revisions)

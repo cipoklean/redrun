@@ -442,6 +442,14 @@ def main(argv: list[str] | None = None) -> int:
     except (ValueError, CollectorError, EngineError) as exc:
         print(f"redrun: {exc}", file=sys.stderr)
         return 2
+    except LLMError as exc:
+        print(
+            f"redrun: the model could not be reached ({str(exc).strip()}). Check that Nightshift is "
+            "running and METERLESS_RUNTIME_TOKEN is set, then run "
+            "`python -m redrun meterless-check`.",
+            file=sys.stderr,
+        )
+        return 2
 
     print(result.model_dump_json(indent=2) if args.as_json else _human(result))
     return 0

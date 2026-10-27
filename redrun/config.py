@@ -23,8 +23,8 @@ class Settings:
     llm_provider: str = "meterless"
     meterless_base_url: str = "http://127.0.0.1:8088/v1"
     meterless_runtime_token: str = ""
-    meterless_fast_model: str = "nvidia/nemotron-3.5-lightning-30b-a3b"
-    meterless_deep_model: str = "nvidia/nemotron-3.5-super-vl-120b-a12b"
+    meterless_fast_model: str = "nvidia/nemotron-3.5-bolt-e4b"
+    meterless_deep_model: str = "nvidia/nemotron-3-ultra-550b-a55b"
     meterless_judge_model: str = ""
     nvidia_api_key: str = ""
     github_token: str = ""
@@ -54,9 +54,9 @@ def load_settings() -> Settings:
         meterless_base_url=os.getenv("METERLESS_BASE_URL") or "http://127.0.0.1:8088/v1",
         meterless_runtime_token=os.getenv("METERLESS_RUNTIME_TOKEN") or "",
         meterless_fast_model=os.getenv("METERLESS_FAST_MODEL")
-        or "nvidia/nemotron-3.5-lightning-30b-a3b",
+        or "nvidia/nemotron-3.5-bolt-e4b",
         meterless_deep_model=os.getenv("METERLESS_DEEP_MODEL")
-        or "nvidia/nemotron-3.5-super-vl-120b-a12b",
+        or "nvidia/nemotron-3-ultra-550b-a55b",
         meterless_judge_model=os.getenv("METERLESS_JUDGE_MODEL") or "",
         nvidia_api_key=os.getenv("NVIDIA_API_KEY") or "",
         github_token=os.getenv("GITHUB_TOKEN") or "",

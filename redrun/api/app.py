@@ -15,7 +15,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from redrun.adapters.base import EngineError
-from redrun.adapters.llm import LLMClient
+from redrun.adapters.llm import LLMClient, LLMError
 from redrun.adapters.zetaris import ZetarisEngine
 from redrun.collectors.base import CollectorError
 from redrun.config import Settings, load_settings
@@ -180,6 +180,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             raise HTTPException(status_code=502, detail=str(exc)) from exc
         except EngineError as exc:
             raise HTTPException(status_code=502, detail=str(exc)) from exc
+        except LLMError as exc:
+            raise HTTPException(
+                status_code=503, detail=f"the model could not be reached: {exc}"
+            ) from exc
 
     def _index() -> FileResponse:
         index = cfg.frontend_dir / "index.html"
@@ -215,6 +219,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 )
             except (ValueError, CollectorError, EngineError) as exc:
                 queue.put({"detail": str(exc)})
+            except LLMError as exc:
+                queue.put({"detail": f"the model could not be reached: {exc}"})
+            except Exception as exc:  # noqa: BLE001 - the stream must always say why it ended
+                queue.put({"detail": f"the run stopped unexpectedly: {type(exc).__name__}"})
             finally:
                 queue.put(None)
 

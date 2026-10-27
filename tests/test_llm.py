@@ -188,9 +188,21 @@ def test_nvidia_uses_its_own_base_url_and_key() -> None:
     assert seen[0].url.host == "integrate.api.nvidia.com"
     assert seen[0].url.path == "/v1/chat/completions"
     assert seen[0].headers["authorization"] == "Bearer nv-key"
-    assert got.usage.model == "nvidia/nemotron-3.5-lightning-30b-a3b"
+    assert got.usage.model == Settings().meterless_fast_model
 
 
 def test_unknown_provider_is_rejected_at_construction() -> None:
     with pytest.raises(LLMError):
         LLMClient(Settings(sample_mode=False, llm_provider="mystery"))
+
+
+def test_an_empty_runtime_token_sends_no_authorization_header() -> None:
+    seen: list[httpx.Request] = []
+    settings = Settings(sample_mode=False, llm_provider="meterless", meterless_runtime_token="")
+    client = LLMClient(
+        settings,
+        transport=httpx.MockTransport(handler_for(seen, {"choices": [{"message": {"content": "y"}}]})),
+    )
+    client.complete([{"role": "user", "content": "x"}], lane="fast")
+    assert "authorization" not in seen[0].headers
+    assert seen[0].headers["meterless-app"] == "redrun"

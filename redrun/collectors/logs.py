@@ -38,7 +38,10 @@ PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
         re.compile(
             r"(?i)(no space left on device|disk quota|out of memory|oom-kill"
             r"|connection reset|connection refused|network is unreachable"
-            r"|temporary failure in name resolution|could not resolve host|tls handshake)"
+            r"|temporary failure in name resolution|could not resolve host|tls handshake"
+            r"|failed to download (?:action|archive)|too many requests|bad gateway"
+            r"|service unavailable|http error 50[234]|is the internet available"
+            r"|status code does not indicate success)"
         ),
     ),
     ("python_error", re.compile(r"^[A-Za-z_][A-Za-z0-9_.]*(?:Error|Exception)(?::.*)?$")),

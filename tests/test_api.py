@@ -94,3 +94,22 @@ def test_run_rejects_an_unknown_sample(client: TestClient) -> None:
     response = client.post("/run", json={"sample": "nope"})
     assert response.status_code == 502
     assert "fixture" in response.json()["detail"].lower()
+
+
+def test_an_unreachable_model_is_a_503_and_a_stream_error(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from redrun.adapters.llm import LLMError
+    import redrun.api.app as app_module
+
+    def boom(*args, **kwargs):
+        raise LLMError("meterless unreachable: connection refused")
+
+    monkeypatch.setattr(app_module, "investigate", boom)
+    response = client.post("/run", json={"sample": "bad_commit"})
+    assert response.status_code == 503
+    assert "could not be reached" in response.json()["detail"]
+
+    stream = client.post("/run/stream", json={"sample": "bad_commit"})
+    assert "event: error" in stream.text
+    assert "could not be reached" in stream.text

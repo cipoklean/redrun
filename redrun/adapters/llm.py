@@ -41,6 +41,17 @@ class Completion:
     usage: Usage
 
 
+def _bearer(token: str) -> dict[str, str]:
+    """An empty token sends no Authorization header at all.
+
+    `Bearer ` with nothing after it is an illegal header value, so httpx refuses the
+    request before it leaves and the runtime never gets to answer 401. Leaving the
+    header off lets the provider say what is wrong instead.
+    """
+    token = (token or "").strip()
+    return {"Authorization": f"Bearer {token}"} if token else {}
+
+
 class LLMClient:
     """`complete(messages, lane)` returns text plus usage. `status()` is a probe."""
 
@@ -69,10 +80,10 @@ class LLMClient:
         if self.provider == "meterless":
             base = settings.meterless_base_url.rstrip("/")
             self.request_meta = {"meterless-app": "redrun", "meterless-scope": "user"}
-            headers = {**self.request_meta, "Authorization": f"Bearer {settings.meterless_runtime_token}"}
+            headers = {**self.request_meta, **_bearer(settings.meterless_runtime_token)}
         elif self.provider == "nvidia":
             base = NVIDIA_BASE_URL
-            headers = {"Authorization": f"Bearer {settings.nvidia_api_key}"}
+            headers = _bearer(settings.nvidia_api_key)
         else:
             raise LLMError(f"unknown LLM_PROVIDER: {settings.llm_provider!r}")
 

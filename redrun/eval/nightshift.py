@@ -18,10 +18,10 @@ from redrun.adapters.llm import LLMClient, LLMError
 from redrun.config import Settings
 
 # Pinned, so a re-record cannot quietly run on whatever .env happens to name.
-FAST_MODEL = "nvidia/nemotron-3.5-lightning-30b-a3b"
-DEEP_MODEL = "nvidia/nemotron-3.5-super-vl-120b-a12b"
+FAST_MODEL = "nvidia/nemotron-3.5-bolt-e4b"
+DEEP_MODEL = "nvidia/nemotron-3-ultra-550b-a55b"
 # The fallback for both lanes when the deep one will not answer.
-FALLBACK_MODEL = "nvidia/nemotron-3.5-lightning-30b-a3b"
+FALLBACK_MODEL = "nvidia/nemotron-3.5-bolt-e4b"
 
 PROVIDER = "meterless"
 PROBE_PROMPT = "Reply with the single word: ready"
