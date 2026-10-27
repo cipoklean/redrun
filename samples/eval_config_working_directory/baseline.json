@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-27T02:01:35",
+  "recorded_at": "2026-10-27T12:38:29",
   "lane": "fast",
   "provider": "meterless",
   "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
     "cause": "unknown",
-    "root_cause": "The job failed because the 'requirements.txt' file was not found in the working directory during the pip installation step.",
-    "next_step": "Verify that requirements.txt exists in the root of the repository checked out by the workflow."
+    "root_cause": "The job failed because the requirements file 'requirements.txt' could not be found in the working directory during the pip installation step.",
+    "next_step": "Verify that 'requirements.txt' exists in the root of the checked-out repository before running the installation command."
   },
-  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The job failed because the 'requirements.txt' file was not found in the working directory during the pip installation step.\", \"next_step\": \"Verify that requirements.txt exists in the root of the repository checked out by the workflow.\"}",
+  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The job failed because the requirements file 'requirements.txt' could not be found in the working directory during the pip installation step.\", \"next_step\": \"Verify that 'requirements.txt' exists in the root of the checked-out repository before running the installation command.\"}",
   "usage": {
-    "prompt_tokens": 7538,
-    "completion_tokens": 62,
-    "latency_ms": 3940
+    "prompt_tokens": 8674,
+    "completion_tokens": 69,
+    "latency_ms": 3130
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

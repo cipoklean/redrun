@@ -1,5 +1,5 @@
 {
-  "recorded_at": "2026-10-27T01:57:25",
+  "recorded_at": "2026-10-27T12:35:32",
   "lane": "fast",
   "provider": "meterless",
   "model": "nvidia/nemotron-3.5-bolt-e4b",
@@ -7,13 +7,13 @@
   "reply": {
     "cause": "bad_commit",
     "root_cause": "The test failed due to an ImportError: cannot import name 'format_total' from 'lab.summary', indicating a mismatch between the code being tested and the expected structure, likely introduced by the commit.",
-    "next_step": "Review the commit 21505ad2541d5be6135ed84fc33697146cf75b8e to identify the change that caused the missing export in lab.summary."
+    "next_step": "Review the commit 21505ad2541d5be6135ed84fc33697146cf75b8e to identify the change that caused the missing 'format_total' function and correct the code or the test."
   },
-  "raw": "{\"cause\": \"bad_commit\", \"root_cause\": \"The test failed due to an ImportError: cannot import name 'format_total' from 'lab.summary', indicating a mismatch between the code being tested and the expected structure, likely introduced by the commit.\", \"next_step\": \"Review the commit 21505ad2541d5be6135ed84fc33697146cf75b8e to identify the change that caused the missing export in lab.summary.\"}",
+  "raw": "{\"cause\": \"bad_commit\", \"root_cause\": \"The test failed due to an ImportError: cannot import name 'format_total' from 'lab.summary', indicating a mismatch between the code being tested and the expected structure, likely introduced by the commit.\", \"next_step\": \"Review the commit 21505ad2541d5be6135ed84fc33697146cf75b8e to identify the change that caused the missing 'format_total' function and correct the code or the test.\"}",
   "usage": {
     "prompt_tokens": 11607,
-    "completion_tokens": 116,
-    "latency_ms": 4224
+    "completion_tokens": 124,
+    "latency_ms": 5043
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

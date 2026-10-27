@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-27T12:24:21",
+  "recorded_at": "2026-10-27T12:46:02",
   "lane": "fast",
   "provider": "meterless",
   "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
     "cause": "expired_or_missing_secret",
-    "root_cause": "The attempt to query the GitHub API using the provided token resulted in a 401 Unauthorized error, indicating the token is invalid or lacks necessary permissions.",
-    "next_step": "Verify that the secret used for the GitHub API call is correctly configured and has the required 'read' scope."
+    "root_cause": "The curl command to check the GitHub API returned a 401 Unauthorized status code, indicating an authentication failure.",
+    "next_step": "Verify that the token used in the workflow has the necessary permissions and has not expired."
   },
-  "raw": "{\"cause\": \"expired_or_missing_secret\", \"root_cause\": \"The attempt to query the GitHub API using the provided token resulted in a 401 Unauthorized error, indicating the token is invalid or lacks necessary permissions.\", \"next_step\": \"Verify that the secret used for the GitHub API call is correctly configured and has the required 'read' scope.\"}",
+  "raw": "{\"cause\": \"expired_or_missing_secret\", \"root_cause\": \"The curl command to check the GitHub API returned a 401 Unauthorized status code, indicating an authentication failure.\", \"next_step\": \"Verify that the token used in the workflow has the necessary permissions and has not expired.\"}",
   "usage": {
     "prompt_tokens": 9633,
-    "completion_tokens": 79,
-    "latency_ms": 3385
+    "completion_tokens": 66,
+    "latency_ms": 2923
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

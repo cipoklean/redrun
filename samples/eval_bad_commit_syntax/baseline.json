@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-27T01:58:26",
+  "recorded_at": "2026-10-27T12:36:11",
   "lane": "fast",
   "provider": "meterless",
   "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
     "cause": "bad_commit",
-    "root_cause": "The test failed due to a Python SyntaxError in lab/parse.py, specifically missing a colon after a for loop, indicating a code issue in the checked-out commit.",
-    "next_step": "Review the changes in the 'case/bad-commit-syntax' branch to correct the Python syntax error."
+    "root_cause": "The test failed due to a SyntaxError in lab/parse.py on line 7, specifically expecting a colon after a for loop, indicating a code error in the checked-out commit.",
+    "next_step": "Review the code change in the commit to correct the Python syntax error."
   },
-  "raw": "{\"cause\": \"bad_commit\", \"root_cause\": \"The test failed due to a Python SyntaxError in lab/parse.py, specifically missing a colon after a for loop, indicating a code issue in the checked-out commit.\", \"next_step\": \"Review the changes in the 'case/bad-commit-syntax' branch to correct the Python syntax error.\"}",
+  "raw": "{\"cause\": \"bad_commit\", \"root_cause\": \"The test failed due to a SyntaxError in lab/parse.py on line 7, specifically expecting a colon after a for loop, indicating a code error in the checked-out commit.\", \"next_step\": \"Review the code change in the commit to correct the Python syntax error.\"}",
   "usage": {
-    "prompt_tokens": 10090,
-    "completion_tokens": 80,
-    "latency_ms": 3327
+    "prompt_tokens": 11177,
+    "completion_tokens": 75,
+    "latency_ms": 4491
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

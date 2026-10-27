@@ -1,5 +1,5 @@
 {
-  "recorded_at": "2026-10-27T01:56:22",
+  "recorded_at": "2026-10-27T12:34:45",
   "lane": "fast",
   "provider": "meterless",
   "model": "nvidia/nemotron-3.5-bolt-e4b",
@@ -13,7 +13,7 @@
   "usage": {
     "prompt_tokens": 11009,
     "completion_tokens": 73,
-    "latency_ms": 3261
+    "latency_ms": 3181
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

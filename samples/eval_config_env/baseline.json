@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-27T01:59:19",
+  "recorded_at": "2026-10-27T12:36:55",
   "lane": "fast",
   "provider": "meterless",
   "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
-    "cause": "expired_or_missing_secret",
-    "root_cause": "The test failed with a KeyError because the environment variable LAB_APP_MODE was not set during the test execution. This variable is likely intended to be provided via a secret or environment configuration in the workflow.",
-    "next_step": "Verify that LAB_APP_MODE is correctly configured as an environment variable or secret in the GitHub Actions workflow."
+    "cause": "config_change",
+    "root_cause": "The test 'test_app_mode_is_known' expects the environment variable 'LAB_APP_MODE' to be set to 'ci' or 'local', but it is missing, causing a KeyError during execution.",
+    "next_step": "Ensure the 'LAB_APP_MODE' environment variable is explicitly set in the GitHub Actions workflow before running tests."
   },
-  "raw": "{\"cause\": \"expired_or_missing_secret\", \"root_cause\": \"The test failed with a KeyError because the environment variable LAB_APP_MODE was not set during the test execution. This variable is likely intended to be provided via a secret or environment configuration in the workflow.\", \"next_step\": \"Verify that LAB_APP_MODE is correctly configured as an environment variable or secret in the GitHub Actions workflow.\"}",
+  "raw": "{\"cause\": \"config_change\", \"root_cause\": \"The test 'test_app_mode_is_known' expects the environment variable 'LAB_APP_MODE' to be set to 'ci' or 'local', but it is missing, causing a KeyError during execution.\", \"next_step\": \"Ensure the 'LAB_APP_MODE' environment variable is explicitly set in the GitHub Actions workflow before running tests.\"}",
   "usage": {
-    "prompt_tokens": 10033,
-    "completion_tokens": 89,
-    "latency_ms": 3729
+    "prompt_tokens": 11121,
+    "completion_tokens": 91,
+    "latency_ms": 3642
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-27T02:05:28",
+  "recorded_at": "2026-10-27T12:41:27",
   "lane": "fast",
   "provider": "meterless",
   "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
     "cause": "flaky_test",
-    "root_cause": "A specific test, test_warm_is_quick, failed because the cache warm time (0.079s) exceeded the defined threshold of 0.05s.",
-    "next_step": "Investigate the performance of the cache warm function to ensure it meets the required execution time."
+    "root_cause": "The test test_warm_is_quick failed because the cache warm time (0.079s) exceeded the assertion threshold of 0.05s, indicating a performance regression rather than a functional bug.",
+    "next_step": "Investigate the performance of the cache warm function to optimize execution time or adjust the test threshold if the current performance is acceptable for production."
   },
-  "raw": "{\"cause\": \"flaky_test\", \"root_cause\": \"A specific test, test_warm_is_quick, failed because the cache warm time (0.079s) exceeded the defined threshold of 0.05s.\", \"next_step\": \"Investigate the performance of the cache warm function to ensure it meets the required execution time.\"}",
+  "raw": "{\"cause\": \"flaky_test\", \"root_cause\": \"The test test_warm_is_quick failed because the cache warm time (0.079s) exceeded the assertion threshold of 0.05s, indicating a performance regression rather than a functional bug.\", \"next_step\": \"Investigate the performance of the cache warm function to optimize execution time or adjust the test threshold if the current performance is acceptable for production.\"}",
   "usage": {
-    "prompt_tokens": 9532,
-    "completion_tokens": 79,
-    "latency_ms": 4240
+    "prompt_tokens": 10620,
+    "completion_tokens": 95,
+    "latency_ms": 4881
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }
