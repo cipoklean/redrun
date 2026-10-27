@@ -287,11 +287,16 @@ def _triage_cause(links: list[Link], job_logs: logs.LogsCollected) -> Cause:
     return Cause.UNKNOWN
 
 
-def _fallback_next_step(cause: Cause) -> str:
+def _fallback_next_step(cause: Cause, cited: Sequence[str] = ()) -> str:
     if cause is Cause.FLAKY_TEST:
         return (
             "Re-run the job. If it fails again on the same commit, treat it as a "
             "real break rather than a flake."
+        )
+    if cause is Cause.INFRA_OUTAGE and not any(c.startswith("ev_outage_") for c in cited):
+        return (
+            "Nothing to fix in the code. Check the service the job calls (its status page, "
+            "logs, or cold start), then re-run the job once it answers again."
         )
     if cause is Cause.INFRA_OUTAGE:
         return (
@@ -472,7 +477,7 @@ def _investigate_prepared(
                     root_cause=detail,
                     confidence=0.0,
                     confidence_breakdown=[],
-                    next_step=_fallback_next_step(cause),
+                    next_step=_fallback_next_step(cause, cited),
                     cited_evidence_ids=cited,
                 )
                 confirmed = skeptic.check(candidate, revisions=report.revisions)

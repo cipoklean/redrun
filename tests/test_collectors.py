@@ -344,3 +344,11 @@ def test_a_first_run_with_no_green_baseline_diffs_the_commit_against_its_parent(
     head = got_runs.failed_run.head_sha
     assert ("compare", {"base": f"{head}~1", "head": head}) in client.calls
     assert [item.filename for item in changes.files] == [".github/workflows/test.yml"]
+
+
+def test_an_upstream_outage_points_at_the_service_not_githubstatus() -> None:
+    from redrun.core.taxonomy import Cause
+    from redrun.pipeline import _fallback_next_step
+
+    assert "githubstatus" not in _fallback_next_step(Cause.INFRA_OUTAGE, ["ev_log_001", "ev_run_1"])
+    assert "githubstatus" in _fallback_next_step(Cause.INFRA_OUTAGE, ["ev_outage_9", "ev_log_001"])
