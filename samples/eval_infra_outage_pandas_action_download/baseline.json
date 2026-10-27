@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-25T21:12:56",
+  "recorded_at": "2026-10-27T12:22:24",
   "lane": "fast",
-  "provider": "nvidia",
-  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "provider": "meterless",
+  "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
     "cause": "unknown",
-    "root_cause": "The log ends with HTTP 429 (Too Many Requests) and 503 (Service Unavailable) errors when downloading the 'fast_float' submodule from GitHub, but without repository diff, previous green run data, or knowledge of recent changes, the exact cause cannot be definitively classified.",
-    "next_step": "Retry the workflow after a pause to accommodate transient GitHub rate limits, and inspect the 'fast_float' submodule/dependency configuration if failures persist."
+    "root_cause": "The build failed because it could not download a required subproject, fast_float, due to repeated HTTP 429 (Too Many Requests) and 503 (Service Unavailable) errors from GitHub.",
+    "next_step": "Check the GitHub API rate limits or try running the job again later to resolve the network issue."
   },
-  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The log ends with HTTP 429 (Too Many Requests) and 503 (Service Unavailable) errors when downloading the 'fast_float' submodule from GitHub, but without repository diff, previous green run data, or knowledge of recent changes, the exact cause cannot be definitively classified.\", \"next_step\": \"Retry the workflow after a pause to accommodate transient GitHub rate limits, and inspect the 'fast_float' submodule/dependency configuration if failures persist.\"}",
+  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The build failed because it could not download a required subproject, fast_float, due to repeated HTTP 429 (Too Many Requests) and 503 (Service Unavailable) errors from GitHub.\", \"next_step\": \"Check the GitHub API rate limits or try running the job again later to resolve the network issue.\"}",
   "usage": {
-    "prompt_tokens": 13298,
-    "completion_tokens": 2167,
-    "latency_ms": 15400
+    "prompt_tokens": 13691,
+    "completion_tokens": 82,
+    "latency_ms": 3369
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

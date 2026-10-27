@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-25T21:08:53",
+  "recorded_at": "2026-10-27T02:04:43",
   "lane": "fast",
-  "provider": "nvidia",
-  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "provider": "meterless",
+  "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
-    "cause": "unknown",
-    "root_cause": "The log shows a test assertion failure in test_index_covers_every_row but does not provide definitive evidence linking the failure to any of the specified causes without access to the repository, diff, or previous run history.",
-    "next_step": "Obtain the repository state, previous green run, and build_index module code to determine the actual root cause."
+    "cause": "flaky_test",
+    "root_cause": "The test test_index_covers_every_row failed because the function build_index returned an empty dictionary instead of a list of length 3, indicating a logic error in the code being tested.",
+    "next_step": "Review the implementation of the build_index function in tests/test_index.py to ensure it correctly processes the input list."
   },
-  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The log shows a test assertion failure in test_index_covers_every_row but does not provide definitive evidence linking the failure to any of the specified causes without access to the repository, diff, or previous run history.\", \"next_step\": \"Obtain the repository state, previous green run, and build_index module code to determine the actual root cause.\"}",
+  "raw": "{\"cause\": \"flaky_test\", \"root_cause\": \"The test test_index_covers_every_row failed because the function build_index returned an empty dictionary instead of a list of length 3, indicating a logic error in the code being tested.\", \"next_step\": \"Review the implementation of the build_index function in tests/test_index.py to ensure it correctly processes the input list.\"}",
   "usage": {
-    "prompt_tokens": 9298,
-    "completion_tokens": 3772,
-    "latency_ms": 23467
+    "prompt_tokens": 9441,
+    "completion_tokens": 90,
+    "latency_ms": 4037
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

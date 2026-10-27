@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-25T20:57:14",
+  "recorded_at": "2026-10-27T12:25:30",
   "lane": "fast",
-  "provider": "nvidia",
-  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "provider": "meterless",
+  "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
     "cause": "expired_or_missing_secret",
-    "root_cause": "The required LAB_TOKEN secret was not set or was empty in the runner environment, causing the workflow script to exit early.",
-    "next_step": "Verify and restore the LAB_TOKEN secret in the GitHub Actions workflow configuration, then re-run the job."
+    "root_cause": "The script failed because the required secret LAB_TOKEN was empty when the publishing logic was executed.",
+    "next_step": "Verify that the LAB_TOKEN secret is correctly configured in the GitHub repository or environment for this workflow."
   },
-  "raw": "{\"cause\": \"expired_or_missing_secret\", \"root_cause\": \"The required LAB_TOKEN secret was not set or was empty in the runner environment, causing the workflow script to exit early.\", \"next_step\": \"Verify and restore the LAB_TOKEN secret in the GitHub Actions workflow configuration, then re-run the job.\"}",
+  "raw": "{\"cause\": \"expired_or_missing_secret\", \"root_cause\": \"The script failed because the required secret LAB_TOKEN was empty when the publishing logic was executed.\", \"next_step\": \"Verify that the LAB_TOKEN secret is correctly configured in the GitHub repository or environment for this workflow.\"}",
   "usage": {
-    "prompt_tokens": 9592,
-    "completion_tokens": 1217,
-    "latency_ms": 12903
+    "prompt_tokens": 9725,
+    "completion_tokens": 65,
+    "latency_ms": 2840
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

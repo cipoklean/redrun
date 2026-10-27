@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-25T20:37:19",
+  "recorded_at": "2026-10-27T01:58:26",
   "lane": "fast",
-  "provider": "nvidia",
-  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "provider": "meterless",
+  "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
     "cause": "bad_commit",
-    "root_cause": "The job checked out commit e3a379295bfc98a1a535adb1087f12bcebc335ab on branch case/bad-commit-syntax, which introduced a syntax error in lab/parse.py line 7, causing pytest collection to fail.",
-    "next_step": "Revert the syntax error in lab/parse.py or checkout a known-good commit before re-running the test suite."
+    "root_cause": "The test failed due to a Python SyntaxError in lab/parse.py, specifically missing a colon after a for loop, indicating a code issue in the checked-out commit.",
+    "next_step": "Review the changes in the 'case/bad-commit-syntax' branch to correct the Python syntax error."
   },
-  "raw": "{\"cause\": \"bad_commit\", \"root_cause\": \"The job checked out commit e3a379295bfc98a1a535adb1087f12bcebc335ab on branch case/bad-commit-syntax, which introduced a syntax error in lab/parse.py line 7, causing pytest collection to fail.\", \"next_step\": \"Revert the syntax error in lab/parse.py or checkout a known-good commit before re-running the test suite.\"}",
+  "raw": "{\"cause\": \"bad_commit\", \"root_cause\": \"The test failed due to a Python SyntaxError in lab/parse.py, specifically missing a colon after a for loop, indicating a code issue in the checked-out commit.\", \"next_step\": \"Review the changes in the 'case/bad-commit-syntax' branch to correct the Python syntax error.\"}",
   "usage": {
-    "prompt_tokens": 9929,
-    "completion_tokens": 2354,
-    "latency_ms": 26456
+    "prompt_tokens": 10090,
+    "completion_tokens": 80,
+    "latency_ms": 3327
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

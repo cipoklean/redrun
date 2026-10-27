@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-25T21:14:37",
+  "recorded_at": "2026-10-27T12:26:44",
   "lane": "fast",
-  "provider": "nvidia",
-  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "provider": "meterless",
+  "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
     "cause": "unknown",
-    "root_cause": "The log excerpt ends after 'Post job cleanup' with no error messages, exit codes, or failure indicators visible; the PR quality check script ran but was skipped for an established contributor, and no diagnostic output is present.",
-    "next_step": "Obtain the full job log or workflow run summary to locate the failure point and error details."
+    "root_cause": "The provided log only shows the setup and execution of a Python script, concluding with a notice that the PR author is an established contributor and skipping all checks, but it does not show the actual failure of the job.",
+    "next_step": "Provide the lines immediately following the execution of 'python scripts/pr_quality/check_pr.py' to identify the error."
   },
-  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The log excerpt ends after 'Post job cleanup' with no error messages, exit codes, or failure indicators visible; the PR quality check script ran but was skipped for an established contributor, and no diagnostic output is present.\", \"next_step\": \"Obtain the full job log or workflow run summary to locate the failure point and error details.\"}",
+  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The provided log only shows the setup and execution of a Python script, concluding with a notice that the PR author is an established contributor and skipping all checks, but it does not show the actual failure of the job.\", \"next_step\": \"Provide the lines immediately following the execution of 'python scripts/pr_quality/check_pr.py' to identify the error.\"}",
   "usage": {
-    "prompt_tokens": 10984,
-    "completion_tokens": 1332,
-    "latency_ms": 22230
+    "prompt_tokens": 11244,
+    "completion_tokens": 90,
+    "latency_ms": 3657
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

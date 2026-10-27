@@ -2,5 +2,16 @@
   "order": 500,
   "title": "eval: flaky timing",
   "category": "flaky_test",
-  "description": "A clock-dependent pause against a 50ms budget: the test is the clock's hostage."
+  "description": "A clock-dependent pause against a 50ms budget: the test is the clock's hostage. The failing run and the passing run are two runs of the same sha. Failed run https://github.com/cipoklean/redrun-lab/act",
+  "recording": {
+    "provider": "meterless",
+    "fast_model": "nvidia/nemotron-3.5-bolt-e4b",
+    "deep_model": "nvidia/nemotron-3-ultra-550b-a55b",
+    "deep_lane_fallback": false,
+    "reason": "nvidia/nemotron-3-ultra-550b-a55b answered a probe call",
+    "headers": {
+      "meterless-app": "redrun",
+      "meterless-scope": "user"
+    }
+  }
 }

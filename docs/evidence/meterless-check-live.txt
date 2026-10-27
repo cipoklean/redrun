@@ -1,0 +1,31 @@
+provider     : meterless
+base url     : http://127.0.0.1:8088/v1
+token        : 3aqi**************************SL
+status       : online
+models       : 86 from GET /v1/models
+  - meterless/auto
+  - meterless/fast
+  - meterless/deep
+  - meterless/cheap
+  - meterless/local
+  - meterless/fusion
+  - meterless/cluster
+  - meterless/text
+  - meterless/code
+  - meterless/vision
+  - meterless/perception
+  - meterless/image
+  - meterless/video
+  - meterless/speech
+  - meterless/transcribe
+  - meterless/music
+  - meterless/embed
+  - meterless/judge
+  - nvidia/nemotron-3.5-lightning-30b-a3b
+  - nvidia/nemotron-3-ultra-550b-a55b
+chat HTTP    : 200
+chat model   : nvidia/nemotron-3.5-bolt-e4b
+chat latency : 1586 ms
+chat tokens  : in=168 out=2
+chat text    : ready
+pinned model : nvidia/nemotron-3.5-bolt-e4b

@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-25T20:27:47",
+  "recorded_at": "2026-10-27T01:56:22",
   "lane": "fast",
-  "provider": "nvidia",
-  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "provider": "meterless",
+  "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
-    "cause": "bad_commit",
-    "root_cause": "The job checked out branch 'case/bad-commit-logic' which contains an `order_total` function with flawed shipping calculation logic, resulting in three pytest assertions failing due to mismatched Decimal values.",
-    "next_step": "Review the commit diff on case/bad-commit-logic or revert to the previous green run to identify and fix the calculation error."
+    "cause": "flaky_test",
+    "root_cause": "The tests in tests/test_pricing.py are failing due to incorrect expected values in assertions, indicating a bug in the application logic rather than an environment issue.",
+    "next_step": "Review the pricing logic in the application code against the expected values in the failing tests."
   },
-  "raw": "{\"cause\": \"bad_commit\", \"root_cause\": \"The job checked out branch 'case/bad-commit-logic' which contains an `order_total` function with flawed shipping calculation logic, resulting in three pytest assertions failing due to mismatched Decimal values.\", \"next_step\": \"Review the commit diff on case/bad-commit-logic or revert to the previous green run to identify and fix the calculation error.\"}",
+  "raw": "{\"cause\": \"flaky_test\", \"root_cause\": \"The tests in tests/test_pricing.py are failing due to incorrect expected values in assertions, indicating a bug in the application logic rather than an environment issue.\", \"next_step\": \"Review the pricing logic in the application code against the expected values in the failing tests.\"}",
   "usage": {
-    "prompt_tokens": 10829,
-    "completion_tokens": 4663,
-    "latency_ms": 29780
+    "prompt_tokens": 11009,
+    "completion_tokens": 73,
+    "latency_ms": 3261
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

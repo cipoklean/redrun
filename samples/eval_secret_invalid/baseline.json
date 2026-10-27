@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-25T20:54:53",
+  "recorded_at": "2026-10-27T12:24:21",
   "lane": "fast",
-  "provider": "nvidia",
-  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "provider": "meterless",
+  "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
     "cause": "expired_or_missing_secret",
-    "root_cause": "The workflow step performed a curl to the GitHub API with an Authorization header that returned HTTP 401, indicating the authentication token (LAB_TOKEN or similar) is missing, expired, or invalid.",
-    "next_step": "Check and refresh the LAB_TOKEN or relevant secret in the GitHub Actions workflow settings, ensuring it has proper permissions and is not expired."
+    "root_cause": "The attempt to query the GitHub API using the provided token resulted in a 401 Unauthorized error, indicating the token is invalid or lacks necessary permissions.",
+    "next_step": "Verify that the secret used for the GitHub API call is correctly configured and has the required 'read' scope."
   },
-  "raw": "{\"cause\": \"expired_or_missing_secret\", \"root_cause\": \"The workflow step performed a curl to the GitHub API with an Authorization header that returned HTTP 401, indicating the authentication token (LAB_TOKEN or similar) is missing, expired, or invalid.\", \"next_step\": \"Check and refresh the LAB_TOKEN or relevant secret in the GitHub Actions workflow settings, ensuring it has proper permissions and is not expired.\"}",
+  "raw": "{\"cause\": \"expired_or_missing_secret\", \"root_cause\": \"The attempt to query the GitHub API using the provided token resulted in a 401 Unauthorized error, indicating the token is invalid or lacks necessary permissions.\", \"next_step\": \"Verify that the secret used for the GitHub API call is correctly configured and has the required 'read' scope.\"}",
   "usage": {
-    "prompt_tokens": 9479,
-    "completion_tokens": 3230,
-    "latency_ms": 30080
+    "prompt_tokens": 9633,
+    "completion_tokens": 79,
+    "latency_ms": 3385
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

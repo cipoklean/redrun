@@ -2,5 +2,16 @@
   "order": 500,
   "title": "eval: secret missing",
   "category": "expired_or_missing_secret",
-  "description": "secrets.LAB_MISSING_TOKEN does not exist, so the step refuses to publish."
+  "description": "secrets.LAB_MISSING_TOKEN does not exist, so the step refuses to publish.",
+  "recording": {
+    "provider": "meterless",
+    "fast_model": "nvidia/nemotron-3.5-bolt-e4b",
+    "deep_model": "nvidia/nemotron-3-ultra-550b-a55b",
+    "deep_lane_fallback": false,
+    "reason": "nvidia/nemotron-3-ultra-550b-a55b answered a probe call",
+    "headers": {
+      "meterless-app": "redrun",
+      "meterless-scope": "user"
+    }
+  }
 }

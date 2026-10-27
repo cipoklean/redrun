@@ -1,7 +1,7 @@
 {
-  "recorded_from": "duckdb",
+  "recorded_from": "zetaris",
   "note": "Recorded by redrun record-sample on a live run.",
-  "recorded_at": "2026-10-25T20:54:22.883020",
+  "recorded_at": "2026-10-27T12:24:18.033098",
   "row_count": 1,
   "rows": [
     {

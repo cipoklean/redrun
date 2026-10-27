@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-25T21:21:10",
+  "recorded_at": "2026-10-27T02:02:40",
   "lane": "fast",
-  "provider": "nvidia",
-  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "provider": "meterless",
+  "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
     "cause": "dependency_bump",
-    "root_cause": "The requirements.txt pins incompatible versions of httpcore==0.16.0 and httpx==0.27.0, which have conflicting dependencies, likely due to a recent dependency version bump without corresponding pin updates.",
-    "next_step": "Update the requirements.txt to use compatible version pins or adjust the httpx/httpcore versions to resolve the dependency conflict."
+    "root_cause": "The requirements.txt specifies conflicting dependencies: httpx 0.27.0 requires httpcore==1.*, but the file explicitly requests httpcore==0.16.0.",
+    "next_step": "Update the version constraint for httpcore in requirements.txt to match the requirement of httpx 0.27.0."
   },
-  "raw": "{\"cause\": \"dependency_bump\", \"root_cause\": \"The requirements.txt pins incompatible versions of httpcore==0.16.0 and httpx==0.27.0, which have conflicting dependencies, likely due to a recent dependency version bump without corresponding pin updates.\", \"next_step\": \"Update the requirements.txt to use compatible version pins or adjust the httpx/httpcore versions to resolve the dependency conflict.\"}",
+  "raw": "{\"cause\": \"dependency_bump\", \"root_cause\": \"The requirements.txt specifies conflicting dependencies: httpx 0.27.0 requires httpcore==1.*, but the file explicitly requests httpcore==0.16.0.\", \"next_step\": \"Update the version constraint for httpcore in requirements.txt to match the requirement of httpx 0.27.0.\"}",
   "usage": {
-    "prompt_tokens": 8861,
-    "completion_tokens": 3078,
-    "latency_ms": 33916
+    "prompt_tokens": 11715,
+    "completion_tokens": 87,
+    "latency_ms": 3775
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

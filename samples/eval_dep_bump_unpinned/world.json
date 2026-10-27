@@ -6,5 +6,5 @@
     "log_errors": 1,
     "dependencies": 1
   },
-  "engine": "duckdb"
+  "engine": "zetaris"
 }

@@ -2,5 +2,16 @@
   "order": 500,
   "title": "eval: secret invalid",
   "category": "expired_or_missing_secret",
-  "description": "LAB_TOKEN is set to a deliberately invalid value, so the API answers 401."
+  "description": "LAB_TOKEN is set to a deliberately invalid value, so the API answers 401.",
+  "recording": {
+    "provider": "meterless",
+    "fast_model": "nvidia/nemotron-3.5-bolt-e4b",
+    "deep_model": "nvidia/nemotron-3-ultra-550b-a55b",
+    "deep_lane_fallback": false,
+    "reason": "nvidia/nemotron-3-ultra-550b-a55b answered a probe call",
+    "headers": {
+      "meterless-app": "redrun",
+      "meterless-scope": "user"
+    }
+  }
 }

@@ -2,5 +2,16 @@
   "order": 500,
   "title": "eval: infra outage pandas action download",
   "category": "infra_outage",
-  "description": "Chosen for the 2026-08-17 critical incident 'Incident with GitHub.com' (13:40-21:15Z), inside which this run failed at 15:38Z. Its log says `##[error]Failed to download archive 'https://codeload.githu"
+  "description": "Chosen for the 2026-08-17 critical incident 'Incident with GitHub.com', id zkxwbgr0cnmx, 13:40:03-21:15:46Z. This run started 15:37:51Z and its jobs completed as failures at 15:39:34Z and 15:40:01Z, i",
+  "recording": {
+    "provider": "meterless",
+    "fast_model": "nvidia/nemotron-3.5-bolt-e4b",
+    "deep_model": "nvidia/nemotron-3-ultra-550b-a55b",
+    "deep_lane_fallback": false,
+    "reason": "nvidia/nemotron-3-ultra-550b-a55b answered a probe call",
+    "headers": {
+      "meterless-app": "redrun",
+      "meterless-scope": "user"
+    }
+  }
 }

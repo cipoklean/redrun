@@ -3,8 +3,8 @@
   "tables": {
     "runs": 2,
     "changes": 1,
-    "log_errors": 0,
+    "log_errors": 7,
     "dependencies": 0
   },
-  "engine": "duckdb"
+  "engine": "zetaris"
 }

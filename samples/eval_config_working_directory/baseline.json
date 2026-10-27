@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-25T20:44:02",
+  "recorded_at": "2026-10-27T02:01:35",
   "lane": "fast",
-  "provider": "nvidia",
-  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "provider": "meterless",
+  "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
     "cause": "unknown",
-    "root_cause": "The pipeline failed during pip install because requirements.txt was not present in the checked-out repository at commit bffa5a7bf0f90342375150216bfa2eddd14863c0.",
-    "next_step": "Locate or restore requirements.txt in the repository and verify the pip install step references the correct path."
+    "root_cause": "The job failed because the 'requirements.txt' file was not found in the working directory during the pip installation step.",
+    "next_step": "Verify that requirements.txt exists in the root of the repository checked out by the workflow."
   },
-  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The pipeline failed during pip install because requirements.txt was not present in the checked-out repository at commit bffa5a7bf0f90342375150216bfa2eddd14863c0.\", \"next_step\": \"Locate or restore requirements.txt in the repository and verify the pip install step references the correct path.\"}",
+  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The job failed because the 'requirements.txt' file was not found in the working directory during the pip installation step.\", \"next_step\": \"Verify that requirements.txt exists in the root of the repository checked out by the workflow.\"}",
   "usage": {
-    "prompt_tokens": 7430,
-    "completion_tokens": 3018,
-    "latency_ms": 21103
+    "prompt_tokens": 7538,
+    "completion_tokens": 62,
+    "latency_ms": 3940
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

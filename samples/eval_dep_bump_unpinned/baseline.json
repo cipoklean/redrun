@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-25T20:48:59",
+  "recorded_at": "2026-10-27T02:03:42",
   "lane": "fast",
-  "provider": "nvidia",
-  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "provider": "meterless",
+  "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
     "cause": "dependency_bump",
-    "root_cause": "The test imports LegacyVersion from packaging.version, which was removed in packaging >= 24; the runner installed packaging 26.3, causing an ImportError during test collection.",
-    "next_step": "Pin packaging to a compatible version (e.g., <24) or replace the import with a supported alternative."
+    "root_cause": "The dependency on 'packaging' was updated to a version (>=21) where 'LegacyVersion' was removed, causing an ImportError in the test code.",
+    "next_step": "Update the code to remove the import of 'LegacyVersion' from packaging.version and revert the dependency constraint change if necessary."
   },
-  "raw": "{\"cause\": \"dependency_bump\", \"root_cause\": \"The test imports LegacyVersion from packaging.version, which was removed in packaging >= 24; the runner installed packaging 26.3, causing an ImportError during test collection.\", \"next_step\": \"Pin packaging to a compatible version (e.g., <24) or replace the import with a supported alternative.\"}",
+  "raw": "{\"cause\": \"dependency_bump\", \"root_cause\": \"The dependency on 'packaging' was updated to a version (>=21) where 'LegacyVersion' was removed, causing an ImportError in the test code.\", \"next_step\": \"Update the code to remove the import of 'LegacyVersion' from packaging.version and revert the dependency constraint change if necessary.\"}",
   "usage": {
-    "prompt_tokens": 9437,
-    "completion_tokens": 3391,
-    "latency_ms": 25345
+    "prompt_tokens": 11628,
+    "completion_tokens": 79,
+    "latency_ms": 3534
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

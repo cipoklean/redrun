@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-25T21:10:48",
+  "recorded_at": "2026-10-27T12:20:41",
   "lane": "fast",
-  "provider": "nvidia",
-  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "provider": "meterless",
+  "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
-    "cause": "unknown",
-    "root_cause": "The log contains test failures (an xgettext encoding/path error with a non-ASCII filename and multiple admin UI assertion mismatches) but lacks repository diff, prior green run data, or infrastructure context to definitively attribute the failure to a specific cause.",
-    "next_step": "Reproduce the failures locally, inspect recent commits, and verify test environment and i18n configuration."
+    "cause": "flaky_test",
+    "root_cause": "The test suite failed due to multiple assertions failing, including one related to unicode file names and others related to admin view structure, suggesting environment or test instability rather than a single code change error.",
+    "next_step": "Review the specific failing tests (test_unicode_file_name, test_delete_selected_hides_objects_when_limit_zero, test_sidebar_model_name_non_ascii) to determine if they are inherently flaky or require environment setup adjustments."
   },
-  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The log contains test failures (an xgettext encoding/path error with a non-ASCII filename and multiple admin UI assertion mismatches) but lacks repository diff, prior green run data, or infrastructure context to definitively attribute the failure to a specific cause.\", \"next_step\": \"Reproduce the failures locally, inspect recent commits, and verify test environment and i18n configuration.\"}",
+  "raw": "{\"cause\": \"flaky_test\", \"root_cause\": \"The test suite failed due to multiple assertions failing, including one related to unicode file names and others related to admin view structure, suggesting environment or test instability rather than a single code change error.\", \"next_step\": \"Review the specific failing tests (test_unicode_file_name, test_delete_selected_hides_objects_when_limit_zero, test_sidebar_model_name_non_ascii) to determine if they are inherently flaky or require environment setup adjustments.\"}",
   "usage": {
-    "prompt_tokens": 40328,
-    "completion_tokens": 1571,
-    "latency_ms": 12687
+    "prompt_tokens": 42121,
+    "completion_tokens": 117,
+    "latency_ms": 9236
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

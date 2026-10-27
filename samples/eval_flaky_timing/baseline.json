@@ -1,19 +1,19 @@
 {
-  "recorded_at": "2026-10-25T20:52:44",
+  "recorded_at": "2026-10-27T02:05:28",
   "lane": "fast",
-  "provider": "nvidia",
-  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "provider": "meterless",
+  "model": "nvidia/nemotron-3.5-bolt-e4b",
   "prompt_lines": 300,
   "reply": {
-    "cause": "unknown",
-    "root_cause": "The log shows a test assertion failure due to cache warm timing (0.079s exceeding the 0.05s threshold), but without repository context, previous green runs, or diff information, the root cause category cannot be definitively determined from the log alone.",
-    "next_step": "Obtain the previous green run, repository diff, or additional test history to identify the actual cause."
+    "cause": "flaky_test",
+    "root_cause": "A specific test, test_warm_is_quick, failed because the cache warm time (0.079s) exceeded the defined threshold of 0.05s.",
+    "next_step": "Investigate the performance of the cache warm function to ensure it meets the required execution time."
   },
-  "raw": "{\"cause\": \"unknown\", \"root_cause\": \"The log shows a test assertion failure due to cache warm timing (0.079s exceeding the 0.05s threshold), but without repository context, previous green runs, or diff information, the root cause category cannot be definitively determined from the log alone.\", \"next_step\": \"Obtain the previous green run, repository diff, or additional test history to identify the actual cause.\"}",
+  "raw": "{\"cause\": \"flaky_test\", \"root_cause\": \"A specific test, test_warm_is_quick, failed because the cache warm time (0.079s) exceeded the defined threshold of 0.05s.\", \"next_step\": \"Investigate the performance of the cache warm function to ensure it meets the required execution time.\"}",
   "usage": {
-    "prompt_tokens": 9408,
-    "completion_tokens": 2981,
-    "latency_ms": 24775
+    "prompt_tokens": 9532,
+    "completion_tokens": 79,
+    "latency_ms": 4240
   },
   "note": "The baseline sees only the last 300 redacted log lines and the cause taxonomy: no collectors, no evidence tables, no cross-source query, no skeptic, no citations."
 }

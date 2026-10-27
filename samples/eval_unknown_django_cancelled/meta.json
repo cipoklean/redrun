@@ -2,5 +2,16 @@
   "order": 500,
   "title": "eval: unknown django cancelled",
   "category": "unknown",
-  "description": "A cancelled run with nothing to read: its only job was cancelled, the whole log is 253 lines that end at 'Cleaning up orphan processes', and none of the collector's error patterns match a line of it. "
+  "description": "A cancelled run with nothing to read: its only job was cancelled, the whole log is 253 lines that end at 'Cleaning up orphan processes', and none of the collector's error patterns match a line of it. ",
+  "recording": {
+    "provider": "meterless",
+    "fast_model": "nvidia/nemotron-3.5-bolt-e4b",
+    "deep_model": "nvidia/nemotron-3-ultra-550b-a55b",
+    "deep_lane_fallback": false,
+    "reason": "nvidia/nemotron-3-ultra-550b-a55b answered a probe call",
+    "headers": {
+      "meterless-app": "redrun",
+      "meterless-scope": "user"
+    }
+  }
 }

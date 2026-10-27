@@ -2,5 +2,16 @@
   "order": 500,
   "title": "eval: dep bump conflict",
   "category": "dependency_bump",
-  "description": "httpx 0.27 requires httpcore 1.x, so pinning httpcore 0.16 makes the requirement set unsatisfiable. pip fails before it installs anything."
+  "description": "httpx 0.27 requires httpcore 1.x, so pinning httpcore 0.16 makes the requirement set unsatisfiable. pip fails before it installs anything.",
+  "recording": {
+    "provider": "meterless",
+    "fast_model": "nvidia/nemotron-3.5-bolt-e4b",
+    "deep_model": "nvidia/nemotron-3-ultra-550b-a55b",
+    "deep_lane_fallback": false,
+    "reason": "nvidia/nemotron-3-ultra-550b-a55b answered a probe call",
+    "headers": {
+      "meterless-app": "redrun",
+      "meterless-scope": "user"
+    }
+  }
 }

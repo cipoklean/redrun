@@ -2,5 +2,16 @@
   "order": 500,
   "title": "eval: infra outage django connection reset",
   "category": "infra_outage",
-  "description": "Chosen for the 2026-10-21 critical incident 'Delays for Pull Requests and Webhook deliveries' (14:52-19:22Z), inside which this run failed at 18:26Z. The tests died on `ConnectionResetError(104, 'Conn"
+  "description": "Chosen for the 2026-10-21 critical incident 'Delays for Pull Requests and Webhook deliveries', id nms1dpzmh9d9, 14:52:49-19:22:52Z. This run started 18:20:14Z and its jobs completed as failures at 18:",
+  "recording": {
+    "provider": "meterless",
+    "fast_model": "nvidia/nemotron-3.5-bolt-e4b",
+    "deep_model": "nvidia/nemotron-3-ultra-550b-a55b",
+    "deep_lane_fallback": false,
+    "reason": "nvidia/nemotron-3-ultra-550b-a55b answered a probe call",
+    "headers": {
+      "meterless-app": "redrun",
+      "meterless-scope": "user"
+    }
+  }
 }
